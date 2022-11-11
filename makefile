@@ -1,13 +1,13 @@
 # Generic makefile
 # Works for any well structured c++ project
 
-.PHONY: build clean
+.PHONY: build clean run
 
 OUT_DIR ?= obj/
 SRC_DIR ?= src/
 DEPS_DIR ?= deps/
 INC_DIR ?= include/
-EXEC_NAME ?= program
+EXEC_NAME ?= gaming
 
 CXX := g++
 CXXFLAGS ?= -O2
@@ -20,11 +20,14 @@ endef
 
 LDFLAGS ?= -O2
 LDFLAGS := $(LDFLAGS) -std=c++11 -I $(INC_DIR)
-LDLIBS := 
+LDLIBS := -lsfml-graphics -lsfml-window -lsfml-system
 
 OBJECTS := $(patsubst $(SRC_DIR)%.cpp,$(OUT_DIR)%.o,$(shell find $(SRC_DIR) | grep '.cpp$$'))
 
 build: $(EXEC_NAME)
+
+run: $(EXEC_NAME)
+	./$(EXEC_NAME)
 
 clean:
 	rm -rf $(OUT_DIR) $(DEPS_DIR) $(EXEC_NAME)
