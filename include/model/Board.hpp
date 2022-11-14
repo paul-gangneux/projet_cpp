@@ -3,7 +3,7 @@
 
 class Board {
 private:
-  
+
 public:
   Board();
   virtual ~Board();

@@ -3,7 +3,7 @@
 
 class Tile {
 private:
-  
+
 public:
   Tile();
   virtual ~Tile();

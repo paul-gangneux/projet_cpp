@@ -15,7 +15,7 @@ int main() {
   text.setString("Gaming");
   text.setCharacterSize(100);
   text.setFillColor(Color::White);
-  text.setPosition(0,0);
+  text.setPosition(0, 0);
 
   bool runs = true;
 
@@ -36,7 +36,7 @@ int main() {
     win.display();
   }
 
-  
+
   win.close();
   return EXIT_SUCCESS;
 }
