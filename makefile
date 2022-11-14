@@ -38,4 +38,6 @@ $(EXEC_NAME): $(OBJECTS)
 $(OUT_DIR)%.o: $(SRC_DIR)%.cpp
 	$(COMPILE_COMMAND)
 
--include $(DEPS_DIR)*.d
+ALL_DEPS := $(shell find $(DEPS_DIR) | grep '.d$$')
+
+-include $(ALL_DEPS)
