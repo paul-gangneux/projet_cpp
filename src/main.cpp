@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "view/DrawText.hpp"
 using namespace sf;
+using namespace std;
 
 int main() {
   RenderWindow win(VideoMode(800, 600, 32), "Gaming");
@@ -13,15 +15,17 @@ int main() {
   text.setString("Gaming");
   text.setCharacterSize(100);
   text.setFillColor(Color::White);
-  // text.setPosition(0,0);
+  text.setPosition(0,0);
 
-  while (win.isOpen()) {
+  bool runs = true;
+
+  while (runs) {
 
     Event event;
     while (win.pollEvent(event)) {
       switch (event.type) {
         case Event::Closed:
-          win.close();
+          runs = false;
           break;
         default:
           break;
@@ -31,5 +35,8 @@ int main() {
     win.draw(text);
     win.display();
   }
+
+  
+  win.close();
   return EXIT_SUCCESS;
 }
