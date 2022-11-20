@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "view/DrawText.hpp"
+#include "geometry/vectors.hpp"
+
 using namespace sf;
 using namespace std;
 
