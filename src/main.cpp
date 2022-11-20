@@ -1,13 +1,13 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "view/DrawText.hpp"
+#include "view/Win.hpp"
 #include "geometry/vectors.hpp"
 
 using namespace sf;
 using namespace std;
 
 int main() {
-  RenderWindow win(VideoMode(800, 600, 32), "Gaming");
+  Win win(800, 600, "Gaming");
 
   // exemple d'affichage de texte (todo: encapsuler dans une classe)
   Font font;
@@ -38,7 +38,5 @@ int main() {
     win.display();
   }
 
-
-  win.close();
   return EXIT_SUCCESS;
 }
