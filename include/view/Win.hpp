@@ -9,6 +9,10 @@ private:
 public:
   Win(int width, int height, const char* name);
   virtual ~Win();
+
+  int getWidth() const;
+  int getHeight() const;
+
 protected:
   virtual void onResize();
 };
