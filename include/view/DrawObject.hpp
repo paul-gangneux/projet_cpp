@@ -36,6 +36,7 @@ public:
   void move(float x, float y);
   void move(vec2i);
 
+  void scale(float x, float y, float origX, float origY);
   void scale(float x, float y);
   void scale(vec2f);
 

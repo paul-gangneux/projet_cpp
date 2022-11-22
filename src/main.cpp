@@ -25,11 +25,15 @@ int main() {
   Sprite* tile = new Sprite();
   tile->setTexture(texture);
   tile->setScale(Vector2f(0.5, 0.5));
+  // tile->setOrigin(tile->getLocalBounds().width/2.0f, tile->getLocalBounds().height/2.0f);
   //tile->move(Vector2f(200, 200));
 
   // exemple de relation de parentage avec DrawObject
   DrawObject drawText(text);
   DrawObject drawTile(tile);
+  DrawObject rootObj;
+  // drawText.setParent(&rootObj);
+  drawTile.setParent(&rootObj);
   drawText.setParent(&drawTile);
 
   // initialising mouse position data
@@ -88,10 +92,13 @@ int main() {
         default:
           break;
         }
+        case Event::MouseWheelScrolled: {
+          float f = event.mouseWheelScroll.delta / 10.0f;
+          rootObj.scale(1 + f, 1 + f, win.getWidth() / 2.0f, win.getHeight() / 2.0f);
+          break;
+        }
       }
     }
-
-    text->setString(to_string(tile->getPosition()));
 
     if (win.hasFocus()) {
       if (validM1pressed) {

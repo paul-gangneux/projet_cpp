@@ -55,6 +55,10 @@ void DrawObject::move(vec2i v) {
   move(v.x, v.y);
 }
 
+void DrawObject::scale(float x, float y, float origX, float origY) {
+  trans.scale(x, y, origX, origY);
+}
+
 void DrawObject::scale(float x, float y) {
   trans.scale(x, y);
 }
