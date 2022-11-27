@@ -8,6 +8,7 @@ using namespace std;
 
 int main() {
   Win win(800, 600, "Gaming");
+  win.setVerticalSyncEnabled(true);
 
   // exemple d'affichage de texte (todo: encapsuler dans une classe)
   Font font;
