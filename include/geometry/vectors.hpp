@@ -2,43 +2,29 @@
 #define GEOMETRY_VECTORS_HPP
 
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
-// inspired from the GLM library
+// shorter names
 
-// float vector of size 2
-typedef struct {
-  float x, y;
-} vec2;
+// float vector
+typedef sf::Vector2f vec2f;
 
-// operator redefinitions
-// notes:
-//     there is no need to redefine =
-//     it doesn't make sense to redefine < or >
+// signed int vector
+typedef sf::Vector2i vec2i;
 
-// addition / substraction
-
-vec2 operator +(const vec2& v1, const vec2& v2);
-vec2 operator -(const vec2& v1, const vec2& v2);
-vec2& operator +=(vec2& v1, const vec2& v2);
-vec2& operator -=(vec2& v1, const vec2& v2);
-
-// inverse
-
-vec2 operator -(const vec2& v);
-
-// scalar multiplication
-
-vec2 operator *(const vec2& v, const float& s);
-vec2 operator *(const float& s, const vec2& v);
-vec2& operator *=(vec2& v, const float& s);
-
-// scalar division
-
-vec2 operator /(const vec2& v, const float& s);
-vec2& operator /=(vec2& v, const float& s);
+// unigned int vector
+typedef sf::Vector2u vec2u;
 
 // stream operator
 
-std::ostream& operator <<(std::ostream& out, const vec2& v);
+template <typename T>
+std::ostream& operator <<(std::ostream& out, const sf::Vector2<T>& v) {
+  return out << v.x << ", " << v.y;
+}
+
+template <typename T>
+std::string to_string(sf::Vector2<T> v) {
+  return std::to_string(v.x) + " " + std::to_string(v.y);
+}
 
 #endif
