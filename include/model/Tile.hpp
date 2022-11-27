@@ -7,6 +7,9 @@ private:
 public:
   Tile();
   virtual ~Tile();
+
+  void rotateClockwise();
+  void rotateCounterClockwise();
 };
 
 #endif
