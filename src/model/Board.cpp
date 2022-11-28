@@ -1,5 +1,11 @@
 #include "model/Board.hpp"
 
+Board::Board() : tileArray{RelativeVector<RelativeVector<Tile*>>()}
+{}
+
+Board::~Board()
+{}
+
 void Board::placeTileForced(int x, int y, Tile* const tile) {
   tileArray[x][y] = tile;
 }

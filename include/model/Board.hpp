@@ -16,8 +16,8 @@ public:
   Board();
   virtual ~Board();
 
-  bool placeTile(int x, int y, Tile * const tile);
   bool outOfBounds(int x, int y);
+  bool placeTile(int x, int y, Tile * const tile);
 };
 
 #endif

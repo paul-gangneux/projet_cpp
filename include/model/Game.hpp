@@ -8,12 +8,12 @@ class Game {
 private:
   Player* players;
   Board board;
-  std::vector<Tile*> bag;
+  //std::vector<Tile*> bag;
 public:
   Game();
   virtual ~Game();
 
-  Tile* grabTile(); //takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
+  virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
 };
 
 #endif
