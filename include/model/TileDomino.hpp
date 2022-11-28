@@ -3,28 +3,31 @@
 
 #include "Tile.hpp"
 
-class TileDomino : public Tile{
-  private:
-    /*
-    Here is how we will represent the Domino Tile :
-    Using one int array T of length 12.
+class TileDomino : public Tile {
+private:
+  /*
+  Here is how we will represent the Domino Tile :
+  Using one int array T of length 12.
 
-    ++ T0 T1 T2 ++
-    T11         T3
-    T10         T4
-    T9          T5
-    ++ T8 T7 T6 ++
+  ++ T0 T1 T2 ++
+  T11         T3
+  T10         T4
+  T9          T5
+  ++ T8 T7 T6 ++
 
-    As pictured, the array numbers will count CLOCKWISE, starting TOP LEFT.
-    This will help for rotation & placement operations.
-    */
-    int* numbers;
-  public:
-    TileDomino();
-    virtual ~TileDomino();
-  
-    void rotateClockwise();
-    void rotateCounterClockwise();
+  As pictured, the array numbers will count CLOCKWISE, starting TOP LEFT.
+  This will help for rotation & placement operations.
+  */
+  int* numbers;
+public:
+  TileDomino();
+  virtual ~TileDomino();
+
+  void rotateClockwise();
+  void rotateCounterClockwise();
+
+  bool matchX(Tile* right);
+  bool matchY(Tile* down);
 };
 
 #endif
