@@ -7,26 +7,18 @@ class TileDomino : public Tile{
   private:
     /*
     Here is how we will represent the Domino Tile :
-    Using four int arrays of length 3.
+    Using one int array T of length 12.
 
-    ++ T0 T1 T2 ++    T : "Top"
-    L2          R0    R : "Right"
-    L1          R1    L : "Left"
-    L0          R2    B : "Bottom"
-    ++ B2 B1 B0 ++
+    ++ T0 T1 T2 ++
+    T11         T3
+    T10         T4
+    T9          T5
+    ++ T8 T7 T6 ++
 
-    As pictured, the array numbers will count clockwise.
+    As pictured, the array numbers will count CLOCKWISE, starting TOP LEFT.
     This will help for rotation & placement operations.
-
-    NOTE: don't shoot me paul, we can switch to a single array of size 12 if you prefer
     */
     int* T;
-    int* R;
-    int* B;
-    int* L;
-
-    void generate3ForArray(int*);
-
   public:
     TileDomino();
     virtual ~TileDomino();

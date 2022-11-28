@@ -2,45 +2,37 @@
 #include <iostream>
 #include <ctime>
 
-void TileDomino::generate3ForArray(int* A){
-    A[0]=rand()%5;
-    A[1]=rand()%5;
-    A[2]=rand()%5;
-}
-
 TileDomino::TileDomino() :
-    T{new int[3]},
-    R{new int[3]},
-    B{new int[3]},
-    L{new int[3]}
+  T{new int[12]}
 {
-    // note: this is lame. i'll probably code it in a better way eventually
-    std::srand(std::time(nullptr));
-    generate3ForArray(T);
-    generate3ForArray(R);
-    generate3ForArray(B);
-    generate3ForArray(L);
+  std::srand(std::time(nullptr));
+  for (int i=0; i<12; i++){
+    T[i]=rand()%5;
+  }
 }
 
 TileDomino::~TileDomino(){
-    delete T;
-    delete R;
-    delete B;
-    delete L;
+  delete T;
 }
+
+// If you are confused on how the following functions work, please check TileDomino.hpp
   
 void TileDomino::rotateClockwise(){
-    int* temp=T;
-    T=L;
-    L=B;
-    B=R;
-    R=temp;
+  int temp[3] = {T[9],T[10],T[11]};
+  for (int i=11; i>2; i--){
+    T[i]=T[(i+9)%12];
+  }
+  for (int i=0; i<3; i++){
+    T[i]=temp[i];
+  }
 }
 
 void TileDomino::rotateCounterClockwise(){
-    int* temp=T;
-    T=R;
-    R=B;
-    B=L;
-    L=temp;
+  int temp[3] = {T[0],T[1],T[2]};
+  for (int i=0; i<9; i++){
+    T[i]=T[i+3];
+  }
+  for (int i=9; i<12; i++){
+    T[i]=temp[i-9];
+  }
 }
