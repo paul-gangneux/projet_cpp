@@ -1,3 +1,5 @@
 #include "model/Tile.hpp"
 
-// TODO
+Tile::Tile(){}
+
+Tile::~Tile(){}

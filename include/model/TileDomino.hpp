@@ -18,7 +18,7 @@ class TileDomino : public Tile{
     As pictured, the array numbers will count CLOCKWISE, starting TOP LEFT.
     This will help for rotation & placement operations.
     */
-    int* T;
+    int* numbers;
   public:
     TileDomino();
     virtual ~TileDomino();

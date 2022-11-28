@@ -14,7 +14,14 @@ bool Board::isAdjacent(int x, int y){
 }
 
 bool Board::placeTile(int x, int y, Tile * const tile){
-  if (isEmptySpace(x,y) && isAdjacent(x,y)){
+  if (
+    isEmptySpace(x,y) &&
+    isAdjacent(x,y) &&
+    ( (board[x-1][y]==nullptr) || (*board[x-1][y]).matchX(tile) ) &&
+    ( (board[x+1][y]==nullptr) || (*tile).matchX(board[x+1][y]) ) &&
+    ( (board[x][y-1]==nullptr) || (*board[x][y-1]).matchY(tile) ) &&
+    ( (board[x][y+1]==nullptr) || (*tile).matchY(board[x][y+1]) )
+  ){
     placeTileForced(x,y,tile);
     return true;
   }

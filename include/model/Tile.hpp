@@ -8,8 +8,11 @@ public:
   Tile();
   virtual ~Tile();
 
-  void rotateClockwise();
-  void rotateCounterClockwise();
+  virtual void rotateClockwise() = 0;
+  virtual void rotateCounterClockwise() = 0;
+
+  virtual bool matchX(Tile* right) = 0;
+  virtual bool matchY(Tile* down) = 0;
 };
 
 #endif
