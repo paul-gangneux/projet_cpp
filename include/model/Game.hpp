@@ -8,7 +8,8 @@ class Game {
 private:
   Player* players;
   Board board;
-  //std::vector<Tile*> bag;
+
+  virtual void gameOver() = 0;
 public:
   Game();
   virtual ~Game();
