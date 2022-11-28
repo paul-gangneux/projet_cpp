@@ -1,12 +1,13 @@
 #ifndef MODEL_BOARD_HPP
 #define MODEL_BOARD_HPP
-#include "Tile.hpp"
 
+#include "RelativeVector.hpp"
 #include <vector>
 
 class Board {
 private:
-  std::vector<std::vector<Tile*>> board;
+  RelativeVector<RelativeVector<Tile*>> tileArray;
+  // std::vector<std::vector<Tile*>> board;
 
   void placeTileForced(int x, int y, Tile * const tile); //used to place the first Tile of a game
   bool isEmptySpace(int x, int y); //checks if there is already a Tile at the given coordinates
@@ -16,6 +17,7 @@ public:
   virtual ~Board();
 
   bool placeTile(int x, int y, Tile * const tile);
+  bool outOfBounds(int x, int y);
 };
 
 #endif
