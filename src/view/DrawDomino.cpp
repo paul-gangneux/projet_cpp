@@ -34,8 +34,7 @@ DrawDomino::DrawDomino() :
   DrawObject(DrawDomino::createDominoSprite()) {
 
   center = vec2f{100, 100};
-  trans.translate(position - center).scale(size, center).rotate(angle, center);
-
+  updateTransform();
 
   for (int i = 0; i < 12; i++) {
     numbers[i] = new DrawText(to_string(i), sf::Color::Blue);

@@ -25,6 +25,11 @@ void DrawObject::setParent(DrawObject* _parent) {
   parent = _parent;
 }
 
+void DrawObject::updateTransform() {
+  trans = Transform::Identity;
+  trans.translate(position - center).scale(size, center).rotate(angle, center);
+}
+
 // void DrawObject::setAbsolutePos(vec2f pos) {
 //   // do only if useful
 // }
@@ -57,7 +62,6 @@ void DrawObject::move(float x, float y) {
   position.x += x;
   position.y += y;
 
-  //TODO: put this in a fonction
   trans = Transform::Identity;
   trans.translate(position - center).scale(size, center).rotate(angle, center);
 }
@@ -71,10 +75,12 @@ void DrawObject::move(vec2i v) {
 }
 
 void DrawObject::scale(float x, float y, float origX, float origY) {
-  trans.scale(x, y, origX, origY);
   size.x *= x;
   size.y *= y;
-  //TODO: change pos according to origY and origX
+  position.x += ((1 - x)) * (origX - position.x);
+  position.y += ((1 - y)) * (origY - position.y);
+
+  updateTransform();
 }
 
 void DrawObject::scale(float x, float y) {
@@ -93,15 +99,17 @@ void DrawObject::rotate(float _angle) {
 }
 
 void DrawObject::rotate(float _angle, float cx, float cy) {
-  trans.rotate(_angle, cx, cy);
+  Transform rot = Transform::Identity;
+  rot.rotate(_angle, cx, cy);
+  position = rot.transformPoint(position);
   angle += _angle;
-  //TODO: change pos according to origY and origX
+
+  updateTransform();
 }
 
 void DrawObject::setPosition(float x, float y) {
   position.x = x;
   position.y = y;
-  
-  trans = Transform::Identity;
-  trans.translate(position - center).scale(size, center).rotate(angle, center);
+
+  updateTransform();
 }

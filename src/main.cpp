@@ -4,19 +4,40 @@
 #include "view/DrawDomino.hpp"
 #include "view/Win.hpp"
 #include "geometry/vectors.hpp"
+#include <list>
 
 using namespace sf;
 using namespace std;
+
+DrawObject rootObj = DrawObject();
+list<DrawObject*> objects = list<DrawObject*>();
+
+void addToObjects(DrawObject* o) {
+  o->setParent(&rootObj);
+  objects.push_back(o);
+}
+
+void clearObjects() {
+  while (!objects.empty()) {
+    DrawObject* o = objects.front();
+    objects.pop_front();
+    delete o;
+  }
+}
 
 int main() {
   Win win(800, 600, "Gaming");
   win.setVerticalSyncEnabled(true);
 
-  DrawDomino drawTile;
-  DrawObject rootObj;
-  drawTile.setParent(&rootObj);
-  drawTile.move(win.getWidth() / 2.0f, win.getHeight() / 2.0f);
-  // drawText.setParent(&drawTile);
+  // examples of drawing tiles
+  DrawDomino* d1 = new DrawDomino();
+  DrawDomino* d2 = new DrawDomino();
+
+  d1->setPosition(win.getWidth() / 2.0f - 102, win.getHeight() / 2.0f);
+  d2->setPosition(win.getWidth() / 2.0f + 102, win.getHeight() / 2.0f);
+
+  addToObjects(d1);
+  addToObjects(d2);
 
   // initialising mouse position data
   vec2i oldMousePos = Mouse::getPosition(win);
@@ -87,12 +108,14 @@ int main() {
         vec2f size = rootObj.getSize();
         size.x = 1.0f / size.x;
         size.y = 1.0f / size.y;
-        drawTile.move(deltaMouse.x * size.x, deltaMouse.y * size.y);
+        rootObj.move(deltaMouse.x, deltaMouse.y);
       }
     }
 
     win.clear();
-    drawTile.draw(win);
+    for (DrawObject* o : objects) {
+      o->draw(win);
+    }
     win.display();
 
     // cap at 60 fps

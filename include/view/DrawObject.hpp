@@ -61,6 +61,8 @@ public:
 
   void rotate(float angle);
   void rotate(float angle, float centerX, float centerY);
+
+  void updateTransform();
 };
 
 #endif
