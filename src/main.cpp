@@ -1,5 +1,7 @@
 #include <iostream>
 #include "view/DrawObject.hpp"
+#include "view/DrawText.hpp"
+#include "view/DrawDomino.hpp"
 #include "view/Win.hpp"
 #include "geometry/vectors.hpp"
 
@@ -10,32 +12,11 @@ int main() {
   Win win(800, 600, "Gaming");
   win.setVerticalSyncEnabled(true);
 
-  // exemple d'affichage de texte (todo: encapsuler dans une classe)
-  Font font;
-  font.loadFromFile("ressource/font/VeraMono.ttf");
-  Text* text = new Text();
-  text->setFont(font);
-  text->setString("Gaming");
-  text->setCharacterSize(30);
-  text->setFillColor(Color::White);
-  text->setPosition(0, 0);
-
-  // exemple d'affichage d'une tuile
-  Texture texture;
-  texture.loadFromFile("./ressource/trax_tile1.png"); //todo: check error
-  Sprite* tile = new Sprite();
-  tile->setTexture(texture);
-  tile->setScale(Vector2f(0.5, 0.5));
-  // tile->setOrigin(tile->getLocalBounds().width/2.0f, tile->getLocalBounds().height/2.0f);
-  //tile->move(Vector2f(200, 200));
-
-  // exemple de relation de parentage avec DrawObject
-  DrawObject drawText(text);
-  DrawObject drawTile(tile);
+  DrawDomino drawTile;
   DrawObject rootObj;
-  // drawText.setParent(&rootObj);
   drawTile.setParent(&rootObj);
-  drawText.setParent(&drawTile);
+  drawTile.move(win.getWidth() / 2.0f, win.getHeight() / 2.0f);
+  // drawText.setParent(&drawTile);
 
   // initialising mouse position data
   vec2i oldMousePos = Mouse::getPosition(win);
@@ -103,14 +84,15 @@ int main() {
 
     if (win.hasFocus()) {
       if (validM1pressed) {
-        //todo : utiliser un changement sur les coord absolues
-        drawTile.move(deltaMouse);
+        vec2f size = rootObj.getSize();
+        size.x = 1.0f / size.x;
+        size.y = 1.0f / size.y;
+        drawTile.move(deltaMouse.x * size.x, deltaMouse.y * size.y);
       }
     }
 
     win.clear();
     drawTile.draw(win);
-    drawText.draw(win);
     win.display();
 
     // cap at 60 fps
