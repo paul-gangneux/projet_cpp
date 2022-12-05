@@ -3,18 +3,24 @@
 
 #include "Player.hpp"
 #include "Board.hpp"
+#include <vector>
 
 class Game {
 private:
-  Player* players;
+  std::vector<Player*> players;
   Board board;
+  int currentPlayer;
 
   virtual void gameOver() = 0;
 public:
   Game();
   virtual ~Game();
 
+  virtual bool canAddNewPlayer();
+  bool addPlayer();
+
   virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
+  void nextTurn();
 };
 
 #endif

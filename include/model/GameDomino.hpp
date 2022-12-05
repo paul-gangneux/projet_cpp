@@ -9,6 +9,7 @@ private:
   std::vector<TileDomino*> bag;
   void gameOver();
 public:
+  bool canAddNewPlayer();
   Tile* grabTile(); // not 100% sure this works since i return a Tile* not TileDomino*. don't forget to cast
 };
 
