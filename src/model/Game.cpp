@@ -13,6 +13,10 @@ Game::~Game() {
     }
 }
 
+std::vector<Player*> const Game::getPlayers() const{
+    return players;
+}
+
 bool Game::canAddNewPlayer() {
     // --- DEBUG
     std::cout << std::endl << "FUCK: Game::canAddNewPlayer() should never be directly called" << std::endl;

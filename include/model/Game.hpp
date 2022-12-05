@@ -16,6 +16,8 @@ public:
   Game();
   virtual ~Game();
 
+  std::vector<Player*> const getPlayers() const;
+
   virtual bool canAddNewPlayer();
   bool addPlayer();
 
