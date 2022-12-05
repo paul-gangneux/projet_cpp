@@ -1,5 +1,5 @@
 #include <iostream>
-#include "view/DrawObject.hpp"
+#include "view/GameView.hpp"
 #include "view/DrawText.hpp"
 #include "view/DrawDomino.hpp"
 #include "view/Win.hpp"
@@ -9,121 +9,16 @@
 using namespace sf;
 using namespace std;
 
-DrawObject rootObj = DrawObject();
-list<DrawObject*> objects = list<DrawObject*>();
-
-void addToObjects(DrawObject* o) {
-  o->setParent(&rootObj);
-  objects.push_back(o);
-}
-
-void clearObjects() {
-  while (!objects.empty()) {
-    DrawObject* o = objects.front();
-    objects.pop_front();
-    delete o;
-  }
-}
-
 int main() {
-  Win win(800, 600, "Gaming");
-  win.setVerticalSyncEnabled(true);
+  GameView view{800, 600, "game"};
 
-  // examples of drawing tiles
-  DrawDomino* d1 = new DrawDomino();
-  DrawDomino* d2 = new DrawDomino();
+  DrawDomino* domino = new DrawDomino();
+  view.addTile(domino, 0, 0);
+  view.addTile(new DrawDomino(), 1, 0);
+  view.addTile(new DrawDomino(), 0, 1);
+  view.addTile(new DrawDomino(), -1, -1);
 
-  d1->setPosition(win.getWidth() / 2.0f - 102, win.getHeight() / 2.0f);
-  d2->setPosition(win.getWidth() / 2.0f + 102, win.getHeight() / 2.0f);
-
-  addToObjects(d1);
-  addToObjects(d2);
-
-  // initialising mouse position data
-  vec2i oldMousePos = Mouse::getPosition(win);
-  vec2i mousePos = oldMousePos;
-  vec2i deltaMouse;
-
-  // initialising variables useful for main loop
-  sf::Clock clock;
-  sf::Time desiredDelay = sf::seconds(1) / 60.0f;
-  bool runs = true;
-  bool validM1pressed = false;
-
-  // --- Main Loop ---
-  while (runs) {
-    clock.restart();
-
-    // updating mouse position
-    deltaMouse = mousePos - oldMousePos;
-    oldMousePos = mousePos;
-    mousePos = Mouse::getPosition(win);
-
-    Event event;
-    while (win.pollEvent(event)) {
-      switch (event.type) {
-        case Event::Closed: {
-          runs = false;
-          break;
-        }
-        case Event::MouseButtonPressed: {
-          switch (event.mouseButton.button) {
-            case Mouse::Button::Left: {
-              if (mousePos.x >= 0 &&
-                mousePos.y >= 0 &&
-                mousePos.x < win.getWidth() &&
-                mousePos.y < win.getHeight())
-              {
-                validM1pressed = true;
-              }
-              break;
-            }
-            default:
-              break;
-          }
-          break;
-        }
-        case Event::MouseButtonReleased: {
-          switch (event.mouseButton.button) {
-            case Mouse::Button::Left: {
-              validM1pressed = false;
-              break;
-            }
-            default:
-              break;
-          }
-        default:
-          break;
-        }
-        case Event::MouseWheelScrolled: {
-          float f = event.mouseWheelScroll.delta / 10.0f;
-          rootObj.scale(1 + f, 1 + f, win.getWidth() / 2.0f, win.getHeight() / 2.0f);
-          break;
-        }
-      }
-    }
-
-    if (win.hasFocus()) {
-      if (validM1pressed) {
-        vec2f size = rootObj.getSize();
-        size.x = 1.0f / size.x;
-        size.y = 1.0f / size.y;
-        rootObj.move(deltaMouse.x, deltaMouse.y);
-      }
-    }
-
-    //rootObj.rotate(1, win.getWidth()/2, win.getHeight()/2);
-    d1->rotate(1);
-
-    win.clear();
-    for (DrawObject* o : objects) {
-      o->draw(win);
-    }
-    win.display();
-
-    // cap at 60 fps
-    sf::sleep(desiredDelay - clock.getElapsedTime());
-  }
+  view.viewLoop();
 
   return EXIT_SUCCESS;
 }

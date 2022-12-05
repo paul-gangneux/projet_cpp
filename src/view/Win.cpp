@@ -5,7 +5,10 @@ using namespace sf;
 Win::Win(int _width, int _height, const char* name) :
   RenderWindow{VideoMode(_width, _height, 32), name},
   width{_width},
-  height{_height} {}
+  height{_height}
+{
+  setVerticalSyncEnabled(true);
+}
 
 Win::~Win() {
   close();
@@ -21,7 +24,7 @@ int Win::getHeight() const {
 
 void Win::onResize() {
   RenderWindow::onResize();
-  
+
   Vector2u v1 = getSize();
   Vector2f v2(v1.x, v1.y);
   Vector2f c = getView().getCenter();
