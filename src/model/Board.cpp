@@ -13,7 +13,7 @@ void Board::placeTileForced(int x, int y, Tile* const tile) {
 }
 
 bool Board::isEmptySpace(int x, int y) {
-  return (tileArray[x][y] != nullptr);
+  return (outOfBounds(x,y) || tileArray[x][y] != nullptr);
 }
 
 bool Board::isAdjacent(int x, int y) {
