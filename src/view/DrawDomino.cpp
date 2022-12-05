@@ -5,11 +5,11 @@
 using namespace sf;
 using namespace std;
 
-#define POS1 0
-#define POS2 45
-#define POS3 85
-#define POS4 125
-#define POS5 165
+#define POS1 0+15
+#define POS2 45+15
+#define POS3 85+15
+#define POS4 125+15
+#define POS5 165+15
 
 sf::Texture initTexture() {
   sf::Texture tex;
@@ -76,6 +76,6 @@ void DrawDomino::draw(sf::RenderTarget& win) const {
 void DrawDomino::rotate(float _angle) {
   DrawObject::rotate(_angle);
   for (int i = 0; i < 12; i++) {
-    numbers[i]->rotate(-_angle, 15, 15);
+    numbers[i]->rotate(-_angle);
   }
 }

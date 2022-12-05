@@ -7,6 +7,8 @@ Board::~Board()
 {}
 
 void Board::placeTileForced(int x, int y, Tile* const tile) {
+  tileArray.expand(x);
+  tileArray[x].expand(y);
   tileArray[x][y] = tile;
 }
 

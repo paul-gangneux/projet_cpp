@@ -26,6 +26,19 @@ public:
       return x >= (int) pos.size();
     return (-x - 1) >= (int) neg.size();
   }
+
+  // expands vector if index is out of bound
+  void expand(int last_index) {
+    if (outOfBounds(last_index)) {
+      if (last_index < 0) {
+        last_index = -last_index - 1;
+        neg.resize(last_index);
+      }
+      else {
+        pos.resize(last_index);
+      }
+    }
+  }
 };
 
 #endif

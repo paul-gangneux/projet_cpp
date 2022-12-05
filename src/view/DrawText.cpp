@@ -24,7 +24,9 @@ Text* DrawText::createText(string str, Color color) {
 DrawText::DrawText(Text* obj) :
   DrawObject(obj),
   textObject{obj}
-{}
+{
+  center = vec2f{15, 15};
+}
 
 DrawText::DrawText(string txt) :
   DrawText(DrawText::createText(txt))

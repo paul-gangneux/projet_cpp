@@ -112,6 +112,9 @@ int main() {
       }
     }
 
+    //rootObj.rotate(1, win.getWidth()/2, win.getHeight()/2);
+    d1->rotate(1);
+
     win.clear();
     for (DrawObject* o : objects) {
       o->draw(win);
