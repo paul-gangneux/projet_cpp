@@ -113,3 +113,7 @@ void DrawObject::setPosition(float x, float y) {
 
   updateTransform();
 }
+
+const Vector2f& DrawObject::getPosition() const {
+  return position;
+}

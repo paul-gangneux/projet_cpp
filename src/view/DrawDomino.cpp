@@ -11,6 +11,7 @@ using namespace std;
 #define POS4 125+15
 #define POS5 165+15
 
+//todo: refactor ?
 sf::Texture initTexture() {
   sf::Texture tex;
   const char path[] = "./ressource/domino.png";

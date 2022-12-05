@@ -59,10 +59,12 @@ public:
   void scale(float x, float y);
   void scale(vec2f);
 
-  void rotate(float angle);
-  void rotate(float angle, float centerX, float centerY);
+  virtual void rotate(float angle);
+  virtual void rotate(float angle, float centerX, float centerY);
 
   void updateTransform();
+
+  const vec2f& getPosition() const;
 };
 
 #endif
