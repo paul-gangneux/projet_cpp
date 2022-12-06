@@ -14,6 +14,9 @@ public:
   DrawText(std::string txt, sf::Color color);
   DrawText(std::string text);
   ~DrawText();
+
+  void setText(char* text);
+  void setText(std::string text);
 };
 
 #endif

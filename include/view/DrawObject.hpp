@@ -65,6 +65,9 @@ public:
   void updateTransform();
 
   const vec2f& getPosition() const;
+
+  void setCenter(float x, float y);
+  const vec2f& getCenter() const;
 };
 
 #endif

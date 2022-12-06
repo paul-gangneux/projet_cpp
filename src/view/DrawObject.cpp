@@ -117,3 +117,14 @@ void DrawObject::setPosition(float x, float y) {
 const Vector2f& DrawObject::getPosition() const {
   return position;
 }
+
+void DrawObject::setCenter(float x, float y) {
+  center.x = x;
+  center.y = y;
+
+  updateTransform();
+}
+
+const Vector2f& DrawObject::getCenter() const {
+  return center;
+}

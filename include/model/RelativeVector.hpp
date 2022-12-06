@@ -1,6 +1,5 @@
 #ifndef MODEL_RELATIVEVECTOR_HPP
 #define MODEL_RELATIVEVECTOR_HPP
-#include "Tile.hpp"
 
 #include <vector>
 

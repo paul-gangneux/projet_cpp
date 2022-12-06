@@ -13,11 +13,11 @@ using namespace std;
 int main() {
   GameView view{800, 600, "game"};
 
-  // tests
-  view.addTile(new DrawTrex(1), 0, 0);
-  view.addTile(new DrawDomino(), 1, 0);
-  view.addTile(new DrawTrex(1), 0, 1);
-  view.addTile(new DrawTrex(2), -1, -1);
+  // // tests
+  // view.addTile(new DrawTrex(1), 0, 0);
+  // view.addTile(new DrawDomino(), 1, 0);
+  // view.addTile(new DrawTrex(1), 0, 1);
+  // view.addTile(new DrawTrex(2), -1, -1);
 
   // starting game loop
   view.viewLoop();

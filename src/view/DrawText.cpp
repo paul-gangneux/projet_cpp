@@ -37,3 +37,11 @@ DrawText::DrawText(string txt, Color color) :
 {}
 
 DrawText::~DrawText() {}
+
+void DrawText::setText(char* str) {
+  textObject->setString(str);
+}
+
+void DrawText::setText(string str) {
+  textObject->setString(str);
+}

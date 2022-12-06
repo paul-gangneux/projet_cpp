@@ -1,4 +1,5 @@
 #include "view/GameView.hpp"
+#include "view/DrawTrex.hpp"
 
 using namespace std;
 using namespace sf;
@@ -9,8 +10,10 @@ using namespace sf;
 GameView::GameView(int _w, int _h, const char* windowTitle) :
   rootObj{DrawObject()},
   objects{list<DrawObject*>()},
-  win{_w, _h, windowTitle}
-{}
+  win{_w, _h, windowTitle, &rootObj}
+{
+  rootObj.setPosition(_w / 2, _h / 2);
+}
 
 GameView::~GameView()
 {}
@@ -23,10 +26,35 @@ void GameView::addObject(DrawObject* o) {
 void GameView::addTile(DrawObject* o, int x, int y) {
   o->setParent(&rootObj);
   o->setPosition(
-    x * 200 + (win.getWidth() / 2.0f),
-    y * 200 + (win.getHeight() / 2.0f)
+    x * 200,
+    y * 200
   );
   objects.push_back(o);
+}
+
+void GameView::addTile(DrawObject* o, int x, int y, float rotation) {
+  addTile(o, x, y);
+  o->rotate(rotation);
+}
+
+// takes mouse coordinates and changes it to coords 
+// the tile would have on the grid in the model
+vec2i GameView::coordToGridPos(vec2i coords) {
+  vec2f pos = vec2f(coords.x, coords.y);
+  pos -= rootObj.getPosition();
+  pos.x += 100.0f * rootObj.getSize().x;
+  pos.y += 100.0f * rootObj.getSize().y;
+  pos /= 200.0f;
+  pos /= rootObj.getSize().x;
+
+  if (pos.x < 0.0f)
+    pos.x -= 1;
+
+  if (pos.y < 0.0f)
+    pos.y -= 1;
+
+  vec2i ret = vec2i(pos.x, pos.y);
+  return ret;
 }
 
 void GameView::clearObjects() {
@@ -52,13 +80,16 @@ void GameView::viewLoop() {
 
   int curRot = 0;
   int destRot = 0;
+  int modelRot = 0;
   DrawObject* curTile = nullptr;
 
   // for testing
-  curTile = new DrawDomino();
+  curTile = new DrawTrex(2);
   curTile->setParent(&rootObj);
+  DrawText debugText("", Color::White);
 
-  // --- Main Loop ---
+  // ===== Main Loop ===== //
+
   while (runs) {
     clock.restart();
 
@@ -67,7 +98,8 @@ void GameView::viewLoop() {
     oldMousePos = mousePos;
     mousePos = Mouse::getPosition(win);
 
-    // -- Event handling -- 
+    // -- Event handling -- //
+
     Event event;
     while (win.pollEvent(event)) {
       switch (event.type) {
@@ -81,9 +113,11 @@ void GameView::viewLoop() {
             ) {
             switch (event.mouseButton.button) {
 
-              // case Mouse::Button::Left:
-              //   validM1pressed = true;
-              //   break;
+              case Mouse::Button::Left: {
+                vec2i aPos = coordToGridPos(mousePos);
+                addTile(new DrawTrex(2), aPos.x, aPos.y, modelRot * 90);
+                break;
+              }
 
               case Mouse::Button::Right:
                 validM2pressed = true;
@@ -117,10 +151,18 @@ void GameView::viewLoop() {
           switch (event.key.code) {
 
             case Keyboard::A:
+              modelRot--;
+              if (modelRot < 0) {
+                modelRot = 3;
+              }
               destRot -= 90;
               break;
 
             case Keyboard::E:
+              modelRot++;
+              if (modelRot > 3) {
+                modelRot = 0;
+              }
               destRot += 90;
               break;
 
@@ -147,7 +189,7 @@ void GameView::viewLoop() {
       }
     }
 
-    // -- state change --
+    // -- state change -- //
 
     if (win.hasFocus()) {
       if (validM2pressed) {
@@ -185,7 +227,10 @@ void GameView::viewLoop() {
       curTile->setPosition((mousePos.x - pos.x) / size.x, (mousePos.y - pos.y) / size.y);
     }
 
-    // -- rendering --
+    vec2i v = coordToGridPos(mousePos);
+    debugText.setText(to_string(v.x) + " " + to_string(v.y));
+
+    // -- rendering -- //
 
     win.clear();
 
@@ -195,7 +240,7 @@ void GameView::viewLoop() {
     if (curTile != nullptr) {
       curTile->draw(win);
     }
-
+    debugText.draw(win);
     win.display();
 
     // cap at 60 fps
