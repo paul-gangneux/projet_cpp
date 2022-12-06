@@ -9,6 +9,7 @@ private:
   int score;
 public:
   Player();
+  Player(std::string _name);
   virtual ~Player();  
 
 };
