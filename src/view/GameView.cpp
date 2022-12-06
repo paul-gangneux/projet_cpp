@@ -1,5 +1,5 @@
 #include "view/GameView.hpp"
-#include "view/drawobject/DrawTrex.hpp"
+#include "view/drawobject/DrawTrax.hpp"
 
 using namespace std;
 using namespace sf;
@@ -90,12 +90,12 @@ void GameView::viewLoop() {
   // --- for testing ---
   int tileType = 1;
 
-  curTile = new DrawTrex(tileType);
+  curTile = new DrawTrax(tileType);
   curTile->setParent(&rootObj);
 
   DrawText debugText("", Color::White);
 
-  // potentialTile = new DrawTrex(2, true);
+  // potentialTile = new DrawTrax(2, true);
 
   int rec_width = TILE_SIZE - (BORDER_WIDTH * 2);
   sf::RectangleShape* rect = new RectangleShape(vec2f(rec_width, rec_width));
@@ -134,7 +134,7 @@ void GameView::viewLoop() {
 
               case Mouse::Button::Left: {
                 vec2i aPos = coordToGridPos(mousePos);
-                addTile(new DrawTrex(tileType), aPos.x, aPos.y, modelRot * 90);
+                addTile(new DrawTrax(tileType), aPos.x, aPos.y, modelRot * 90);
                 break;
               }
 
@@ -197,7 +197,7 @@ void GameView::viewLoop() {
                 delete curTile;
               }
 
-              curTile = new DrawTrex(tileType);
+              curTile = new DrawTrax(tileType);
               curTile->setParent(&rootObj);
               curTile->rotate(modelRot * 90);
               curRot = 0;

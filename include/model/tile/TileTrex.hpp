@@ -3,13 +3,13 @@
 
 #include "Tile.hpp"
 
-class TileTrex : public Tile {
+class TileTrax : public Tile {
 private:
   // 0 for white, 1 for black
   char colors[4];
 public:
-  TileTrex();
-  virtual ~TileTrex();
+  TileTrax();
+  virtual ~TileTrax();
 
   void rotateClockwise();
   void rotateCounterClockwise();

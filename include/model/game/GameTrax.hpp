@@ -2,15 +2,15 @@
 #define MODEL_GAME_TREX_HPP
 
 #include "Game.hpp"
-#include "model/tile/TileTrex.hpp"
+#include "model/tile/TileTrax.hpp"
 
-class GameTrex : public Game {
+class GameTrax : public Game {
 private:
-  // std::vector<GameTrex*> bag;
+  // std::vector<GameTrax*> bag;
   void gameOver();
 public:
-  GameTrex();
-  ~GameTrex();
+  GameTrax();
+  ~GameTrax();
 
   bool canAddNewPlayer();
   Tile* grabTile();

@@ -2,7 +2,7 @@
 #include "view/GameView.hpp"
 #include "view/drawobject/DrawText.hpp"
 #include "view/drawobject/DrawDomino.hpp"
-#include "view/drawobject/DrawTrex.hpp"
+#include "view/drawobject/DrawTrax.hpp"
 #include "view/Win.hpp"
 #include "geometry/vectors.hpp"
 #include <list>
