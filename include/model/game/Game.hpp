@@ -1,8 +1,8 @@
 #ifndef MODEL_GAME_HPP
 #define MODEL_GAME_HPP
 
-#include "Player.hpp"
-#include "Board.hpp"
+#include "model/Player.hpp"
+#include "model/Board.hpp"
 #include <vector>
 
 class Game {

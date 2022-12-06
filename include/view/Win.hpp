@@ -2,7 +2,7 @@
 #define VIEW_WIN_HPP
 
 #include <SFML/Graphics.hpp>
-#include <view/DrawObject.hpp>
+#include <view/drawobject/DrawObject.hpp>
 
 class Win : public sf::RenderWindow {
 private:

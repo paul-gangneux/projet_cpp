@@ -1,7 +1,7 @@
 #ifndef VIEW_DRAWTEXT_HPP
 #define VIEW_DRAWTEXT_HPP
 
-#include "view/DrawObject.hpp"
+#include "view/drawobject/DrawObject.hpp"
 
 class DrawText : public DrawObject {
 private:

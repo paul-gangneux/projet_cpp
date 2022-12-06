@@ -1,8 +1,8 @@
 #ifndef VIEW_DRAWDOMINO_HPP
 #define VIEW_DRAWDOMINO_HPP
 
-#include "view/DrawObject.hpp"
-#include "view/DrawText.hpp"
+#include "view/drawobject/DrawObject.hpp"
+#include "view/drawobject/DrawText.hpp"
 
 class DrawDomino : public DrawObject {
 private:

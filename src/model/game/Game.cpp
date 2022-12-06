@@ -1,4 +1,4 @@
-#include "model/Game.hpp"
+#include "model/game/Game.hpp"
 #include <iostream>
 
 Game::Game() :
@@ -13,7 +13,7 @@ Game::~Game() {
     }
 }
 
-std::vector<Player*> const Game::getPlayers() const{
+std::vector<Player*> const Game::getPlayers() const {
     return players;
 }
 

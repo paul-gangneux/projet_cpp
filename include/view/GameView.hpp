@@ -2,9 +2,9 @@
 #define VIEW_VIEW_HPP
 
 #include <iostream>
-#include "view/DrawObject.hpp"
-#include "view/DrawText.hpp"
-#include "view/DrawDomino.hpp"
+#include "view/drawobject/DrawObject.hpp"
+#include "view/drawobject/DrawText.hpp"
+#include "view/drawobject/DrawDomino.hpp"
 #include "view/Win.hpp"
 #include "geometry/vectors.hpp"
 #include <list>

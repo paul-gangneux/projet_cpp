@@ -3,7 +3,7 @@
 
 #include "RelativeVector.hpp"
 #include <vector>
-#include "Tile.hpp"
+#include "tile/Tile.hpp"
 
 class Board {
 private:

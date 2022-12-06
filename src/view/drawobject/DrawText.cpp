@@ -1,4 +1,4 @@
-#include "view/DrawText.hpp"
+#include "view/drawobject/DrawText.hpp"
 
 using namespace sf;
 using namespace std;

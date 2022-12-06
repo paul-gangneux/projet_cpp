@@ -1,4 +1,4 @@
-#include "view/DrawDomino.hpp"
+#include "view/drawobject/DrawDomino.hpp"
 #include "geometry/vectors.hpp"
 #include <iostream>
 
