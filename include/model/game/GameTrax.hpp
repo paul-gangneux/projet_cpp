@@ -13,7 +13,6 @@ public:
   ~GameTrax();
 
   bool canAddNewPlayer();
-  Tile* grabTile();
 };
 
 #endif

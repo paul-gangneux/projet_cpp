@@ -21,7 +21,8 @@ public:
   virtual bool canAddNewPlayer();
   bool addPlayer();
 
-  virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
+  //virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
+  // not all games have bags
   void nextTurn();
 };
 
