@@ -17,7 +17,7 @@ Texture DrawTrax::texture2 = initTexture("./ressource/trax_tile2.png");
 
 Sprite* DrawTrax::createSprite(int type, bool transparent) {
   Sprite* tile = new Sprite();
-  if (type == 1) {
+  if (type == 0) {
     tile->setTexture(DrawTrax::texture1);
   }
   else {

@@ -31,10 +31,10 @@ public:
     if (outOfBounds(last_index)) {
       if (last_index < 0) {
         last_index = -last_index - 1;
-        neg.resize(last_index);
+        neg.resize(last_index + 1);
       }
       else {
-        pos.resize(last_index);
+        pos.resize(last_index + 1);
       }
     }
   }

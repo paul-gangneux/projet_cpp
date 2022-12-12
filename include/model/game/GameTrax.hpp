@@ -7,7 +7,7 @@
 class GameTrax : public Game {
 private:
   // std::vector<GameTrax*> bag;
-  void gameOver();
+  bool gameOver();
 public:
   GameTrax();
   ~GameTrax();

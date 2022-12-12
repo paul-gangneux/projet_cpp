@@ -42,8 +42,8 @@ void TileDomino::rotateCounterClockwise() {
  * with tile1 being the tile IMMEDIATELY ON THE LEFT of tile2.
  * in other words, the X coordinate of tile1 must be the X coordinate of tile2 minus 1.
 */
-bool TileDomino::matchX(Tile* right) {
-  TileDomino* local = dynamic_cast<TileDomino*>(right);
+bool TileDomino::matchX(const Tile* right) const {
+  const TileDomino* local = dynamic_cast<const TileDomino*>(right);
   if (local == nullptr) return false;
   return (
     (this->numbers[3] == local->numbers[11]) &&
@@ -57,8 +57,8 @@ bool TileDomino::matchX(Tile* right) {
  * with tile1 being the tile IMMEDIATELY UPWARDS of tile2.
  * in other words, the Y coordinate of tile1 must be the Y coordinate of tile2 minus 1.
 */
-bool TileDomino::matchY(Tile* down) {
-  TileDomino* local = dynamic_cast<TileDomino*>(down);
+bool TileDomino::matchY(const Tile* down) const {
+  const TileDomino* local = dynamic_cast<const TileDomino*>(down);
   if (local == nullptr) return false;
   return (
     (this->numbers[8] == local->numbers[0]) &&

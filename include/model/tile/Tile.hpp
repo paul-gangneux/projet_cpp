@@ -11,8 +11,8 @@ public:
   virtual void rotateClockwise() = 0;
   virtual void rotateCounterClockwise() = 0;
 
-  virtual bool matchX(Tile* right) = 0;
-  virtual bool matchY(Tile* down) = 0;
+  virtual bool matchX(const Tile* right) const = 0;
+  virtual bool matchY(const Tile* down) const = 0;
 };
 
 #endif

@@ -10,8 +10,10 @@ private:
   std::vector<Player*> players;
   Board board;
   int currentPlayer;
+  bool firstPlay;
 
-  virtual void gameOver() = 0;
+  // must return true if game is over
+  virtual bool gameOver() = 0;
 public:
   Game();
   virtual ~Game();
@@ -24,6 +26,8 @@ public:
   //virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
   // not all games have bags
   void nextTurn();
+
+  bool placeTile(Tile* const tile, int x, int y);
 };
 
 #endif

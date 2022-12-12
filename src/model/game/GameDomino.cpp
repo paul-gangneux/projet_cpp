@@ -13,7 +13,9 @@ GameDomino::~GameDomino() {
 
 }
 
-void GameDomino::gameOver() {}
+bool GameDomino::gameOver() {
+  return false; //todo
+}
 
 bool GameDomino::canAddNewPlayer() {
   return true; //always return true since we can have infinite gamers playing a domino game

@@ -5,17 +5,22 @@
 
 class TileTrax : public Tile {
 private:
-  // 0 for white, 1 for black
+  // w for white, b for black
+  // positions for colors are:
+  // --0--
+  // 3---1
+  // --2--
   char colors[4];
 public:
-  TileTrax();
+  TileTrax(int type);
+  TileTrax(int type, int rotation);
   virtual ~TileTrax();
 
   void rotateClockwise();
   void rotateCounterClockwise();
 
-  bool matchX(Tile* right);
-  bool matchY(Tile* down);
+  bool matchX(const Tile* right) const;
+  bool matchY(const Tile* down) const;
 };
 
 #endif

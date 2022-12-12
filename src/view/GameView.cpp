@@ -1,5 +1,7 @@
 #include "view/GameView.hpp"
 #include "view/drawobject/DrawTrax.hpp"
+#include "model/game/GameTrax.hpp"
+#include "model/tile/TileTrax.hpp"
 
 using namespace std;
 using namespace sf;
@@ -69,6 +71,11 @@ void GameView::clearObjects() {
 }
 
 void GameView::viewLoop() {
+  // game data (TODO, generalize)
+  GameTrax game;
+  int tileType = 1;
+  bool firstPlay = true;
+
   // initialising mouse position data
   vec2i oldMousePos = Mouse::getPosition(win);
   vec2i mousePos = oldMousePos;
@@ -88,9 +95,8 @@ void GameView::viewLoop() {
   DrawObject* potentialTile = nullptr;
 
   // --- for testing ---
-  int tileType = 1;
 
-  curTile = new DrawTrax(tileType);
+  curTile = new DrawTrax(tileType, curRot);
   curTile->setParent(&rootObj);
 
   DrawText debugText("", Color::White);
@@ -106,6 +112,7 @@ void GameView::viewLoop() {
   potentialTile = new DrawObject(rect);
   potentialTile->setParent(&rootObj);
   potentialTile->setCenter(rec_width / 2, rec_width / 2);
+  potentialTile->setPosition(0, 0);
 
   // ===== Main Loop ===== //
 
@@ -131,10 +138,31 @@ void GameView::viewLoop() {
             mousePos.y < win.getHeight()
             ) {
             switch (event.mouseButton.button) {
-
+              // placing a tile
               case Mouse::Button::Left: {
-                vec2i aPos = coordToGridPos(mousePos);
-                addTile(new DrawTrax(tileType), aPos.x, aPos.y, modelRot * 90);
+
+                // sets position to 0,0 if it's the first play
+                vec2i aPos;
+                if (firstPlay) {
+                  aPos = vec2i(0, 0);
+                  firstPlay = false;
+                }
+                else {
+                  aPos = coordToGridPos(mousePos);
+                }
+
+                // try to put tile in model
+                TileTrax* tile = new TileTrax(tileType, modelRot);
+                bool b = game.placeTile(tile, aPos.x, aPos.y);
+
+                // if successful, add tile to view
+                if (b) {
+                  addTile(new DrawTrax(tileType), aPos.x, aPos.y, modelRot * 90);
+                }
+                else {
+                  delete tile;
+                }
+
                 break;
               }
 
@@ -192,7 +220,7 @@ void GameView::viewLoop() {
               break;
 
             case Keyboard::Space:
-              tileType = (tileType == 1) ? 2 : 1;
+              tileType = (tileType == 1) ? 0 : 1;
               if (curTile != nullptr) {
                 delete curTile;
               }
@@ -267,7 +295,9 @@ void GameView::viewLoop() {
     vec2i v = coordToGridPos(mousePos);
     debugText.setText(to_string(v.x) + " " + to_string(v.y));
 
-    potentialTile->setPosition(v.x * TILE_SIZE, v.y * TILE_SIZE);
+    if (!firstPlay) {
+      potentialTile->setPosition(v.x * TILE_SIZE, v.y * TILE_SIZE);
+    }
 
     // -- rendering -- //
 
