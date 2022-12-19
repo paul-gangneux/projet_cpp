@@ -7,7 +7,7 @@
 class GameDomino : public Game {
 private:
   std::vector<TileDomino*> bag;
-  bool gameOver();
+  bool isOver();
 public:
   GameDomino();
   ~GameDomino();

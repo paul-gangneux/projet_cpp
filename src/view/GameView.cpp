@@ -1,27 +1,25 @@
 #include "view/GameView.hpp"
-#include "view/drawobject/DrawTrax.hpp"
 #include "model/game/GameTrax.hpp"
 #include "model/tile/TileTrax.hpp"
+#include "view/drawobject/DrawTrax.hpp"
 
 using namespace std;
 using namespace sf;
 
-#define ABS(x) ((x>=0)?(x):-(x))
-#define SIGN(x) ((x>=0)?1:-1)
+#define ABS(x) ((x >= 0) ? (x) : -(x))
+#define SIGN(x) ((x >= 0) ? 1 : -1)
 
 #define TILE_SIZE 200
 #define BORDER_WIDTH 8
 
 GameView::GameView(int _w, int _h, const char* windowTitle) :
-  rootObj{DrawObject()},
-  objects{list<DrawObject*>()},
-  win{_w, _h, windowTitle, &rootObj}
-{
+    rootObj{DrawObject()},
+    objects{list<DrawObject*>()},
+    win{_w, _h, windowTitle, &rootObj} {
   rootObj.setPosition(_w / 2, _h / 2);
 }
 
-GameView::~GameView()
-{}
+GameView::~GameView() {}
 
 void GameView::addObject(DrawObject* o) {
   o->setParent(&rootObj);
@@ -30,10 +28,7 @@ void GameView::addObject(DrawObject* o) {
 
 void GameView::addTile(DrawObject* o, int x, int y) {
   o->setParent(&rootObj);
-  o->setPosition(
-    x * TILE_SIZE,
-    y * TILE_SIZE
-  );
+  o->setPosition(x * TILE_SIZE, y * TILE_SIZE);
   objects.push_back(o);
 }
 
@@ -42,14 +37,14 @@ void GameView::addTile(DrawObject* o, int x, int y, float rotation) {
   o->rotate(rotation);
 }
 
-// takes mouse coordinates and changes it to coords 
+// takes mouse coordinates and changes it to coords
 // the tile would have on the grid in the model
 vec2i GameView::coordToGridPos(vec2i coords) {
   vec2f pos = vec2f(coords.x, coords.y);
   pos -= rootObj.getPosition();
   pos.x += (TILE_SIZE / 2.0f) * rootObj.getSize().x;
   pos.y += (TILE_SIZE / 2.0f) * rootObj.getSize().y;
-  pos /= (float) TILE_SIZE;
+  pos /= (float)TILE_SIZE;
   pos /= rootObj.getSize().x;
 
   if (pos.x < 0.0f)
@@ -129,41 +124,30 @@ void GameView::viewLoop() {
     Event event;
     while (win.pollEvent(event)) {
       switch (event.type) {
-
         case Event::MouseButtonPressed: {
-          if (
-            mousePos.x >= 0 &&
-            mousePos.y >= 0 &&
-            mousePos.x < win.getWidth() &&
-            mousePos.y < win.getHeight()
-            ) {
+          if (mousePos.x >= 0 && mousePos.y >= 0 &&
+              mousePos.x < win.getWidth() && mousePos.y < win.getHeight()) {
             switch (event.mouseButton.button) {
               // placing a tile
               case Mouse::Button::Left: {
-
-                // sets position to 0,0 if it's the first play
-                vec2i aPos;
-                if (firstPlay) {
-                  aPos = vec2i(0, 0);
-                  firstPlay = false;
-                }
-                else {
-                  aPos = coordToGridPos(mousePos);
-                }
-
-                // try to put tile in model
-                TileTrax* tile = new TileTrax(tileType, modelRot);
-                bool b = game.placeTile(tile, aPos.x, aPos.y);
-
-                // if successful, add tile to view
-                if (b) {
-                  int tileInfos[4];
-                  while (game.getTileInfoInPlaceQueue(tileInfos)) {
-                    addTile(new DrawTrax(tileInfos[0]), tileInfos[1], tileInfos[2], tileInfos[3] * 90);
+                if (!game.isOver()) {
+                  // sets position to 0,0 if it's the first play
+                  vec2i aPos;
+                  if (firstPlay) {
+                    aPos = vec2i(0, 0);
+                    firstPlay = false;
+                  } else {
+                    aPos = coordToGridPos(mousePos);
                   }
-                }
-                else {
-                  delete tile;
+
+                  // try to put tile in model
+                  TileTrax* tile = new TileTrax(tileType, modelRot);
+                  bool b = game.placeTile(tile, aPos.x, aPos.y);
+
+                  // if successful, add tile to view
+                  if (!b) {
+                    delete tile;
+                  }
                 }
 
                 break;
@@ -182,10 +166,9 @@ void GameView::viewLoop() {
 
         case Event::MouseButtonReleased: {
           switch (event.mouseButton.button) {
-
-            // case Mouse::Button::Left:
-            //   validM1pressed = false;
-            //   break;
+              // case Mouse::Button::Left:
+              //   validM1pressed = false;
+              //   break;
 
             case Mouse::Button::Right:
               validM2pressed = false;
@@ -199,7 +182,6 @@ void GameView::viewLoop() {
 
         case Event::KeyPressed: {
           switch (event.key.code) {
-
             case Keyboard::A:
               modelRot--;
               if (modelRot < 0) {
@@ -242,7 +224,8 @@ void GameView::viewLoop() {
 
         case Event::MouseWheelScrolled: {
           float f = event.mouseWheelScroll.delta / 10.0f;
-          rootObj.scale(1 + f, 1 + f, win.getWidth() / 2.0f, win.getHeight() / 2.0f);
+          rootObj.scale(
+              1 + f, 1 + f, win.getWidth() / 2.0f, win.getHeight() / 2.0f);
           break;
         }
 
@@ -251,9 +234,8 @@ void GameView::viewLoop() {
           break;
         }
 
-        default: {
+        default:
           break;
-        }
       }
     }
 
@@ -272,9 +254,8 @@ void GameView::viewLoop() {
         int d = ABS(curRot - destRot);
         if (d < 5) {
           r = d;
-        }
-        else {
-          r = 7;
+        } else {
+          r = 8;
           while (d > 90) {
             r += 2;
             d -= 90;
@@ -283,8 +264,7 @@ void GameView::viewLoop() {
         r *= SIGN(destRot - curRot);
         curTile->rotate(r);
         curRot += r;
-      }
-      else {
+      } else {
         curRot = 0;
         destRot = 0;
       }
@@ -292,7 +272,8 @@ void GameView::viewLoop() {
       // positions the tile where the mouse is
       vec2f size = rootObj.getSize();
       vec2f pos = rootObj.getPosition();
-      curTile->setPosition((mousePos.x - pos.x) / size.x, (mousePos.y - pos.y) / size.y);
+      curTile->setPosition(
+          (mousePos.x - pos.x) / size.x, (mousePos.y - pos.y) / size.y);
     }
 
     vec2i v = coordToGridPos(mousePos);
@@ -302,18 +283,35 @@ void GameView::viewLoop() {
       potentialTile->setPosition(v.x * TILE_SIZE, v.y * TILE_SIZE);
     }
 
+    int tileInfos[4];
+    if (game.getTileInfoInPlaceQueue(tileInfos)) {
+      addTile(
+          new DrawTrax(tileInfos[0]),
+          tileInfos[1],
+          tileInfos[2],
+          tileInfos[3] * 90);
+    }
+    // we wait until all the tiles are placed before showing the end game
+    else if (game.isOver()) {
+      debugText.setText("Game over");
+      // TODO
+    }
+
     // -- rendering -- //
 
     win.clear();
 
-    potentialTile->draw(win);
+    if (!game.isOver()) {
+      potentialTile->draw(win);
+    }
     for (DrawObject* o : objects) {
       o->draw(win);
     }
-    if (curTile != nullptr) {
+    if (!game.isOver() && curTile != nullptr) {
       curTile->draw(win);
     }
     debugText.draw(win);
+
     win.display();
 
     // cap at 60 fps

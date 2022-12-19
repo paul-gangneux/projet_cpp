@@ -13,7 +13,7 @@ GameDomino::~GameDomino() {
 
 }
 
-bool GameDomino::gameOver() {
+bool GameDomino::isOver() {
   return false; //todo
 }
 
@@ -24,7 +24,7 @@ bool GameDomino::canAddNewPlayer() {
 // [NOTE] if returns nullptr, end the game.
 Tile* GameDomino::grabTile() {
   if (bag.empty()) {
-    gameOver(); // not be the best way to do it. we end game then we come back to this function (pile) to return a nullptr ? eeeh
+    isOver(); // not be the best way to do it. we end game then we come back to this function (pile) to return a nullptr ? eeeh
     return nullptr;
   }
   Tile* res = bag.back();

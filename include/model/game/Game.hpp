@@ -12,8 +12,6 @@ protected:
   int currentPlayer;
   bool firstPlay;
 
-  // must return true if game is over
-  virtual bool gameOver() = 0;
 public:
   Game();
   virtual ~Game();
@@ -23,11 +21,15 @@ public:
   virtual bool canAddNewPlayer();
   bool addPlayer();
 
-  //virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
+  //virtual Tile* grabTile() = 0;
+  // takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
   // not all games have bags
   void nextTurn();
 
   virtual bool placeTile(Tile* const tile, int x, int y);
+
+  // must return true if game is over
+  virtual bool isOver() = 0;
 };
 
 #endif
