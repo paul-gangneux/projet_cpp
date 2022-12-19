@@ -18,6 +18,8 @@ public:
   void placeTileForced(int x, int y, Tile* const tile); //used to place the first Tile of a game
   bool outOfBounds(int x, int y);
   bool placeTile(int x, int y, Tile* const tile);
+  // returns null if coords are out of bounds
+  Tile* get(int x, int y);
 };
 
 #endif

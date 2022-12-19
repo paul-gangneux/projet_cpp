@@ -43,3 +43,9 @@ bool Board::placeTile(int x, int y, Tile* const tile) {
   }
   return false;
 }
+
+Tile* Board::get(int x, int y) {
+  if (outOfBounds(x,y))
+    return nullptr;
+  return tileArray[x][y];
+}

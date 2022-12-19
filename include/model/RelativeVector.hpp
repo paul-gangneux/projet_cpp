@@ -10,7 +10,10 @@ private:
   std::vector<T> neg;
 
 public:
-  RelativeVector() {} // auto initialization
+  RelativeVector(): 
+    pos{std::vector<T>()},
+    neg{std::vector<T>()} 
+    {}
   ~RelativeVector() {} // todo, maybe
 
   T& operator[](int x) {

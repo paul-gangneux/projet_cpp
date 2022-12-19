@@ -6,7 +6,7 @@
 #include <vector>
 
 class Game {
-private:
+protected:
   std::vector<Player*> players;
   Board board;
   int currentPlayer;
@@ -27,7 +27,7 @@ public:
   // not all games have bags
   void nextTurn();
 
-  bool placeTile(Tile* const tile, int x, int y);
+  virtual bool placeTile(Tile* const tile, int x, int y);
 };
 
 #endif

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <ctime>
 
-TileTrax::TileTrax(int type) {
+TileTrax::TileTrax(int _type, int rot) : type{_type}, rotation{rot} {
   if (type == 0) {
     colors[0] = 'b';
     colors[1] = 'w';
@@ -15,14 +15,14 @@ TileTrax::TileTrax(int type) {
     colors[2] = 'b';
     colors[3] = 'b';
   }
-}
-
-TileTrax::TileTrax(int type, int rot) : TileTrax(type) {
   if (rot <= 3 && rot >= 0) {
     for (int i = 0; i < rot; i++) {
       rotateClockwise();
     }
   }
+}
+
+TileTrax::TileTrax(int _type) : TileTrax(_type, 0) {
 }
 
 TileTrax::~TileTrax() {
@@ -63,4 +63,16 @@ bool TileTrax::matchX(const Tile* right) const {
 bool TileTrax::matchY(const Tile* down) const {
   const TileTrax* _down = dynamic_cast<const TileTrax*>(down);
   return (colors[2] == _down->colors[0]);
+}
+
+int TileTrax::getType() const {
+  return type;
+}
+
+int TileTrax::getRotation() const {
+  return rotation;
+}
+
+char TileTrax::getColor(int i) const {
+  return colors[i];
 }

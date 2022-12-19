@@ -157,7 +157,10 @@ void GameView::viewLoop() {
 
                 // if successful, add tile to view
                 if (b) {
-                  addTile(new DrawTrax(tileType), aPos.x, aPos.y, modelRot * 90);
+                  int tileInfos[4];
+                  while (game.getTileInfoInPlaceQueue(tileInfos)) {
+                    addTile(new DrawTrax(tileInfos[0]), tileInfos[1], tileInfos[2], tileInfos[3] * 90);
+                  }
                 }
                 else {
                   delete tile;
