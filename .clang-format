@@ -1,0 +1,7 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+# Force pointers to the type for C++.
+DerivePointerAlignment: false
+PointerAlignment: Left
+...

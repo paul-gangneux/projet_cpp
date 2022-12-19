@@ -1,7 +1,7 @@
 # Generic makefile
 # Works for any well structured c++ project
 
-.PHONY: build clean run
+.PHONY: build clean run format
 
 OUT_DIR ?= obj/
 SRC_DIR ?= src/
@@ -28,6 +28,9 @@ run: $(EXEC_NAME)
 
 clean:
 	rm -rf $(OUT_DIR) $(DEPS_DIR) $(EXEC_NAME)
+
+format:
+	clang-format $(find src | grep .cpp) $(find include | grep .hpp) -style=file -i
 
 $(EXEC_NAME): $(OBJECTS)
 	$(CPP) $(CPPFLAGS) -o $@ $+ $(LIBS)
