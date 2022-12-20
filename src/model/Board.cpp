@@ -4,8 +4,14 @@
 Board::Board() : tileArray{RelativeVector<RelativeVector<Tile*>>()}
 {}
 
-Board::~Board()
-{}
+Board::~Board() {
+  tileArray.forEach([](RelativeVector<Tile*> arr) {
+    arr.forEach([](Tile* tile) {
+      if (tile != nullptr)
+        delete tile;
+    });
+  });
+}
 
 void Board::placeTileForced(int x, int y, Tile* const tile) {
   tileArray.expand(x);

@@ -19,7 +19,9 @@ GameView::GameView(int _w, int _h, const char* windowTitle) :
   rootObj.setPosition(_w / 2, _h / 2);
 }
 
-GameView::~GameView() {}
+GameView::~GameView() {
+  clearObjects();
+}
 
 void GameView::addObject(DrawObject* o) {
   o->setParent(&rootObj);
@@ -95,8 +97,6 @@ void GameView::viewLoop() {
   curTile->setParent(&rootObj);
 
   DrawText debugText("", Color::White);
-
-  // potentialTile = new DrawTrax(2, true);
 
   int rec_width = TILE_SIZE - (BORDER_WIDTH * 2);
   sf::RectangleShape* rect = new RectangleShape(vec2f(rec_width, rec_width));
@@ -319,5 +319,10 @@ void GameView::viewLoop() {
     sf::sleep(desiredDelay - clock.getElapsedTime());
   }
 
-  // todo: necessary frees
+  if (curTile != nullptr) {
+    delete curTile;
+  }
+  if (potentialTile != nullptr) {
+    delete potentialTile;  // also frees rect
+  }
 }

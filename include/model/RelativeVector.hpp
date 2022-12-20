@@ -2,6 +2,7 @@
 #define MODEL_RELATIVEVECTOR_HPP
 
 #include <vector>
+#include <functional>
 
 // relative vector for tiles
 template<typename T> class RelativeVector {
@@ -39,6 +40,15 @@ public:
       else {
         pos.resize(last_index + 1);
       }
+    }
+  }
+
+  void forEach(std::function<void(T)> f) {
+    for (T t : neg) {
+      f(t);
+    }
+    for (T t : pos) {
+      f(t);
     }
   }
 };
