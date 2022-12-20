@@ -1,29 +1,25 @@
-#ifndef VIEW_GAMEVIEW_HPP
-#define VIEW_GAMEVIEW_HPP
+#ifndef VIEW_GAMEVIEWTraxTRAX_HPP
+#define VIEW_GAMEVIEWTraxTRAX_HPP
 
 #include <iostream>
 #include <list>
 #include "geometry/vectors.hpp"
-#include "view/DrawableState.hpp"
 #include "view/Win.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawObject.hpp"
 #include "view/drawobject/DrawText.hpp"
+#include "view/GameView.hpp"
 
-class GameView : public DrawableState {
+class GameViewTrax : public GameView {
  private:
   DrawObject rootObj = DrawObject();
-  DrawObject potentialTile = DrawObject();
-  DrawObject curTile = DrawObject();
-  Game game;
   std::list<DrawObject*> objects = std::list<DrawObject*>();
-
 
   vec2i coordToGridPos(vec2i coords);
 
  public:
-  GameView(Win* win);
-  ~GameView();
+  GameViewTrax(Win* win);
+  ~GameViewTrax();
 
   void addObject(DrawObject* obj);
   void addTile(DrawObject* obj, int x, int y);

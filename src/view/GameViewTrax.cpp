@@ -1,4 +1,4 @@
-#include "view/GameView.hpp"
+#include "view/GameViewTrax.hpp"
 #include "model/game/GameTrax.hpp"
 #include "model/tile/TileTrax.hpp"
 #include "view/drawobject/DrawTrax.hpp"
@@ -12,43 +12,31 @@ using namespace sf;
 #define TILE_SIZE 200
 #define BORDER_WIDTH 8
 
-GameView::GameView(Win* _win) :
-    DrawableState(_win),
-    rootObj{DrawObject()},
-    objects{list<DrawObject*>()} {
-  win->setRootObject(&rootObj);
-  rootObj.setPosition(win->getWidth() / 2, win->getHeight() / 2);
-}
+GameViewTrax::GameViewTrax(Win* _win) : GameView(_win) {}
 
-GameView::~GameView() {
+GameViewTrax::~GameViewTrax() {
   clearObjects();
 }
 
-void GameView::addObject(DrawObject* o) {
+void GameViewTrax::addObject(DrawObject* o) {
   o->setParent(&rootObj);
   objects.push_back(o);
 }
 
-void GameView::addTile(DrawObject* o, int x, int y) {
+void GameViewTrax::addTile(DrawObject* o, int x, int y) {
   o->setParent(&rootObj);
   o->setPosition(x * TILE_SIZE, y * TILE_SIZE);
   objects.push_back(o);
 }
 
-void GameView::addTile(DrawObject* o, int x, int y, float rotation) {
+void GameViewTrax::addTile(DrawObject* o, int x, int y, float rotation) {
   addTile(o, x, y);
   o->rotate(rotation);
 }
 
-void GameView::changeState() {}
-
-void GameView::handleEvents() {}
-
-void GameView::draw() {}
-
 // takes mouse coordinates and changes it to coords
 // the tile would have on the grid in the model
-vec2i GameView::coordToGridPos(vec2i coords) {
+vec2i GameViewTrax::coordToGridPos(vec2i coords) {
   vec2f pos = vec2f(coords.x, coords.y);
   pos -= rootObj.getPosition();
   pos.x += (TILE_SIZE / 2.0f) * rootObj.getSize().x;
@@ -66,7 +54,7 @@ vec2i GameView::coordToGridPos(vec2i coords) {
   return ret;
 }
 
-void GameView::clearObjects() {
+void GameViewTrax::clearObjects() {
   while (!objects.empty()) {
     DrawObject* o = objects.front();
     objects.pop_front();
@@ -78,19 +66,9 @@ void handleEvent() {}
 
 void changeState() {}
 
-void draw() {
-  if (!game.isOver()) {
-    potentialTile->draw(*win);
-  }
-  for (DrawObject* o : objects) {
-    o->draw(*win);
-  }
-  if (!game.isOver() && curTile != nullptr) {
-    curTile->draw(*win);
-  }
-}
+void draw() {}
 
-void GameView::viewLoop() {
+void GameViewTrax::viewLoop() {
   // game data (TODO, generalize)
   GameTrax game;
   int tileType = 1;

@@ -151,6 +151,10 @@ bool GameTrax::placeTile(Tile* const tile, int x, int y) {
   return res;
 };
 
+// bool GameTrax::placeTile(int tyleType, int rotation, int x, int y) {
+//   //todo ?
+// };
+
 bool GameTrax::getTileInfoInPlaceQueue(int infos[4]) {
   if (placedTilesQueue.empty()) {
     return false;
