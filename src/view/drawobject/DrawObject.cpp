@@ -114,6 +114,12 @@ void DrawObject::setPosition(float x, float y) {
   updateTransform();
 }
 
+void DrawObject::setPosition(vec2f pos) {
+  position = pos;
+
+  updateTransform();
+}
+
 const Vector2f& DrawObject::getPosition() const {
   return position;
 }

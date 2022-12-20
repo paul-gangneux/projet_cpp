@@ -283,6 +283,7 @@ void GameView::viewLoop() {
       potentialTile->setPosition(v.x * TILE_SIZE, v.y * TILE_SIZE);
     }
 
+    // add the tiles that had been placed in model (once per frame)
     int tileInfos[4];
     if (game.getTileInfoInPlaceQueue(tileInfos)) {
       addTile(
@@ -293,7 +294,7 @@ void GameView::viewLoop() {
     }
     // we wait until all the tiles are placed before showing the end game
     else if (game.isOver()) {
-      debugText.setText("Game over");
+      debugText.setText(string("Game over"));
       // TODO
     }
 

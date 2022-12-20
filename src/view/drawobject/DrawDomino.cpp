@@ -1,17 +1,17 @@
 #include "view/drawobject/DrawDomino.hpp"
-#include "geometry/vectors.hpp"
 #include <iostream>
+#include "geometry/vectors.hpp"
 
 using namespace sf;
 using namespace std;
 
-#define POS1 0+15
-#define POS2 45+15
-#define POS3 85+15
-#define POS4 125+15
-#define POS5 165+15
+#define POS1 5 + 15
+#define POS2 45 + 15
+#define POS3 85 + 15
+#define POS4 125 + 15
+#define POS5 165 + 15
 
-//todo: refactor ?
+// todo: refactor ?
 sf::Texture initTexture() {
   sf::Texture tex;
   const char path[] = "./ressource/domino.png";
@@ -31,14 +31,12 @@ Sprite* DrawDomino::createDominoSprite() {
   return tile;
 }
 
-DrawDomino::DrawDomino() :
-  DrawObject(DrawDomino::createDominoSprite()) {
-
+DrawDomino::DrawDomino() : DrawObject(DrawDomino::createDominoSprite()) {
   center = vec2f{100, 100};
   updateTransform();
 
   for (int i = 0; i < 12; i++) {
-    numbers[i] = new DrawText(to_string(i), sf::Color::Blue);
+    numbers[i] = new DrawText(to_string(i % 10), sf::Color::Blue);
     numbers[i]->setParent(this);
   }
 
@@ -60,8 +58,7 @@ DrawDomino::DrawDomino() :
   numbers[11]->move(POS1, POS2);
 }
 
-DrawDomino::~DrawDomino()
-{
+DrawDomino::~DrawDomino() {
   for (int i = 0; i < 12; i++) {
     delete numbers[i];
   }
