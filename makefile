@@ -1,7 +1,7 @@
 # Generic makefile
 # Works for any well structured c++ project
 
-.PHONY: build clean run
+.PHONY: build clean run format
 
 OUT_DIR ?= obj/
 SRC_DIR ?= src/
@@ -14,12 +14,15 @@ CPP := g++
 OPTI ?= -O2
 CPPFLAGS := $(OPTI) -std=c++11 -Wall -Wextra -I $(INC_DIR)
 
+CPP_FILES = $(shell find $(SRC_DIR) | grep '.cpp$$')
+HPP_FILES = $(shell find $(INC_DIR) | grep '.hpp$$')
+
 define CPP_OBJ
 mkdir -p $(@D) $(dir $(DEPS_DIR)$*)
 $(CPP) $(CPPFLAGS) -c $< -MMD -MT $@ -MF $(DEPS_DIR)$*.d -o $@
 endef
 
-OBJECTS := $(patsubst $(SRC_DIR)%.cpp,$(OUT_DIR)%.o,$(shell find $(SRC_DIR) | grep '.cpp$$'))
+OBJECTS := $(patsubst $(SRC_DIR)%.cpp,$(OUT_DIR)%.o,$(CPP_FILES))
 
 build: $(EXEC_NAME)
 
@@ -28,6 +31,9 @@ run: $(EXEC_NAME)
 
 clean:
 	rm -rf $(OUT_DIR) $(DEPS_DIR) $(EXEC_NAME)
+
+format:
+	clang-format -style=file -i $(CPP_FILES) $(HPP_FILES)
 
 $(EXEC_NAME): $(OBJECTS)
 	$(CPP) $(CPPFLAGS) -o $@ $+ $(LIBS)

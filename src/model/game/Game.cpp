@@ -1,10 +1,11 @@
-#include "model/Game.hpp"
+#include "model/game/Game.hpp"
 #include <iostream>
 
 Game::Game() :
     players{std::vector<Player*>()},
     board{Board()},
-    currentPlayer{0}
+    currentPlayer{0},
+    firstPlay{true}
 {}
 
 Game::~Game() {
@@ -13,13 +14,13 @@ Game::~Game() {
     }
 }
 
-std::vector<Player*> const Game::getPlayers() const{
+std::vector<Player*> const Game::getPlayers() const {
     return players;
 }
 
 bool Game::canAddNewPlayer() {
     // --- DEBUG
-    std::cout << std::endl << "FUCK: Game::canAddNewPlayer() should never be directly called" << std::endl;
+    std::cout << std::endl << "OOPSIE: Game::canAddNewPlayer() should never be directly called" << std::endl;
     std::exit(1);
     // --- end debug
     return false;
@@ -37,9 +38,11 @@ void Game::nextTurn() {
     currentPlayer = (currentPlayer + 1) % players.size();
 }
 
-bool Game::placeTile(int x, int y, Tile * const _tile){
-    if (board.placeTile(x,y,_tile)){
+bool Game::placeTile(Tile* const tile, int x, int y) {
+    if (firstPlay) {
+        board.placeTileForced(x, y, tile);
+        firstPlay = false;
         return true;
     }
-    return false;
+    return board.placeTile(x, y, tile);
 }

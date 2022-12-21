@@ -1,0 +1,16 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+DerivePointerAlignment: false
+PointerAlignment: Left
+AllowShortIfStatementsOnASingleLine: false
+BreakConstructorInitializers: AfterColon
+BinPackParameters: false
+BinPackArguments: false
+AllowShortFunctionsOnASingleLine: Empty
+#AllowShortBlocksOnASingleLine: Empty
+AllowAllParametersOfDeclarationOnNextLine: true
+AlwaysBreakBeforeMultilineStrings: true
+AllowAllParametersOfDeclarationOnNextLine: true
+#AllowAllArgumentsOnNextLine: true
+AlignAfterOpenBracket: AlwaysBreak

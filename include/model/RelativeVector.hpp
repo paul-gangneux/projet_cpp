@@ -1,8 +1,8 @@
 #ifndef MODEL_RELATIVEVECTOR_HPP
 #define MODEL_RELATIVEVECTOR_HPP
-#include "Tile.hpp"
 
 #include <vector>
+#include <functional>
 
 // relative vector for tiles
 template<typename T> class RelativeVector {
@@ -11,7 +11,10 @@ private:
   std::vector<T> neg;
 
 public:
-  RelativeVector() {} // auto initialization
+  RelativeVector(): 
+    pos{std::vector<T>()},
+    neg{std::vector<T>()} 
+    {}
   ~RelativeVector() {} // todo, maybe
 
   T& operator[](int x) {
@@ -25,6 +28,28 @@ public:
     if (x >= 0)
       return x >= (int) pos.size();
     return (-x - 1) >= (int) neg.size();
+  }
+
+  // expands vector if index is out of bound
+  void expand(int last_index) {
+    if (outOfBounds(last_index)) {
+      if (last_index < 0) {
+        last_index = -last_index - 1;
+        neg.resize(last_index + 1);
+      }
+      else {
+        pos.resize(last_index + 1);
+      }
+    }
+  }
+
+  void forEach(std::function<void(T)> f) {
+    for (T t : neg) {
+      f(t);
+    }
+    for (T t : pos) {
+      f(t);
+    }
   }
 };
 

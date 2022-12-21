@@ -1,13 +1,13 @@
 #ifndef MODEL_GAME_DOMINO_HPP
 #define MODEL_GAME_DOMINO_HPP
 
-#include "Game.hpp"
-#include "TileDomino.hpp"
+#include "model/game/Game.hpp"
+#include "model/tile/TileDomino.hpp"
 
 class GameDomino : public Game {
 private:
   std::vector<TileDomino*> bag;
-  void gameOver();
+  bool isOver();
 public:
   GameDomino();
   ~GameDomino();

@@ -26,8 +26,8 @@ public:
   void rotateClockwise();
   void rotateCounterClockwise();
 
-  bool matchX(Tile* right);
-  bool matchY(Tile* down);
+  bool matchX(const Tile* right) const;
+  bool matchY(const Tile* down) const;
 };
 
 #endif
