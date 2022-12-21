@@ -5,7 +5,7 @@
 #include <list>
 #include "geometry/vectors.hpp"
 #include "model/game/Game.hpp"
-#include "view/DrawableState.hpp"
+#include "view/gameview/DrawableState.hpp"
 #include "view/Win.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawObject.hpp"

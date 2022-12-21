@@ -1,4 +1,4 @@
-#include "view/DrawableState.hpp"
+#include "view/gameview/DrawableState.hpp"
 
 DrawableState::DrawableState(Win* _win) : win{_win} {}
 

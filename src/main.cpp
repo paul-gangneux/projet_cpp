@@ -1,8 +1,8 @@
 #include <iostream>
 #include <list>
 #include "geometry/vectors.hpp"
-#include "view/GameMenu.hpp"
-#include "view/GameViewTrax.hpp"
+#include "view/gameview/GameMenu.hpp"
+#include "view/gameview/GameViewTrax.hpp"
 #include "view/Win.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawText.hpp"

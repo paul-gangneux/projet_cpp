@@ -1,7 +1,7 @@
 #ifndef VIEW_GAMEMENU_HPP
 #define VIEW_GAMEMENU_HPP
 
-#include "view/DrawableState.hpp"
+#include "view/gameview/DrawableState.hpp"
 #include "view/drawobject/DrawText.hpp"
 
 #define EVENT_SELECT_MENU 10

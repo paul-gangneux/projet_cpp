@@ -1,4 +1,4 @@
-#include "view/GameView.hpp"
+#include "view/gameview/GameView.hpp"
 #include "model/game/GameTrax.hpp"
 #include "model/tile/TileTrax.hpp"
 #include "view/drawobject/DrawTrax.hpp"

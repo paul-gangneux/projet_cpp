@@ -1,4 +1,4 @@
-#include "view/GameMenu.hpp"
+#include "view/gameview/GameMenu.hpp"
 
 using namespace sf;
 
