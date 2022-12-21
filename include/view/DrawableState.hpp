@@ -12,8 +12,7 @@ class DrawableState {
   DrawableState(Win* win);
 
  public:
-  
-  virtual ~DrawableState() = 0;
+  virtual ~DrawableState();
 
   // can return EVENT_QUIT or EVENT_BACK, to be done by the main function
   virtual int handleEvents(sf::Event& event) = 0;

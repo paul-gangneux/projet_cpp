@@ -64,7 +64,7 @@ DrawDomino::~DrawDomino() {
   }
 }
 
-void DrawDomino::draw(sf::RenderTarget& win) const {
+void DrawDomino::draw(sf::RenderTarget* win) const {
   DrawObject::draw(win);
   for (int i = 0; i < 12; i++) {
     numbers[i]->draw(win);

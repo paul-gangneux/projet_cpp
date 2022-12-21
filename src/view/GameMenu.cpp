@@ -56,7 +56,7 @@ int GameMenu::handleEvents(sf::Event& event) {
   return 0;
 }
 void GameMenu::changeState() {
-  // todo
+  // nothing to do
 }
 void GameMenu::draw() {
   menuText.draw(win);

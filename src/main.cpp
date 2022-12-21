@@ -15,27 +15,26 @@ Win* win;
 DrawableState* view;
 
 void switchView(int newView) {
-  delete view;
-  switch (newView)
-  {
-  case EVENT_SELECT_DOMINO:
-    //view = new GameViewDomino(); // TODO
-    break;
-  case EVENT_SELECT_TRAX:
-    view = new GameViewTrax(win);
-    break;
-  case EVENT_SELECT_CARCASSONE:
-    //TODO
-    break;
-  
-  default:
-    break;
+  switch (newView) {
+    case EVENT_SELECT_DOMINO:
+      // view = new GameViewDomino(); // TODO
+      break;
+    case EVENT_SELECT_TRAX:
+      delete view;
+      view = new GameViewTrax(win);
+      break;
+    case EVENT_SELECT_CARCASSONE:
+      // TODO
+      break;
+
+    default:
+      break;
   }
 }
 
 int main() {
   win = new Win(800, 600, "game");
-  DrawableState* view = new GameMenu(win);
+  view = new GameMenu(win);
 
   // initialising mouse position data
   vec2i oldMousePos = Mouse::getPosition(*win);

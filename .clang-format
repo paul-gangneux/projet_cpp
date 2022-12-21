@@ -14,3 +14,4 @@ AlwaysBreakBeforeMultilineStrings: true
 AllowAllParametersOfDeclarationOnNextLine: true
 #AllowAllArgumentsOnNextLine: true
 AlignAfterOpenBracket: AlwaysBreak
+SpaceAfterCStyleCast: true
