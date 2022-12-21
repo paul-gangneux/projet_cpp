@@ -5,7 +5,7 @@
 #include "view/drawobject/DrawText.hpp"
 
 class DrawDomino : public DrawObject {
-private:
+ private:
   static sf::Texture texture;
   static sf::Sprite* createDominoSprite();
   /*
@@ -16,14 +16,13 @@ private:
   ++ T8 T7 T6 ++
   */
   DrawText* numbers[12];
-public:
+
+ public:
   DrawDomino(/* args */);
   ~DrawDomino();
 
   virtual void rotate(float angle);
-  virtual void draw(sf::RenderTarget& win) const;
+  virtual void draw(sf::RenderTarget* win) const;
 };
-
-
 
 #endif
