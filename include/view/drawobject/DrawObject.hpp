@@ -39,7 +39,7 @@ public:
 
   void setParent(DrawObject* parent);
   sf::Transform getAbsoluteTransform() const;
-  virtual void draw(sf::RenderTarget& win) const;
+  virtual void draw(sf::RenderTarget* win) const;
 
   // void setAbsolutePos(vec2f pos); do only if useful
   // vec2f getAbsolutePos() const;

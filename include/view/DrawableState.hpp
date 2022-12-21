@@ -3,6 +3,9 @@
 
 #include "view/Win.hpp"
 
+#define EVENT_QUIT 1
+#define EVENT_BACK 2
+
 class DrawableState {
  protected:
   Win* win;
@@ -12,7 +15,8 @@ class DrawableState {
   
   virtual ~DrawableState() = 0;
 
-  virtual void handleEvents() = 0;
+  // can return EVENT_QUIT or EVENT_BACK, to be done by the main function
+  virtual int handleEvents(sf::Event& event) = 0;
   virtual void changeState() = 0;
   virtual void draw() = 0;
 };

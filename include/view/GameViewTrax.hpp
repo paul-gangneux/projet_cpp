@@ -28,7 +28,7 @@ class GameViewTrax : public GameView {
   void clearObjects();
   void viewLoop();
 
-  virtual void handleEvents();
+  virtual int handleEvents(sf::Event& event);
   virtual void changeState();
   virtual void draw();
 };

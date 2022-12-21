@@ -54,8 +54,8 @@ Transform DrawObject::getAbsoluteTransform() const {
   return t2;
 }
 
-void DrawObject::draw(RenderTarget& win) const {
-  win.draw(*dr_ptr, getAbsoluteTransform());
+void DrawObject::draw(RenderTarget* win) const {
+  win->draw(*dr_ptr, getAbsoluteTransform());
 }
 
 void DrawObject::move(float x, float y) {

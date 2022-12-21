@@ -9,15 +9,15 @@
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawObject.hpp"
 #include "view/drawobject/DrawText.hpp"
+#include "model/game/Game.hpp"
 
 class GameView : public DrawableState {
  private:
   DrawObject rootObj = DrawObject();
   DrawObject potentialTile = DrawObject();
   DrawObject curTile = DrawObject();
-  Game game;
+  Game* game;
   std::list<DrawObject*> objects = std::list<DrawObject*>();
-
 
   vec2i coordToGridPos(vec2i coords);
 
