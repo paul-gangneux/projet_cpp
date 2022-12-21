@@ -3,6 +3,7 @@
 
 #include <queue>
 #include "Game.hpp"
+#include "geometry/vectors.hpp"
 #include "model/tile/TileTrax.hpp"
 
 class GameTrax : public Game {
@@ -11,11 +12,12 @@ class GameTrax : public Game {
   std::queue<int*> placedTilesQueue;
   bool gameIsOver;
   int nbOfTiles;
+  int minX, maxX, minY, maxY;
 
   void playIfForced(int x, int y);
   char getColorIfExists(int x, int y, int colorPos);
   void checkForEndGame(int x, int y);
-  bool checkPathForLoop(int origX, int origY, char col, int x, int y, int dir);
+  bool checkPath(vec2i pos, vec2i ori, bool xtrm[4], char col, int dir);
 
  public:
   GameTrax();
