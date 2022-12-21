@@ -3,17 +3,15 @@
 using namespace sf;
 
 Win::Win(int _width, int _height, const char* name, DrawObject* _object) :
-  RenderWindow{VideoMode(_width, _height, 32), name},
-  width{_width},
-  height{_height},
-  rootObject{_object}
-{
+    RenderWindow{VideoMode(_width, _height, 32), name},
+    width{_width},
+    height{_height},
+    rootObject{_object} {
   setVerticalSyncEnabled(true);
 }
 
 Win::Win(int _width, int _height, const char* name) :
-  Win(_width, _height, name, nullptr)
-{}
+    Win(_width, _height, name, nullptr) {}
 
 Win::~Win() {
   close();

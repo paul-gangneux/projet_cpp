@@ -1,10 +1,8 @@
 #include "model/tile/TileDomino.hpp"
-#include <iostream>
 #include <ctime>
+#include <iostream>
 
-TileDomino::TileDomino() :
-  numbers{new int[12]}
-{
+TileDomino::TileDomino() : numbers{new int[12]} {
   std::srand(std::time(nullptr));
   for (int i = 0; i < 12; i++) {
     numbers[i] = rand() % 5;
@@ -15,7 +13,8 @@ TileDomino::~TileDomino() {
   delete numbers;
 }
 
-// If you are confused on how the following functions work, please check TileDomino.hpp
+// If you are confused on how the following functions work, please check
+// TileDomino.hpp
 
 void TileDomino::rotateClockwise() {
   int temp[3] = {numbers[9], numbers[10], numbers[11]};
@@ -40,29 +39,31 @@ void TileDomino::rotateCounterClockwise() {
 /* [WARNING !]
  * this function must be called in the following way : tile1.matchX(tile2)
  * with tile1 being the tile IMMEDIATELY ON THE LEFT of tile2.
- * in other words, the X coordinate of tile1 must be the X coordinate of tile2 minus 1.
-*/
+ * in other words, the X coordinate of tile1 must be the X coordinate of tile2
+ * minus 1.
+ */
 bool TileDomino::matchX(const Tile* right) const {
   const TileDomino* local = dynamic_cast<const TileDomino*>(right);
-  if (local == nullptr) return false;
+  if (local == nullptr)
+    return false;
   return (
-    (this->numbers[3] == local->numbers[11]) &&
-    (this->numbers[4] == local->numbers[10]) &&
-    (this->numbers[5] == local->numbers[9])
-    );
+      (this->numbers[3] == local->numbers[11]) &&
+      (this->numbers[4] == local->numbers[10]) &&
+      (this->numbers[5] == local->numbers[9]));
 }
 
 /* [WARNING !]
  * this function must be called in the following way : tile1.matchY(tile2)
  * with tile1 being the tile IMMEDIATELY UPWARDS of tile2.
- * in other words, the Y coordinate of tile1 must be the Y coordinate of tile2 minus 1.
-*/
+ * in other words, the Y coordinate of tile1 must be the Y coordinate of tile2
+ * minus 1.
+ */
 bool TileDomino::matchY(const Tile* down) const {
   const TileDomino* local = dynamic_cast<const TileDomino*>(down);
-  if (local == nullptr) return false;
+  if (local == nullptr)
+    return false;
   return (
-    (this->numbers[8] == local->numbers[0]) &&
-    (this->numbers[7] == local->numbers[1]) &&
-    (this->numbers[6] == local->numbers[2])
-    );
+      (this->numbers[8] == local->numbers[0]) &&
+      (this->numbers[7] == local->numbers[1]) &&
+      (this->numbers[6] == local->numbers[2]));
 }

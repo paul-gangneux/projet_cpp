@@ -1,21 +1,26 @@
 #ifndef MODEL_BOARD_HPP
 #define MODEL_BOARD_HPP
 
-#include "RelativeVector.hpp"
 #include <vector>
+#include "RelativeVector.hpp"
 #include "tile/Tile.hpp"
 
 class Board {
-private:
+ private:
   RelativeVector<RelativeVector<Tile*>> tileArray;
 
-  bool isEmptySpace(int x, int y); //checks if there is already a Tile at the given coordinates
-  bool isAdjacent(int x, int y); //checks if any of the 4 adjacent squares are occupied by a Tile
-public:
+  // checks if there is already a Tile at the given coordinates
+  bool isEmptySpace(int x, int y);
+
+  // checks if any of the 4 adjacent squares are occupied by a Tile
+  bool isAdjacent(int x, int y);
+
+ public:
   Board();
   virtual ~Board();
 
-  void placeTileForced(int x, int y, Tile* const tile); //used to place the first Tile of a game
+  // used to place the first Tile of a game
+  void placeTileForced(int x, int y, Tile* const tile);
   bool outOfBounds(int x, int y);
   bool placeTile(int x, int y, Tile* const tile);
   // returns null if coords are out of bounds

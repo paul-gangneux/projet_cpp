@@ -1,21 +1,19 @@
 #ifndef MODEL_RELATIVEVECTOR_HPP
 #define MODEL_RELATIVEVECTOR_HPP
 
-#include <vector>
 #include <functional>
+#include <vector>
 
 // relative vector for tiles
-template<typename T> class RelativeVector {
-private:
+template <typename T>
+class RelativeVector {
+ private:
   std::vector<T> pos;
   std::vector<T> neg;
 
-public:
-  RelativeVector(): 
-    pos{std::vector<T>()},
-    neg{std::vector<T>()} 
-    {}
-  ~RelativeVector() {} // todo, maybe
+ public:
+  RelativeVector() : pos{std::vector<T>()}, neg{std::vector<T>()} {}
+  ~RelativeVector() {}  // todo, maybe
 
   T& operator[](int x) {
     if (x >= 0)
@@ -36,8 +34,7 @@ public:
       if (last_index < 0) {
         last_index = -last_index - 1;
         neg.resize(last_index + 1);
-      }
-      else {
+      } else {
         pos.resize(last_index + 1);
       }
     }

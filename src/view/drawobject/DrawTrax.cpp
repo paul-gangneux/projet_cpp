@@ -19,8 +19,7 @@ Sprite* DrawTrax::createSprite(int type, bool transparent) {
   Sprite* tile = new Sprite();
   if (type == 0) {
     tile->setTexture(DrawTrax::texture1);
-  }
-  else {
+  } else {
     tile->setTexture(DrawTrax::texture2);
   }
   tile->setScale(Vector2f(0.5, 0.5));
@@ -31,8 +30,7 @@ Sprite* DrawTrax::createSprite(int type, bool transparent) {
 }
 
 DrawTrax::DrawTrax(int type, bool transparent) :
-  DrawObject(DrawTrax::createSprite(type, transparent))
-{
+    DrawObject(DrawTrax::createSprite(type, transparent)) {
   center = vec2f{100, 100};
   updateTransform();
 }

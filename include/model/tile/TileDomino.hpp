@@ -4,7 +4,7 @@
 #include "Tile.hpp"
 
 class TileDomino : public Tile {
-private:
+ private:
   /*
   Here is how we will represent the Domino Tile :
   Using one int array T of length 12.
@@ -19,7 +19,8 @@ private:
   This will help for rotation & placement operations.
   */
   int* numbers;
-public:
+
+ public:
   TileDomino();
   virtual ~TileDomino();
 

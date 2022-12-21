@@ -4,15 +4,14 @@ using namespace std;
 using namespace sf;
 
 DrawObject::DrawObject() :
-  parent{nullptr},
-  dr_ptr{nullptr},
-  tr_ptr{nullptr},
-  trans{Transform::Identity},
-  position{vec2f{0.0f, 0.0f}},
-  size{1.0f, 1.0f},
-  angle{0.0f},
-  center{vec2f{0.0f, 0.0f}}
-{
+    parent{nullptr},
+    dr_ptr{nullptr},
+    tr_ptr{nullptr},
+    trans{Transform::Identity},
+    position{vec2f{0.0f, 0.0f}},
+    size{1.0f, 1.0f},
+    angle{0.0f},
+    center{vec2f{0.0f, 0.0f}} {
   trans.translate(position - center).scale(size, center).rotate(angle, center);
 }
 

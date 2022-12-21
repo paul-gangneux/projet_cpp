@@ -1,12 +1,12 @@
 #include <iostream>
 #include <list>
 #include "geometry/vectors.hpp"
-#include "view/gameview/GameMenu.hpp"
-#include "view/gameview/GameViewTrax.hpp"
 #include "view/Win.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawText.hpp"
 #include "view/drawobject/DrawTrax.hpp"
+#include "view/gameview/GameMenu.hpp"
+#include "view/gameview/GameViewTrax.hpp"
 
 using namespace sf;
 using namespace std;

@@ -4,13 +4,15 @@
 #include "view/drawobject/DrawObject.hpp"
 
 class DrawText : public DrawObject {
-private:
+ private:
   static sf::Font font;
-  static sf::Text* createText(std::string text, sf::Color color = sf::Color::Black);
+  static sf::Text* createText(
+      std::string text, sf::Color color = sf::Color::Black);
   sf::Text* textObject;
 
   DrawText(sf::Text* obj);
-public:
+
+ public:
   DrawText(std::string txt, sf::Color color);
   DrawText(std::string text);
   ~DrawText();

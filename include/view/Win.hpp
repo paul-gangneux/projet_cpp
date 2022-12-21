@@ -5,11 +5,11 @@
 #include <view/drawobject/DrawObject.hpp>
 
 class Win : public sf::RenderWindow {
-private:
+ private:
   int width, height;
   DrawObject* rootObject;
 
-public:
+ public:
   Win(int width, int height, const char* name, DrawObject* rootObject);
   Win(int width, int height, const char* name);
   virtual ~Win();
@@ -19,7 +19,7 @@ public:
 
   void setRootObject(DrawObject* object);
 
-protected:
+ protected:
   virtual void onResize();
 };
 

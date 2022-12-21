@@ -1,8 +1,8 @@
 #ifndef GEOMETRY_VECTORS_HPP
 #define GEOMETRY_VECTORS_HPP
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 // shorter names
 
@@ -18,7 +18,7 @@ typedef sf::Vector2u vec2u;
 // stream operator
 
 template <typename T>
-std::ostream& operator <<(std::ostream& out, const sf::Vector2<T>& v) {
+std::ostream& operator<<(std::ostream& out, const sf::Vector2<T>& v) {
   return out << v.x << ", " << v.y;
 }
 

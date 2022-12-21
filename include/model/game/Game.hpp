@@ -1,18 +1,18 @@
 #ifndef MODEL_GAME_HPP
 #define MODEL_GAME_HPP
 
-#include "model/Player.hpp"
-#include "model/Board.hpp"
 #include <vector>
+#include "model/Board.hpp"
+#include "model/Player.hpp"
 
 class Game {
-protected:
+ protected:
   std::vector<Player*> players;
   Board board;
   int currentPlayer;
   bool firstPlay;
 
-public:
+ public:
   Game();
   virtual ~Game();
 
@@ -21,7 +21,7 @@ public:
   virtual bool canAddNewPlayer();
   bool addPlayer();
 
-  //virtual Tile* grabTile() = 0;
+  // virtual Tile* grabTile() = 0;
   // takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
   // not all games have bags
   void nextTurn();
