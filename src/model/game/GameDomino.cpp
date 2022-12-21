@@ -31,3 +31,10 @@ Tile* GameDomino::grabTile() {
   bag.pop_back(); // no, pop_back does not return anything
   return res;
 }
+
+bool GameDomino::placeTile(Tile * const _tile, int x, int y){
+  if (Game::placeTile(_tile, x, y)){
+    return true;
+  }
+  return false;
+}

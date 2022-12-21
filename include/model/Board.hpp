@@ -15,9 +15,9 @@ public:
   Board();
   virtual ~Board();
 
-  void placeTileForced(int x, int y, Tile* const tile); //used to place the first Tile of a game
+  void placeTileForced(Tile* const tile, int x, int y); //used to place the first Tile of a game
   bool outOfBounds(int x, int y);
-  bool placeTile(int x, int y, Tile* const tile);
+  bool placeTile(Tile* const tile, int x, int y);
   // returns null if coords are out of bounds
   Tile* get(int x, int y);
 };

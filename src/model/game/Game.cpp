@@ -40,9 +40,9 @@ void Game::nextTurn() {
 
 bool Game::placeTile(Tile* const tile, int x, int y) {
     if (firstPlay) {
-        board.placeTileForced(x, y, tile);
+        board.placeTileForced(tile, x, y);
         firstPlay = false;
         return true;
     }
-    return board.placeTile(x, y, tile);
+    return board.placeTile(tile, x, y);
 }

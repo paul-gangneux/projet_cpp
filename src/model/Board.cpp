@@ -13,7 +13,7 @@ Board::~Board() {
   });
 }
 
-void Board::placeTileForced(int x, int y, Tile* const tile) {
+void Board::placeTileForced(Tile* const tile, int x, int y) {
   tileArray.expand(x);
   tileArray[x].expand(y);
   tileArray[x][y] = tile;
@@ -35,7 +35,7 @@ bool Board::outOfBounds(int x, int y) {
     );
 }
 
-bool Board::placeTile(int x, int y, Tile* const tile) {
+bool Board::placeTile(Tile* const tile, int x, int y) {
   if (
     isEmptySpace(x, y) &&
     isAdjacent(x, y) &&
@@ -44,7 +44,7 @@ bool Board::placeTile(int x, int y, Tile* const tile) {
     (outOfBounds(x, y - 1) || (tileArray[x][y - 1] == nullptr) || tileArray[x][y - 1]->matchY(tile)) &&
     (outOfBounds(x, y + 1) || (tileArray[x][y + 1] == nullptr) || tile->matchY(tileArray[x][y + 1]))
     ) {
-    placeTileForced(x, y, tile);
+    placeTileForced(tile, x, y);
     return true;
   }
   return false;
