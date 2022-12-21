@@ -12,7 +12,7 @@ GameViewTrax::GameViewTrax(Win* _win) :
 
 GameViewTrax::~GameViewTrax() {}
 
-void GameViewTrax::onKeyPress(Event& event) {
+int GameViewTrax::onKeyPress(Event& event) {
   switch (event.key.code) {
     case Keyboard::Space: {
       tileType = (tileType == 1) ? 0 : 1;
@@ -26,8 +26,15 @@ void GameViewTrax::onKeyPress(Event& event) {
       destRot = 0;
       break;
     }
+    case Keyboard::Return: {
+      if (game->isOver()) {
+        return EVENT_BACK;
+      }
+      break;
+    }
     default: { break; }
   }
+  return 0;
 }
 
 void GameViewTrax::changeState() {

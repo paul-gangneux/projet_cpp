@@ -16,6 +16,10 @@ DrawableState* view;
 
 void switchView(int newView) {
   switch (newView) {
+    case EVENT_SELECT_MENU:
+      delete view;
+      view = new GameMenu(win);
+      break;
     case EVENT_SELECT_DOMINO:
       // view = new GameViewDomino(); // TODO
       break;

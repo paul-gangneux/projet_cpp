@@ -154,7 +154,7 @@ int GameView::handleEvents(sf::Event& event) {
           }
 
           default:
-            onKeyPress(event);
+            return onKeyPress(event);
             break;
         }
       }
