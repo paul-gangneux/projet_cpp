@@ -23,6 +23,7 @@ public:
 
   virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
   void nextTurn();
+  virtual bool placeTile(int x, int y, Tile * const);
 };
 
 #endif

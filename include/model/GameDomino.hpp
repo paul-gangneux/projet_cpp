@@ -14,6 +14,7 @@ public:
 
   bool canAddNewPlayer();
   Tile* grabTile(); // not 100% sure this works since i return a Tile* not TileDomino*. don't forget to cast
+  bool placeTile(int x, int y, Tile * const);
 };
 
 #endif

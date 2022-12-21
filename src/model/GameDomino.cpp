@@ -10,7 +10,9 @@ GameDomino::GameDomino() :
 }
 
 GameDomino::~GameDomino(){
-
+  while (!bag.empty()){
+    delete bag.back();
+  }
 }
 
 void GameDomino::gameOver(){}
@@ -28,4 +30,10 @@ Tile* GameDomino::grabTile() {
   Tile* res = bag.back();
   bag.pop_back(); // no, pop_back does not return anything
   return res;
+}
+
+bool GameDomino::placeTile(int x, int y, Tile * const _tile){
+  if (Game::placeTile(x,y,_tile)) {
+    
+  }
 }

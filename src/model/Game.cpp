@@ -36,3 +36,10 @@ bool Game::addPlayer() {
 void Game::nextTurn() {
     currentPlayer = (currentPlayer + 1) % players.size();
 }
+
+bool Game::placeTile(int x, int y, Tile * const _tile){
+    if (board.placeTile(x,y,_tile)){
+        return true;
+    }
+    return false;
+}
