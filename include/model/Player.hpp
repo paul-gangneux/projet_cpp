@@ -11,6 +11,7 @@ class Player {
  public:
   Player();
   Player(std::string _name);
+  Player(int);
   virtual ~Player();
   void addScore(int);
 };

@@ -7,7 +7,7 @@ class TileDomino : public Tile {
  private:
   /*
   Here is how we will represent the Domino Tile :
-  Using one int array T of length 12.
+  Using one int array T of length 12, named "numbers"
 
   ++ T0 T1 T2 ++
   T11         T3
@@ -24,12 +24,17 @@ class TileDomino : public Tile {
   TileDomino();
   virtual ~TileDomino();
 
-  int* const getNumbers() const;
+  int const* getNumbers() const;
 
   void rotateClockwise();
   void rotateCounterClockwise();
 
+  /// checks if the 3 numbers on the right side of the current tile match
+  /// with the 3 numbers on the left side of the tile "right".
   bool matchX(const Tile* right) const;
+
+  /// checks if the 3 numbers on the bottom side of the current tile match
+  /// with the 3 numbers on the top side of the tile "down".
   bool matchY(const Tile* down) const;
 };
 

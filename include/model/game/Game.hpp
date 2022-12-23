@@ -2,8 +2,6 @@
 #define MODEL_GAME_HPP
 
 #include <vector>
-#include "model/Board.hpp"
-#include "model/Player.hpp"
 
 #include "model/Board.hpp"
 #include "model/Player.hpp"
@@ -22,17 +20,23 @@ class Game {
 
   std::vector<Player*> const getPlayers() const;
 
-  // must return true if game is over
+  /// returns true if the game has ended.
   bool isOver();
 
+  /// returns true as long as new players can be added.
+  /// once the limit has been reached, returns false.
   virtual bool canAddNewPlayer();
+
+  /// adds a new Player* to the players vector
+  /// returns false if no new player has been added.
+  /// (if max number of players was reached or if init failed)
   bool addPlayer();
 
-  // virtual Tile* grabTile() = 0;
-  // takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
-  // not all games have bags
+  /// increments currentplayer, modulo number of players.
   void nextTurn();
 
+  /// tries to place a tile at coordinates x y,
+  /// returns false if the placement was invalid (= tile wasn't placed).
   virtual bool placeTile(Tile* const tile, int x, int y);
 };
 

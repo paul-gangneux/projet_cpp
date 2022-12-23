@@ -7,7 +7,10 @@ Game::Game() :
     board{Board()},
     currentPlayer{0},
     firstPlay{true},
-    gameIsOver{false} {}
+    gameIsOver{false} {
+  addPlayer();
+  addPlayer();
+}
 
 Game::~Game() {
   for (Player* p : players) {
@@ -36,9 +39,12 @@ bool Game::canAddNewPlayer() {
 bool Game::addPlayer() {
   if (!canAddNewPlayer())
     return false;
-  Player* p = new Player();
+
+  Player* p = new Player(players.size() + 1);
+
   if (p == nullptr)
     return false;
+
   players.push_back(p);
   return true;
 }
