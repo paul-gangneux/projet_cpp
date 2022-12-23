@@ -7,7 +7,10 @@ Game::Game() :
     board{Board()},
     currentPlayer{0},
     firstPlay{true},
-    gameIsOver{false} {}
+    gameIsOver{false} {
+  addPlayer();
+  addPlayer();
+}
 
 Game::~Game() {
   for (Player* p : players) {
