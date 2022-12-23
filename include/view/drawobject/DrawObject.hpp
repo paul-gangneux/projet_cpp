@@ -63,6 +63,7 @@ class DrawObject : public sf::Transformable {
 
   virtual void rotate(float angle);
   virtual void rotate(float angle, float centerX, float centerY);
+  virtual void setRotation(float angle);
 
   void updateTransform();
 

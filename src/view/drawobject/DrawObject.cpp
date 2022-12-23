@@ -106,6 +106,14 @@ void DrawObject::rotate(float _angle, float cx, float cy) {
   updateTransform();
 }
 
+void DrawObject::setRotation(float _angle) {
+  Transform rot = Transform::Identity;
+  rot.rotate(_angle, center);
+  angle = _angle;
+
+  updateTransform();
+}
+
 void DrawObject::setPosition(float x, float y) {
   position.x = x;
   position.y = y;

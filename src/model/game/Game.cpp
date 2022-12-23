@@ -26,6 +26,10 @@ bool Game::isOver() {
   return gameIsOver;
 }
 
+bool Game::canAddNewPlayer() {
+  return true;
+}
+
 bool Game::addPlayer() {
   if (!canAddNewPlayer())
     return false;

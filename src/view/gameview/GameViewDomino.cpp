@@ -7,8 +7,10 @@ using namespace sf;
 
 GameViewDomino::GameViewDomino(Win* _win) :
     GameView(_win, new GameDomino(), nullptr),
-    curModelTile{(TileDomino*) ((GameDomino*) game)->grabTile()} {
+    curModelTile{(TileDomino*) ((GameDomino*) game)->grabTile()},
+    discardTile{false} {
   curTile = new DrawDomino(curModelTile);
+  curTile->setParent(&rootObj);
 }
 
 GameViewDomino::~GameViewDomino() {}
@@ -16,9 +18,8 @@ GameViewDomino::~GameViewDomino() {}
 int GameViewDomino::onKeyPress(Event& event) {
   switch (event.key.code) {
     case Keyboard::Space: {
-      ((GameDomino*) game)->discardTile(curModelTile);
-      delete curTile;
-      curTile = nullptr;
+      if (!game->isOver())
+        discardTile = true;
       break;
     }
 
@@ -28,8 +29,6 @@ int GameViewDomino::onKeyPress(Event& event) {
 }
 
 void GameViewDomino::changeState() {
-  GameView::changeState();
-
   if (leftRotPress)
     curModelTile->rotateCounterClockwise();
 
@@ -52,18 +51,40 @@ void GameViewDomino::changeState() {
 
       // if successful, add tile to view
       if (b) {
-        addTile(curTile, aPos.x, aPos.y);
+        destRot = 0;
+        curRot = 0;
+        addTile(curTile, aPos.x, aPos.y, modelRot * 90);
+        modelRot = 0;
         if (!game->isOver()) {
           curModelTile = (TileDomino*) ((GameDomino*) game)->grabTile();
           curTile = new DrawDomino(curModelTile);
+          curTile->setParent(&rootObj);
+        } else {
+          curTile = nullptr;
         }
-
-      } else {
-        // todo
       }
     }
     validM1Press = false;
   }
+
+  if (discardTile) {
+    destRot = 0;
+    curRot = 0;
+    modelRot = 0;
+    ((GameDomino*) game)->discardTile(curModelTile);
+    delete curTile;
+    curTile = nullptr;
+    if (!game->isOver()) {
+      curModelTile = (TileDomino*) ((GameDomino*) game)->grabTile();
+      curTile = new DrawDomino(curModelTile);
+      curTile->setParent(&rootObj);
+    } else {
+      curTile = nullptr;
+    }
+    discardTile = false;
+  }
+
+  GameView::changeState();
 
   if (game->isOver()) {
     // todo

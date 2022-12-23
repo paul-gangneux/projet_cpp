@@ -24,6 +24,7 @@ class DrawDomino : public DrawObject {
   ~DrawDomino();
 
   virtual void rotate(float angle);
+  virtual void setRotation(float angle);
   virtual void draw(sf::RenderTarget* win) const;
 };
 

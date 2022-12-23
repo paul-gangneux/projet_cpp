@@ -71,7 +71,7 @@ void GameView::addTile(DrawObject* o, int x, int y) {
 
 void GameView::addTile(DrawObject* o, int x, int y, float rotation) {
   addTile(o, x, y);
-  o->rotate(rotation);
+  o->setRotation(rotation);
 }
 
 // takes mouse coordinates and changes it to coords

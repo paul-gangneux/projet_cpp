@@ -38,8 +38,22 @@ DrawDomino::DrawDomino(TileDomino* domino) :
   updateTransform();
 
   for (int i = 0; i < 12; i++) {
-    numbers[i] =
-        new DrawText(to_string(domino->getNumbers()[i]), sf::Color::Blue);
+    int n = domino->getNumbers()[i];
+    sf::Color color;
+    if (n == 0) {
+      color = sf::Color::Black;
+    } else if (n == 1) {
+      color = sf::Color::Blue;
+    } else if (n == 2) {
+      color = sf::Color(0x008800FF);
+    } else if (n == 3) {
+      color = sf::Color::Magenta;
+    } else if (n == 4) {
+      color = sf::Color::Red;
+    } else {
+      color = sf::Color(0x808080FF);
+    }
+    numbers[i] = new DrawText(to_string(n), color);
     numbers[i]->setParent(this);
   }
 
@@ -78,5 +92,12 @@ void DrawDomino::rotate(float _angle) {
   DrawObject::rotate(_angle);
   for (int i = 0; i < 12; i++) {
     numbers[i]->rotate(-_angle);
+  }
+}
+
+void DrawDomino::setRotation(float _angle) {
+  DrawObject::setRotation(_angle);
+  for (int i = 0; i < 12; i++) {
+    numbers[i]->setRotation(-_angle);
   }
 }

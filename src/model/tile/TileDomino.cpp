@@ -1,17 +1,14 @@
 #include "model/tile/TileDomino.hpp"
-
-#include <ctime>
 #include <iostream>
 
 TileDomino::TileDomino() : numbers{new int[12]} {
-  std::srand(std::time(nullptr));
   for (int i = 0; i < 12; i++) {
     numbers[i] = rand() % 5;
   }
 }
 
 TileDomino::~TileDomino() {
-  delete numbers;
+  delete[] numbers;
 }
 
 int const* TileDomino::getNumbers() const {

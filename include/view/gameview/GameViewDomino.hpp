@@ -7,6 +7,7 @@
 class GameViewDomino : public GameView {
  private:
   TileDomino* curModelTile;
+  bool discardTile;
 
  public:
   GameViewDomino(Win* win);

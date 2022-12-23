@@ -12,11 +12,11 @@ class GameDomino : public Game {
 
  public:
   GameDomino();
-  ~GameDomino();
+  virtual ~GameDomino();
 
   /// always returns true, since we can have an
   /// infinite number of players on a domino game.
-  bool canAddNewPlayer();
+  virtual bool canAddNewPlayer();
 
   /// returns a Tile* from the bag.
   /// however, it points to a TileDomino, so we will use casting later.
@@ -29,7 +29,7 @@ class GameDomino : public Game {
   /// if the tile was placed correctly : returns true,
   /// proceeds to the next turn,
   /// checks if the bag is empty - if it is, changes gameIsOver to true
-  bool placeTile(Tile* const, int x, int y);
+  virtual bool placeTile(Tile* const, int x, int y);
 
   /// deletes the tile and proceed to the next turn.
   /// checks if the bag is empty - if it is, changes gameIsOver to true

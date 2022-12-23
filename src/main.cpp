@@ -40,6 +40,7 @@ void switchView(int newView) {
 }
 
 int main() {
+  std::srand(std::time(0));
   win = new Win(800, 600, "game");
   view = new GameMenu(win);
 
