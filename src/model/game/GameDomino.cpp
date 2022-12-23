@@ -11,7 +11,7 @@ GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
 GameDomino::~GameDomino() {}
 
 bool GameDomino::canAddNewPlayer() {
-  return true;  // always return true since we can have infinite gamers playing
+  return true;  // always return true since we can have infinite players playing
                 // a domino game
 }
 

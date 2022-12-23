@@ -61,7 +61,7 @@ class GameView : public DrawableState {
   virtual void draw();
 
   // deals with all key press events that arent default
-  virtual void onKeyPress(sf::Event& event) = 0;
+  virtual int onKeyPress(sf::Event& event) = 0;
 };
 
 #endif

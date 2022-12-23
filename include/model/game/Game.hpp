@@ -2,6 +2,8 @@
 #define MODEL_GAME_HPP
 
 #include <vector>
+#include "model/Board.hpp"
+#include "model/Player.hpp"
 
 #include "model/Board.hpp"
 #include "model/Player.hpp"

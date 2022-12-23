@@ -1,5 +1,4 @@
 #include "model/tile/TileDomino.hpp"
-
 #include <ctime>
 #include <iostream>
 

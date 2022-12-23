@@ -1,5 +1,4 @@
 #include "model/tile/TileTrax.hpp"
-
 #include <ctime>
 #include <iostream>
 

@@ -20,7 +20,7 @@ class GameViewTrax : public GameView {
   virtual ~GameViewTrax();
 
   virtual void changeState();
-  virtual void onKeyPress(sf::Event& event);
+  virtual int onKeyPress(sf::Event& event);
 };
 
 #endif
