@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 
 GameViewTrax::GameViewTrax(Win* _win) :
-    GameView(_win, new DrawTrax(0), new GameTrax()),
+    GameView(_win, new GameTrax(), new DrawTrax(0)),
     tileType{0} {}
 
 GameViewTrax::~GameViewTrax() {}

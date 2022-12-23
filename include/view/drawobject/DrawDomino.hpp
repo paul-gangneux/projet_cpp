@@ -1,12 +1,14 @@
 #ifndef VIEW_DRAWDOMINO_HPP
 #define VIEW_DRAWDOMINO_HPP
 
+#include "model/tile/TileDomino.hpp"
 #include "view/drawobject/DrawObject.hpp"
 #include "view/drawobject/DrawText.hpp"
 
 class DrawDomino : public DrawObject {
  private:
   static sf::Texture texture;
+  static sf::Texture initTexture();
   static sf::Sprite* createDominoSprite();
   /*
   ++ T0 T1 T2 ++
@@ -18,7 +20,7 @@ class DrawDomino : public DrawObject {
   DrawText* numbers[12];
 
  public:
-  DrawDomino(/* args */);
+  DrawDomino(TileDomino* domino);
   ~DrawDomino();
 
   virtual void rotate(float angle);

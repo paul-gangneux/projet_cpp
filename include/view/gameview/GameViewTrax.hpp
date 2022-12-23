@@ -1,5 +1,5 @@
-#ifndef VIEW_GAMEVIEWTraxTRAX_HPP
-#define VIEW_GAMEVIEWTraxTRAX_HPP
+#ifndef VIEW_GAMEVIEWTRAX_HPP
+#define VIEW_GAMEVIEWTRAX_HPP
 
 #include <iostream>
 #include <list>

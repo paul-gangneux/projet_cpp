@@ -15,10 +15,10 @@
 class GameView : public DrawableState {
  protected:
   DrawObject rootObj;
+  Game* game;
   DrawObject* tilePlacementVisual;
   DrawObject* curTile;
   std::list<DrawObject*> objects;
-  Game* game;
 
   // mouse data
 
@@ -45,7 +45,7 @@ class GameView : public DrawableState {
   vec2i coordToGridPos(vec2i coords);
   DrawObject* initTilePlacementVisual();
 
-  GameView(Win* win, DrawObject* firstTile, Game* game);
+  GameView(Win* win, Game* game, DrawObject* firstTile);
 
  public:
   virtual ~GameView();

@@ -13,8 +13,9 @@ using namespace std;
 #define POS4 125 + 15
 #define POS5 165 + 15
 
-// todo: refactor ?
-sf::Texture initTexture() {
+sf::Texture DrawDomino::texture = initTexture();
+
+sf::Texture DrawDomino::initTexture() {
   sf::Texture tex;
   const char path[] = "./ressource/domino.png";
   bool res = tex.loadFromFile(path);
@@ -24,8 +25,6 @@ sf::Texture initTexture() {
   return tex;
 }
 
-sf::Texture DrawDomino::texture = initTexture();
-
 Sprite* DrawDomino::createDominoSprite() {
   Sprite* tile = new Sprite();
   tile->setTexture(DrawDomino::texture);
@@ -33,12 +32,14 @@ Sprite* DrawDomino::createDominoSprite() {
   return tile;
 }
 
-DrawDomino::DrawDomino() : DrawObject(DrawDomino::createDominoSprite()) {
+DrawDomino::DrawDomino(TileDomino* domino) :
+    DrawObject(DrawDomino::createDominoSprite()) {
   center = vec2f{100, 100};
   updateTransform();
 
   for (int i = 0; i < 12; i++) {
-    numbers[i] = new DrawText(to_string(i % 10), sf::Color::Blue);
+    numbers[i] =
+        new DrawText(to_string(domino->getNumbers()[i]), sf::Color::Blue);
     numbers[i]->setParent(this);
   }
 

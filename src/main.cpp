@@ -7,6 +7,7 @@
 #include "view/drawobject/DrawText.hpp"
 #include "view/drawobject/DrawTrax.hpp"
 #include "view/gameview/GameMenu.hpp"
+#include "view/gameview/GameViewDomino.hpp"
 #include "view/gameview/GameViewTrax.hpp"
 
 using namespace sf;
@@ -22,7 +23,8 @@ void switchView(int newView) {
       view = new GameMenu(win);
       break;
     case EVENT_SELECT_DOMINO:
-      // view = new GameViewDomino(); // TODO
+      delete view;
+      view = new GameViewDomino(win);
       break;
     case EVENT_SELECT_TRAX:
       delete view;

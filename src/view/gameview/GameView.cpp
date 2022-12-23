@@ -13,13 +13,13 @@ using namespace sf;
 #define TILE_SIZE 200
 #define BORDER_WIDTH 8
 
-GameView::GameView(Win* _win, DrawObject* firstTile, Game* _game) :
+GameView::GameView(Win* _win, Game* _game, DrawObject* firstTile) :
     DrawableState(_win),
     rootObj{DrawObject()},
+    game{_game},
     tilePlacementVisual{initTilePlacementVisual()},
     curTile{firstTile},
     objects{list<DrawObject*>()},
-    game{_game},
     oldMousePos{Mouse::getPosition(*win)},
     mousePos{oldMousePos},
     deltaMouse{vec2i{0, 0}},
@@ -33,7 +33,8 @@ GameView::GameView(Win* _win, DrawObject* firstTile, Game* _game) :
     modelRot{0} {
   win->setRootObject(&rootObj);
   rootObj.setPosition(win->getWidth() / 2, win->getHeight() / 2);
-  curTile->setParent(&rootObj);
+  if (curTile != nullptr)
+    curTile->setParent(&rootObj);
 }
 
 GameView::~GameView() {
@@ -151,6 +152,13 @@ int GameView::handleEvents(sf::Event& event) {
 
           case Keyboard::Escape: {
             return EVENT_BACK;
+            break;
+          }
+
+          case Keyboard::Return: {
+            if (game->isOver()) {
+              return EVENT_BACK;
+            }
             break;
           }
 
