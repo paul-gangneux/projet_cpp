@@ -8,11 +8,14 @@ GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
   }
 }
 
-GameDomino::~GameDomino() {}
+GameDomino::~GameDomino() {
+  for (TileDomino* td : bag) {
+    delete td;
+  }
+}
 
 bool GameDomino::canAddNewPlayer() {
-  return true;  // always return true since we can have infinite players playing
-                // a domino game
+  return true;
 }
 
 Tile* GameDomino::grabTile() {
@@ -42,6 +45,9 @@ bool GameDomino::placeTile(Tile* const _tile, int x, int y) {
       // --- end debug
       std::exit(1);
     }
+    // calculate the points that are won by placing the current tile,
+    // then adds it to the current player's score
+    // if this seems confusing, please check TileDomino, it will clear it up.
     int score = 0;
     const int* nums = local->getNumbers();
 
@@ -66,7 +72,7 @@ bool GameDomino::placeTile(Tile* const _tile, int x, int y) {
   return false;
 }
 
-void GameDomino::discardTile(Tile* _tile) {
+void GameDomino::discardTile(Tile* const _tile) {
   // since the tile will be removed from the bag & not placed on the board,
   // it won't ever serve again. we can delete it immediately and not risk a
   // double delete

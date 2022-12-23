@@ -6,18 +6,34 @@
 
 class GameDomino : public Game {
  private:
+  /// contains all the (randomly generated) tiles that will be played
+  /// during the game. once it is empty, the game is over.
   std::vector<TileDomino*> bag;
 
  public:
   GameDomino();
   ~GameDomino();
 
+  /// always returns true, since we can have an
+  /// infinite number of players on a domino game.
   bool canAddNewPlayer();
-  Tile* grabTile();  // not 100% sure this works since i return a Tile* not
-                     // TileDomino*. don't forget to cast
+
+  /// returns a Tile* from the bag.
+  /// however, it points to a TileDomino, so we will use casting later.
+  Tile* grabTile();
+  // i named it "grab", as using "get" or "draw" might be misleading
+
+  /// tries to place a tile at coordinates x y,
+  /// returns false if the placement was invalid (= tile wasn't placed).
+  ///
+  /// if the tile was placed correctly : returns true,
+  /// proceeds to the next turn,
+  /// checks if the bag is empty - if it is, changes gameIsOver to true
   bool placeTile(Tile* const, int x, int y);
-  void discardTile(Tile*);  // maybe need to add const so that incoming tiles
-                            // will be accepted
+
+  /// deletes the tile and proceed to the next turn.
+  /// checks if the bag is empty - if it is, changes gameIsOver to true
+  void discardTile(Tile* const);
 };
 
 #endif
