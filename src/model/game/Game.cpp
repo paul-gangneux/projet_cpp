@@ -26,16 +26,6 @@ bool Game::isOver() {
   return gameIsOver;
 }
 
-bool Game::canAddNewPlayer() {
-  // --- DEBUG
-  std::cout << std::endl
-            << "OOPSIE: Game::canAddNewPlayer() should never be directly called"
-            << std::endl;
-  std::exit(1);
-  // --- end debug
-  return false;
-}
-
 bool Game::addPlayer() {
   if (!canAddNewPlayer())
     return false;
