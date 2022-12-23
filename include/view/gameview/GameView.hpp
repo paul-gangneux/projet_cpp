@@ -3,13 +3,14 @@
 
 #include <iostream>
 #include <list>
+
 #include "geometry/vectors.hpp"
 #include "model/game/Game.hpp"
-#include "view/gameview/DrawableState.hpp"
 #include "view/Win.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawObject.hpp"
 #include "view/drawobject/DrawText.hpp"
+#include "view/gameview/DrawableState.hpp"
 
 class GameView : public DrawableState {
  protected:

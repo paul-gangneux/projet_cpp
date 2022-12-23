@@ -1,4 +1,5 @@
 #include "view/gameview/GameViewTrax.hpp"
+
 #include "model/game/GameTrax.hpp"
 #include "model/tile/TileTrax.hpp"
 #include "view/drawobject/DrawTrax.hpp"
@@ -7,8 +8,7 @@ using namespace std;
 using namespace sf;
 
 GameViewTrax::GameViewTrax(Win* _win) :
-    GameView(_win, new DrawTrax(0), new GameTrax()),
-    tileType{0} {}
+    GameView(_win, new DrawTrax(0), new GameTrax()), tileType{0} {}
 
 GameViewTrax::~GameViewTrax() {}
 
@@ -26,7 +26,9 @@ void GameViewTrax::onKeyPress(Event& event) {
       destRot = 0;
       break;
     }
-    default: { break; }
+    default: {
+      break;
+    }
   }
 }
 

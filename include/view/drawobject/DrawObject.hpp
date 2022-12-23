@@ -2,15 +2,16 @@
 #define VIEW_DRAWOBJECT_HPP
 
 #include <SFML/Graphics.hpp>
+
 #include "geometry/vectors.hpp"
 
 class DrawObject : public sf::Transformable {
-private:
+ private:
   DrawObject* parent;
   sf::Drawable* dr_ptr;
   sf::Transformable* tr_ptr;
 
-protected:
+ protected:
   // transform relative to parent, or to world if parent is null
   sf::Transform trans;
   vec2f position;
@@ -18,21 +19,22 @@ protected:
   float angle;
   vec2f center;
 
-public:
+ public:
   DrawObject();
 
   template <typename T>
   DrawObject(T* object) :
-    parent{nullptr},
-    dr_ptr{(sf::Drawable*) object},
-    tr_ptr{(sf::Transformable*) object},
-    trans{sf::Transform::Identity},
-    position{vec2f{0.0f, 0.0f}},
-    size{1.0f, 1.0f},
-    angle{0.0f},
-    center{vec2f{0.0f, 0.0f}}
-  {
-    trans.translate(position - center).scale(size, center).rotate(angle, center);
+      parent{nullptr},
+      dr_ptr{(sf::Drawable*) object},
+      tr_ptr{(sf::Transformable*) object},
+      trans{sf::Transform::Identity},
+      position{vec2f{0.0f, 0.0f}},
+      size{1.0f, 1.0f},
+      angle{0.0f},
+      center{vec2f{0.0f, 0.0f}} {
+    trans.translate(position - center)
+        .scale(size, center)
+        .rotate(angle, center);
   }
 
   virtual ~DrawObject();

@@ -1,18 +1,20 @@
 #ifndef MODEL_GAME_HPP
 #define MODEL_GAME_HPP
 
-#include "Player.hpp"
-#include "Board.hpp"
 #include <vector>
 
+#include "Board.hpp"
+#include "Player.hpp"
+
 class Game {
-private:
+ private:
   std::vector<Player*> players;
   Board board;
   int currentPlayer;
 
   virtual void gameOver() = 0;
-public:
+
+ public:
   Game();
   virtual ~Game();
 
@@ -21,9 +23,10 @@ public:
   virtual bool canAddNewPlayer();
   bool addPlayer();
 
-  virtual Tile* grabTile() = 0;//takes a tile from the bag. i named it "grab" to avoid using "get" or "draw"
+  virtual Tile* grabTile() = 0;  // takes a tile from the bag. i named it "grab"
+                                 // to avoid using "get" or "draw"
   void nextTurn();
-  virtual bool placeTile(int x, int y, Tile * const);
+  virtual bool placeTile(int x, int y, Tile* const);
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define MODEL_GAME_TREX_HPP
 
 #include <queue>
+
 #include "Game.hpp"
 #include "model/tile/TileTrax.hpp"
 

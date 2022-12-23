@@ -5,16 +5,18 @@
 #include "model/tile/TileDomino.hpp"
 
 class GameDomino : public Game {
-private:
+ private:
   std::vector<TileDomino*> bag;
   bool isOver();
-public:
+
+ public:
   GameDomino();
   ~GameDomino();
 
   bool canAddNewPlayer();
-  Tile* grabTile(); // not 100% sure this works since i return a Tile* not TileDomino*. don't forget to cast
-  bool placeTile(Tile * const, int x, int y);
+  Tile* grabTile();  // not 100% sure this works since i return a Tile* not
+                     // TileDomino*. don't forget to cast
+  bool placeTile(Tile* const, int x, int y);
 };
 
 #endif

@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <list>
+
 #include "geometry/vectors.hpp"
-#include "view/gameview/GameView.hpp"
 #include "view/Win.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawObject.hpp"
 #include "view/drawobject/DrawText.hpp"
+#include "view/gameview/GameView.hpp"
 
 class GameViewTrax : public GameView {
  private:

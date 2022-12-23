@@ -4,7 +4,7 @@
 #include "Tile.hpp"
 
 class TileTrax : public Tile {
-private:
+ private:
   // 0 for straight, 1 for curved
   int type;
 
@@ -17,7 +17,8 @@ private:
   // 3---1
   // --2--
   char colors[4];
-public:
+
+ public:
   TileTrax(int type);
   TileTrax(int type, int rotation);
   virtual ~TileTrax();

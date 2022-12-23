@@ -23,7 +23,7 @@ bool GameTrax::canAddNewPlayer() {
 
 char GameTrax::getColorIfExists(int x, int y, int colorPos) {
   char c;
-  TileTrax* t = (TileTrax*)board.get(x, y);
+  TileTrax* t = (TileTrax*) board.get(x, y);
   if (t != nullptr) {
     c = t->getColor(colorPos);
   } else {
@@ -36,7 +36,7 @@ void GameTrax::playIfForced(int x, int y) {
   if (nbOfTiles >= 64)
     return;
 
-  TileTrax* t = (TileTrax*)board.get(x, y);
+  TileTrax* t = (TileTrax*) board.get(x, y);
   if (t != nullptr)
     return;
 
@@ -93,10 +93,11 @@ bool GameTrax::checkPathForLoop(
   if (x == origX && y == origY)
     return true;
 
-  int colors[4] = {getColorIfExists(x, y, 0),
-                   getColorIfExists(x, y, 1),
-                   getColorIfExists(x, y, 2),
-                   getColorIfExists(x, y, 3)};
+  int colors[4] = {
+      getColorIfExists(x, y, 0),
+      getColorIfExists(x, y, 1),
+      getColorIfExists(x, y, 2),
+      getColorIfExists(x, y, 3)};
 
   colors[dir] = '\0';
   if (colors[0] == col) {
@@ -141,7 +142,10 @@ bool GameTrax::placeTile(Tile* const tile, int x, int y) {
   if (res) {
     nbOfTiles++;
     placedTilesQueue.push(new int[4]{
-        ((TileTrax*)tile)->getType(), x, y, ((TileTrax*)tile)->getRotation()});
+        ((TileTrax*) tile)->getType(),
+        x,
+        y,
+        ((TileTrax*) tile)->getRotation()});
     checkForEndGame(x, y);
     playIfForced(x + 1, y);
     playIfForced(x - 1, y);

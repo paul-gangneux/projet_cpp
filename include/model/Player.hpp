@@ -4,14 +4,15 @@
 #include <string>
 
 class Player {
-private:
+ private:
   std::string name;
   int score;
-public:
+
+ public:
   Player();
   Player(std::string _name);
-  virtual ~Player();  
-
+  virtual ~Player();
+  void addScore(int);
 };
 
 #endif

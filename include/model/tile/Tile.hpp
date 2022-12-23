@@ -2,9 +2,8 @@
 #define MODEL_TILE_HPP
 
 class Tile {
-private:
-
-public:
+ private:
+ public:
   Tile();
   virtual ~Tile();
 
