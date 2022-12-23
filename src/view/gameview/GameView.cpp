@@ -158,6 +158,7 @@ int GameView::handleEvents(sf::Event& event) {
             return onKeyPress(event);
             break;
         }
+        break;
       }
 
       case Event::MouseWheelScrolled: {
