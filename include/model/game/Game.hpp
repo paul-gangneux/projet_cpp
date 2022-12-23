@@ -25,7 +25,7 @@ class Game {
 
   /// returns true as long as new players can be added.
   /// once the limit has been reached, returns false.
-  virtual bool canAddNewPlayer();
+  virtual bool canAddNewPlayer() = 0;
 
   /// adds a new Player* to the players vector
   /// returns false if no new player has been added.

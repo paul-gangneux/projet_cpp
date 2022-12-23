@@ -4,12 +4,7 @@
 #define MIN(x, y) (x < y ? x : y)
 
 GameTrax::GameTrax() :
-    Game(),
-    nbOfTiles{0},
-    minX{0},
-    maxX{0},
-    minY{0},
-    maxY{0} {}
+    Game(), nbOfTiles{0}, minX{0}, maxX{0}, minY{0}, maxY{0} {}
 
 GameTrax::~GameTrax() {
   while (!placedTilesQueue.empty()) {
@@ -20,7 +15,7 @@ GameTrax::~GameTrax() {
 }
 
 bool GameTrax::canAddNewPlayer() {
-  return true;
+  return false;
 }
 
 char GameTrax::getColorIfExists(int x, int y, int colorPos) {
@@ -191,10 +186,11 @@ bool GameTrax::placeTile(Tile* const tile, int x, int y) {
     minY = MIN(minY, y);
     maxX = MAX(maxX, x);
     maxY = MAX(maxY, y);
-    placedTilesQueue.push(new int[4]{((TileTrax*) tile)->getType(),
-                                     x,
-                                     y,
-                                     ((TileTrax*) tile)->getRotation()});
+    placedTilesQueue.push(new int[4]{
+        ((TileTrax*) tile)->getType(),
+        x,
+        y,
+        ((TileTrax*) tile)->getRotation()});
     checkForEndGame(x, y);
     playIfForced(x + 1, y);
     playIfForced(x - 1, y);
