@@ -12,12 +12,16 @@ class Game {
   Board board;
   int currentPlayer;
   bool firstPlay;
+  bool gameIsOver;
 
  public:
   Game();
   virtual ~Game();
 
   std::vector<Player*> const getPlayers() const;
+
+  // must return true if game is over
+  bool isOver();
 
   virtual bool canAddNewPlayer();
   bool addPlayer();
@@ -28,9 +32,6 @@ class Game {
   void nextTurn();
 
   virtual bool placeTile(Tile* const tile, int x, int y);
-
-  // must return true if game is over
-  virtual bool isOver() = 0;
 };
 
 #endif

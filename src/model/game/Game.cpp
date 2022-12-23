@@ -6,7 +6,8 @@ Game::Game() :
     players{std::vector<Player*>()},
     board{Board()},
     currentPlayer{0},
-    firstPlay{true} {}
+    firstPlay{true},
+    gameIsOver{false} {}
 
 Game::~Game() {
   for (Player* p : players) {
@@ -16,6 +17,10 @@ Game::~Game() {
 
 std::vector<Player*> const Game::getPlayers() const {
   return players;
+}
+
+bool Game::isOver() {
+  return gameIsOver;
 }
 
 bool Game::canAddNewPlayer() {

@@ -7,7 +7,6 @@
 class GameDomino : public Game {
  private:
   std::vector<TileDomino*> bag;
-  bool isOver();
 
  public:
   GameDomino();
@@ -17,6 +16,8 @@ class GameDomino : public Game {
   Tile* grabTile();  // not 100% sure this works since i return a Tile* not
                      // TileDomino*. don't forget to cast
   bool placeTile(Tile* const, int x, int y);
+  void discardTile(Tile*);  // maybe need to add const so that incoming tiles
+                            // will be accepted
 };
 
 #endif

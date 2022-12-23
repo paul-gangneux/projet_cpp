@@ -10,21 +10,20 @@ GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
 
 GameDomino::~GameDomino() {}
 
-bool GameDomino::isOver() {
-  return false;  // todo
-}
-
 bool GameDomino::canAddNewPlayer() {
   return true;  // always return true since we can have infinite gamers playing
                 // a domino game
 }
 
-// [NOTE] if returns nullptr, end the game.
 Tile* GameDomino::grabTile() {
   if (bag.empty()) {
-    isOver();  // not be the best way to do it. we end game then we come back to
-               // this function (pile) to return a nullptr ? eeeh
-    return nullptr;
+    // --- DEBUG
+    std::cout << std::endl
+              << "OOPSIE: GameDomino::grabTile() was called, but the bag is "
+                 "empty. Check value of isGameOver"
+              << std::endl;
+    std::exit(1);
+    // --- end debug
   }
   Tile* res = bag.back();
   bag.pop_back();  // no, pop_back does not return anything
@@ -35,10 +34,12 @@ bool GameDomino::placeTile(Tile* const _tile, int x, int y) {
   if (Game::placeTile(_tile, x, y)) {
     const TileDomino* local = dynamic_cast<const TileDomino*>(_tile);
     if (local == nullptr) {
+      // --- DEBUG
       std::cout << std::endl
                 << "OOPSIE: GameDomino::placeTile(...) did not cast correctly "
                    "a Tile to a TileDomino"
                 << std::endl;
+      // --- end debug
       std::exit(1);
     }
     int score = 0;
@@ -54,7 +55,26 @@ bool GameDomino::placeTile(Tile* const _tile, int x, int y) {
       score += (nums[9] + nums[10] + nums[11]);
 
     (*players.at(currentPlayer)).addScore(score);
+
+    // if the tile that has just been placed was the last one, game is over.
+    if (bag.size() == 0)
+      gameIsOver = true;
+
+    nextTurn();
     return true;
   }
   return false;
+}
+
+void GameDomino::discardTile(Tile* _tile) {
+  // since the tile will be removed from the bag & not placed on the board,
+  // it won't ever serve again. we can delete it immediately and not risk a
+  // double delete
+  delete _tile;
+
+  // if the tile that has just been discarded was the last one, game is over.
+  if (bag.size() == 0)
+    gameIsOver = true;
+
+  nextTurn();
 }

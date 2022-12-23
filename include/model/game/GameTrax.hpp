@@ -10,7 +10,6 @@ class GameTrax : public Game {
  private:
   // std::vector<GameTrax*> bag;
   std::queue<int*> placedTilesQueue;
-  bool gameIsOver;
   int nbOfTiles;
 
   void playIfForced(int x, int y);
@@ -29,8 +28,6 @@ class GameTrax : public Game {
   // returns false if queue is empty
   // infos are: type, x pos, y pos, rotation
   bool getTileInfoInPlaceQueue(int infos[4]);
-
-  virtual bool isOver();
 };
 
 #endif

@@ -3,7 +3,7 @@
 #define MAX(x, y) (x > y ? x : y)
 #define MIN(x, y) (x < y ? x : y)
 
-GameTrax::GameTrax() : Game(), gameIsOver{false}, nbOfTiles{0} {}
+GameTrax::GameTrax() : Game(), nbOfTiles{0} {}
 
 GameTrax::~GameTrax() {
   while (!placedTilesQueue.empty()) {
@@ -11,10 +11,6 @@ GameTrax::~GameTrax() {
     placedTilesQueue.pop();
     delete[] i;
   }
-}
-
-bool GameTrax::isOver() {
-  return gameIsOver;
 }
 
 bool GameTrax::canAddNewPlayer() {
