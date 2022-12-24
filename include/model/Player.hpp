@@ -14,6 +14,8 @@ class Player {
   Player(int);
   virtual ~Player();
   void addScore(int);
+
+  const std::string getName() const;
 };
 
 #endif

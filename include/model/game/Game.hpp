@@ -20,6 +20,8 @@ class Game {
 
   std::vector<Player*> const getPlayers() const;
 
+  Player const* getCurrentPlayer() const;
+
   /// returns true if the game has ended.
   virtual bool isOver();
 

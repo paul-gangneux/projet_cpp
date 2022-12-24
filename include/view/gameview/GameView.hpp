@@ -14,11 +14,14 @@
 
 class GameView : public DrawableState {
  protected:
-  DrawObject rootObj;
   Game* game;
+  DrawObject rootObj;
   DrawObject* tilePlacementVisual;
   DrawObject* curTile;
+  DrawText* topLeftText;
+
   std::list<DrawObject*> objects;
+  std::list<DrawText*> textList;
 
   // mouse data
 
@@ -55,6 +58,7 @@ class GameView : public DrawableState {
   void addTile(DrawObject* obj, int x, int y, float rotation);
 
   void clearObjects();
+  void clearText();
 
   virtual int handleEvents(sf::Event& event);
   virtual void changeState();

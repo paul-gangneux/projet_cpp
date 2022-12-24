@@ -50,42 +50,42 @@ void GameTrax::playIfForced(int x, int y) {
   // case straight tile
   if (up == down && up != '\0') {
     if (up == 'b') {
-      placeTile(new TileTrax(0, 0), x, y);
+      placeTileAux(new TileTrax(0, 0), x, y);
     } else {
-      placeTile(new TileTrax(0, 1), x, y);
+      placeTileAux(new TileTrax(0, 1), x, y);
     }
   } else if (left == right && left != '\0') {
     if (left == 'w') {
-      placeTile(new TileTrax(0, 0), x, y);
+      placeTileAux(new TileTrax(0, 0), x, y);
     } else {
-      placeTile(new TileTrax(0, 1), x, y);
+      placeTileAux(new TileTrax(0, 1), x, y);
     }
   }
   // case curved tile
 
   else if (up == right && up != '\0') {
     if (up == 'w') {
-      placeTile(new TileTrax(1, 0), x, y);
+      placeTileAux(new TileTrax(1, 0), x, y);
     } else {
-      placeTile(new TileTrax(1, 2), x, y);
+      placeTileAux(new TileTrax(1, 2), x, y);
     }
   } else if (right == down && right != '\0') {
     if (right == 'w') {
-      placeTile(new TileTrax(1, 1), x, y);
+      placeTileAux(new TileTrax(1, 1), x, y);
     } else {
-      placeTile(new TileTrax(1, 3), x, y);
+      placeTileAux(new TileTrax(1, 3), x, y);
     }
   } else if (down == left && down != '\0') {
     if (down == 'w') {
-      placeTile(new TileTrax(1, 2), x, y);
+      placeTileAux(new TileTrax(1, 2), x, y);
     } else {
-      placeTile(new TileTrax(1, 0), x, y);
+      placeTileAux(new TileTrax(1, 0), x, y);
     }
   } else if (left == up && left != '\0') {
     if (left == 'w') {
-      placeTile(new TileTrax(1, 3), x, y);
+      placeTileAux(new TileTrax(1, 3), x, y);
     } else {
-      placeTile(new TileTrax(1, 1), x, y);
+      placeTileAux(new TileTrax(1, 1), x, y);
     }
   }
 }
@@ -181,7 +181,7 @@ void GameTrax::checkForEndGame(int x, int y) {
     gameIsOver = true;
 }
 
-bool GameTrax::placeTile(Tile* const tile, int x, int y) {
+bool GameTrax::placeTileAux(Tile* const tile, int x, int y) {
   bool res = (maxX - minX < 7 || (x >= minX && x <= maxX)) &&
              (maxY - minY < 7 || (y >= minY && y <= maxY)) &&
              Game::placeTile(tile, x, y);
@@ -200,6 +200,14 @@ bool GameTrax::placeTile(Tile* const tile, int x, int y) {
     playIfForced(x - 1, y);
     playIfForced(x, y + 1);
     playIfForced(x, y - 1);
+  }
+  return res;
+}
+
+bool GameTrax::placeTile(Tile* const tile, int x, int y) {
+  bool res = placeTileAux(tile, x, y);
+  if (res) {
+    nextTurn();
   }
   return res;
 };

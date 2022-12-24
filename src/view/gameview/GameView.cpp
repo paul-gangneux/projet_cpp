@@ -15,11 +15,13 @@ using namespace sf;
 
 GameView::GameView(Win* _win, Game* _game, DrawObject* firstTile) :
     DrawableState(_win),
-    rootObj{DrawObject()},
     game{_game},
+    rootObj{DrawObject()},
     tilePlacementVisual{initTilePlacementVisual()},
     curTile{firstTile},
+    topLeftText{new DrawText("", Color::White)},
     objects{list<DrawObject*>()},
+    textList{list<DrawText*>()},
     oldMousePos{Mouse::getPosition(*win)},
     mousePos{oldMousePos},
     deltaMouse{vec2i{0, 0}},
@@ -35,10 +37,12 @@ GameView::GameView(Win* _win, Game* _game, DrawObject* firstTile) :
   rootObj.setPosition(win->getWidth() / 2, win->getHeight() / 2);
   if (curTile != nullptr)
     curTile->setParent(&rootObj);
+  textList.push_back(topLeftText);
 }
 
 GameView::~GameView() {
   clearObjects();
+  clearText();
   delete curTile;
   delete game;
 }
@@ -102,6 +106,14 @@ void GameView::clearObjects() {
   }
 }
 
+void GameView::clearText() {
+  while (!textList.empty()) {
+    DrawText* o = textList.front();
+    textList.pop_front();
+    delete o;
+  }
+}
+
 int GameView::handleEvents(sf::Event& event) {
   // updating mouse position
   deltaMouse = mousePos - oldMousePos;
@@ -145,7 +157,7 @@ int GameView::handleEvents(sf::Event& event) {
             break;
           }
 
-          case Keyboard::E: {
+          case Keyboard::Z: {
             rightRotPress = true;
             break;
           }
@@ -238,7 +250,7 @@ void GameView::changeState() {
       destRot = 0;
     }
 
-    // positions the tile where the mouse is
+    // positions the held tile where the mouse is
     vec2f size = rootObj.getSize();
     vec2f pos = rootObj.getPosition();
     curTile->setPosition(
@@ -247,9 +259,15 @@ void GameView::changeState() {
 
   vec2i v = coordToGridPos(mousePos);
 
+  // positionning the square showing where the tile will be placed
   if (!firstPlay) {
     tilePlacementVisual->setPosition(v.x * TILE_SIZE, v.y * TILE_SIZE);
   }
+
+  if (!game->isOver())
+    topLeftText->setText(" turn: " + game->getCurrentPlayer()->getName());
+  else
+    topLeftText->setText(" Game Ended, press ENTER to go back");
 }
 
 void GameView::draw() {
@@ -261,5 +279,8 @@ void GameView::draw() {
   }
   if (!game->isOver() && curTile != nullptr) {
     curTile->draw(win);
+  }
+  for (DrawText* t : textList) {
+    t->draw(win);
   }
 }

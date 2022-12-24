@@ -18,6 +18,7 @@ class GameTrax : public Game {
   char getColorIfExists(int x, int y, int colorPos);
   void checkForEndGame(int x, int y);
   bool checkPath(vec2i pos, vec2i ori, bool xtrm[4], char col, int dir);
+  bool placeTileAux(Tile* const tile, int x, int y);
 
  public:
   GameTrax();

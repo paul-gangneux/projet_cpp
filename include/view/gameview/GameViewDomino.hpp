@@ -7,7 +7,9 @@
 class GameViewDomino : public GameView {
  private:
   TileDomino* curModelTile;
+  DrawText* controlText;
   bool discardTile;
+  bool controlsAreShown;
 
  public:
   GameViewDomino(Win* win);

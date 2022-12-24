@@ -6,18 +6,21 @@
 class DrawText : public DrawObject {
  private:
   static sf::Font font;
-  static sf::Text* createText(
-      std::string text, sf::Color color = sf::Color::Black);
+  static sf::Text* createText(std::string text, sf::Color color, int size);
+
   sf::Text* textObject;
+  // float width;
+  // float height;
 
   DrawText(sf::Text* obj);
 
  public:
-  DrawText(std::string txt, sf::Color color);
+  DrawText(std::string text, sf::Color color = sf::Color::Black, int size = 30);
+  DrawText(std::string text, int size);
   DrawText(std::string text);
   ~DrawText();
 
-  void setText(char* text);
+  void setText(const char* text);
   void setText(std::string text);
 };
 

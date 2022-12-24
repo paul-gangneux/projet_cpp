@@ -22,6 +22,10 @@ std::vector<Player*> const Game::getPlayers() const {
   return players;
 }
 
+Player const* Game::getCurrentPlayer() const {
+  return players.at(currentPlayer);
+}
+
 bool Game::isOver() {
   return gameIsOver;
 }

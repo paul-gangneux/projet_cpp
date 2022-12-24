@@ -1,15 +1,19 @@
 #include "model/Player.hpp"
 
-Player::Player() : name{"polggers"}, score{0} {}
+using namespace std;
 
-Player::Player(std::string _name) : name{_name}, score{0} {}
+Player::Player() : name{"John Gaming"}, score{0} {}
 
-Player::Player(int n) : name{"Gamer "}, score{0} {
-  name += std::to_string(n);
-}
+Player::Player(string _name) : name{_name}, score{0} {}
+
+Player::Player(int n) : name{"Player " + to_string(n)}, score{0} {}
 
 Player::~Player() {}
 
 void Player::addScore(int s) {
   score += s;
+}
+
+const string Player::getName() const {
+  return name;
 }
