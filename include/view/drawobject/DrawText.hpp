@@ -23,6 +23,8 @@ class DrawText : public DrawObject {
   void setText(const char* text);
   void setText(std::string text);
 
+  void setColor(sf::Color color);
+
   float getWidth() const;
   float getHeight() const;
 };

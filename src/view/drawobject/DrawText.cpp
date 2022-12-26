@@ -55,6 +55,10 @@ void DrawText::setText(string str) {
   // updateTransform();
 }
 
+void DrawText::setColor(sf::Color color) {
+  textObject->setColor(color);
+}
+
 float DrawText::getWidth() const {
   return textObject->getLocalBounds().width;
 }

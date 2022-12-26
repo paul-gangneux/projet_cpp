@@ -1,4 +1,7 @@
 #include "view/gameview/GameMenu.hpp"
+#include <cmath>
+
+#define ABS(x) (x >= 0 ? x : -x)
 
 using namespace sf;
 
@@ -59,7 +62,12 @@ int GameMenu::handleEvents(sf::Event& event) {
   return 0;
 }
 void GameMenu::changeState() {
-  // nothing to do
+  static float i = 1;
+  i += 0.03f;
+  menuText.setColor(Color(
+      ABS(sin(i)) * 255,
+      ABS(sin(i * 1.3)) * 200 + 55,
+      ABS(sin(i * 2.7)) * 255));
 }
 void GameMenu::draw() {
   menuText.draw(win);
