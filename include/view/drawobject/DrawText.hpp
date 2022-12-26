@@ -22,6 +22,9 @@ class DrawText : public DrawObject {
 
   void setText(const char* text);
   void setText(std::string text);
+
+  float getWidth() const;
+  float getHeight() const;
 };
 
 #endif

@@ -16,7 +16,6 @@ using namespace sf;
 GameView::GameView(Win* _win, Game* _game, DrawObject* firstTile) :
     DrawableState(_win),
     game{_game},
-    rootObj{DrawObject()},
     tilePlacementVisual{initTilePlacementVisual()},
     curTile{firstTile},
     topLeftText{new DrawText("", Color::White)},
@@ -33,8 +32,6 @@ GameView::GameView(Win* _win, Game* _game, DrawObject* firstTile) :
     curRot{0},
     destRot{0},
     modelRot{0} {
-  win->setRootObject(&rootObj);
-  rootObj.setPosition(win->getWidth() / 2, win->getHeight() / 2);
   if (curTile != nullptr)
     curTile->setParent(&rootObj);
   textList.push_back(topLeftText);

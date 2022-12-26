@@ -4,7 +4,10 @@ using namespace sf;
 
 GameMenu::GameMenu(Win* _win) :
     DrawableState(_win),
-    menuText{" 1. domino\n 2. trax\n 3. carcassone", Color::White} {}
+    menuText{"1. domino\n\n2. trax\n\n3. carcassone", Color::White, 42} {
+  menuText.setParent(&rootObj);
+  menuText.move(-menuText.getWidth() / 2, -menuText.getHeight() / 2);
+}
 
 GameMenu::~GameMenu() {}
 

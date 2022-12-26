@@ -16,6 +16,7 @@ class Game {
 
  public:
   Game();
+  Game(const char* p1name, const char* p2name);
   virtual ~Game();
 
   std::vector<Player*> const getPlayers() const;
@@ -33,6 +34,8 @@ class Game {
   /// returns false if no new player has been added.
   /// (if max number of players was reached or if init failed)
   virtual bool addPlayer();
+
+  virtual bool addPlayer(const char* name);
 
   /// increments currentplayer, modulo number of players.
   virtual void nextTurn();

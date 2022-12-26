@@ -9,6 +9,7 @@
 class DrawableState {
  protected:
   Win* win;
+  DrawObject rootObj;
   DrawableState(Win* win);
 
  public:

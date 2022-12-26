@@ -85,7 +85,7 @@ int main() {
     view->changeState();
 
     // -- rendering -- //
-    win->clear();
+    win->clear(Color(10, 18, 15, 255));
     view->draw();
     win->display();
 

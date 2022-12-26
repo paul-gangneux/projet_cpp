@@ -54,3 +54,11 @@ void DrawText::setText(string str) {
   // center = vec2f{width / 2, height / 2};
   // updateTransform();
 }
+
+float DrawText::getWidth() const {
+  return textObject->getLocalBounds().width;
+}
+
+float DrawText::getHeight() const {
+  return textObject->getLocalBounds().height;
+}

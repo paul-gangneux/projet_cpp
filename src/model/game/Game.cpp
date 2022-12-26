@@ -2,15 +2,17 @@
 
 #include <iostream>
 
-Game::Game() :
+Game::Game(const char* p1name, const char* p2name) :
     players{std::vector<Player*>()},
     board{Board()},
     currentPlayer{0},
     firstPlay{true},
     gameIsOver{false} {
-  addPlayer();
-  addPlayer();
+  addPlayer(p1name);
+  addPlayer(p2name);
 }
+
+Game::Game() : Game("player 1", "player 2") {}
 
 Game::~Game() {
   for (Player* p : players) {
@@ -39,6 +41,19 @@ bool Game::addPlayer() {
     return false;
 
   Player* p = new Player(players.size() + 1);
+
+  if (p == nullptr)
+    return false;
+
+  players.push_back(p);
+  return true;
+}
+
+bool Game::addPlayer(const char* name) {
+  if (!canAddNewPlayer())
+    return false;
+
+  Player* p = new Player(name);
 
   if (p == nullptr)
     return false;

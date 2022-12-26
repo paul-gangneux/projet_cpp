@@ -15,7 +15,6 @@
 class GameView : public DrawableState {
  protected:
   Game* game;
-  DrawObject rootObj;
   DrawObject* tilePlacementVisual;
   DrawObject* curTile;
   DrawText* topLeftText;

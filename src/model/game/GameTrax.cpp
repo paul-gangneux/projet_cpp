@@ -4,7 +4,7 @@
 #define MIN(x, y) (x < y ? x : y)
 
 GameTrax::GameTrax() :
-    Game(),
+    Game("white", "black"),
     nbOfTiles{0},
     minX{0},
     maxX{0},
