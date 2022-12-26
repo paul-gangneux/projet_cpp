@@ -13,12 +13,16 @@ using namespace sf;
 #define TILE_SIZE 200
 #define BORDER_WIDTH 8
 
-GameView::GameView(Win* _win, Game* _game, DrawObject* firstTile) :
+static const char* showControlsText = "Press C to show controls";
+
+GameView::GameView(
+    Win* _win, Game* _game, DrawObject* firstTile, const char* _ctrlText) :
     DrawableState(_win),
     game{_game},
     tilePlacementVisual{initTilePlacementVisual()},
     curTile{firstTile},
     topLeftText{new DrawText("", Color::White)},
+    controlsText{new DrawText(showControlsText, Color::White, 24)},
     objects{list<DrawObject*>()},
     textList{list<DrawText*>()},
     oldMousePos{Mouse::getPosition(*win)},
@@ -29,12 +33,17 @@ GameView::GameView(Win* _win, Game* _game, DrawObject* firstTile) :
     leftRotPress{false},
     rightRotPress{false},
     firstPlay{true},
+    controlsAreShown{false},
     curRot{0},
     destRot{0},
-    modelRot{0} {
+    modelRot{0},
+    ctrlText{_ctrlText} {
   if (curTile != nullptr)
     curTile->setParent(&rootObj);
   textList.push_back(topLeftText);
+  textList.push_back(controlsText);
+  controlsText->setPosition(
+      controlsText->getWidth() / 2 + 15, controlsText->getHeight() / 2 + 100);
 }
 
 GameView::~GameView() {
@@ -159,6 +168,20 @@ int GameView::handleEvents(sf::Event& event) {
             break;
           }
 
+          case Keyboard::C: {
+            if (controlsAreShown)
+              controlsText->setText(showControlsText);
+            else
+              controlsText->setText(ctrlText);
+
+            controlsAreShown = !controlsAreShown;
+            controlsText->setPosition(
+                controlsText->getWidth() / 2 + 15,
+                controlsText->getHeight() / 2 + 100);
+
+            break;
+          }
+
           case Keyboard::Escape: {
             return EVENT_BACK;
             break;
@@ -261,10 +284,15 @@ void GameView::changeState() {
     tilePlacementVisual->setPosition(v.x * TILE_SIZE, v.y * TILE_SIZE);
   }
 
-  if (!game->isOver())
-    topLeftText->setText(" turn: " + game->getCurrentPlayer()->getName());
-  else
-    topLeftText->setText(" Game Ended, press ENTER to go back");
+  if (!game->isOver()) {
+    topLeftText->setText("Turn: " + game->getCurrentPlayer()->getName());
+    topLeftText->setPosition(
+        topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
+  } else {
+    topLeftText->setText("Game Ended, press ENTER to go back");
+    topLeftText->setPosition(
+        topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
+  }
 }
 
 void GameView::draw() {

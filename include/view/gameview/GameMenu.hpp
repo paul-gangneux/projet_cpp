@@ -1,7 +1,7 @@
 #ifndef VIEW_GAMEMENU_HPP
 #define VIEW_GAMEMENU_HPP
 
-#include "view/drawobject/DrawText.hpp"
+#include "view/drawobject/TextBox.hpp"
 #include "view/gameview/DrawableState.hpp"
 
 #define EVENT_SELECT_MENU 10
@@ -11,7 +11,10 @@
 
 class GameMenu : public DrawableState {
  private:
-  DrawText menuText;
+  TextBox menuTextBoxes[3];
+  int selectedAction;
+
+  void switchSelectedAction(int action);
 
  public:
   GameMenu(Win* win);

@@ -13,12 +13,14 @@ class DrawText : public DrawObject {
   // float height;
 
   DrawText(sf::Text* obj);
+  void recenter();
 
  public:
-  DrawText(std::string text, sf::Color color = sf::Color::Black, int size = 30);
+  DrawText(std::string text, sf::Color color, int size = 30);
   DrawText(std::string text, int size);
   DrawText(std::string text);
-  ~DrawText();
+  DrawText(const char* text);
+  virtual ~DrawText();
 
   void setText(const char* text);
   void setText(std::string text);

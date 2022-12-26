@@ -5,7 +5,7 @@
 using namespace std;
 using namespace sf;
 
-static const char* textControls1 =
+static const char* textControls =
     "Controls:\n"
     "Left click: place domino\n"
     "Right click: move camera\n"
@@ -15,18 +15,12 @@ static const char* textControls1 =
     "ESC: back to menu\n"
     "C: hide controls";
 
-static const char* textControls2 = "Press C to show controls";
-
 GameViewDomino::GameViewDomino(Win* _win) :
-    GameView(_win, new GameDomino(), nullptr),
+    GameView(_win, new GameDomino(), nullptr, textControls),
     curModelTile{(TileDomino*) ((GameDomino*) game)->grabTile()},
-    controlText{new DrawText(textControls1, Color::White, 24)},
-    discardTile{false},
-    controlsAreShown{true} {
+    discardTile{false} {
   curTile = new DrawDomino(curModelTile);
   curTile->setParent(&rootObj);
-  controlText->move(30, 70);
-  textList.push_back(controlText);
 }
 
 GameViewDomino::~GameViewDomino() {}
@@ -38,18 +32,6 @@ int GameViewDomino::onKeyPress(Event& event) {
         discardTile = true;
       break;
     }
-
-    case Keyboard::C: {
-      if (controlsAreShown)
-        controlText->setText(textControls2);
-      else
-        controlText->setText(textControls1);
-
-      controlsAreShown = !controlsAreShown;
-
-      break;
-    }
-
     default: { break; }
   }
   return 0;

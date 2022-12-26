@@ -22,11 +22,10 @@ Text* DrawText::createText(string str, Color color, int size) {
 }
 
 DrawText::DrawText(Text* obj) : DrawObject(obj), textObject{obj} {
-  // width = textObject->getLocalBounds().width;
-  // height = textObject->getLocalBounds().height;
-  center = vec2f{15, 15};
-  // updateTransform();
+  recenter();
 }
+
+DrawText::DrawText(const char* txt) : DrawText(string(txt)) {}
 
 DrawText::DrawText(string txt) :
     DrawText(DrawText::createText(txt, sf::Color::Black, 30)) {}
@@ -41,22 +40,16 @@ DrawText::~DrawText() {}
 
 void DrawText::setText(const char* str) {
   textObject->setString(str);
-  // width = textObject->getLocalBounds().width;
-  // height = textObject->getLocalBounds().height;
-  // center = vec2f{width / 2, height / 2};
-  // updateTransform();
+  recenter();
 }
 
 void DrawText::setText(string str) {
   textObject->setString(str);
-  // width = textObject->getLocalBounds().width;
-  // height = textObject->getLocalBounds().height;
-  // center = vec2f{width / 2, height / 2};
-  // updateTransform();
+  recenter();
 }
 
 void DrawText::setColor(sf::Color color) {
-  textObject->setColor(color);
+  textObject->setFillColor(color);
 }
 
 float DrawText::getWidth() const {
@@ -65,4 +58,12 @@ float DrawText::getWidth() const {
 
 float DrawText::getHeight() const {
   return textObject->getLocalBounds().height;
+}
+
+void DrawText::recenter() {
+  float width = textObject->getLocalBounds().width;
+  float height = textObject->getLocalBounds().height;
+  float left = textObject->getLocalBounds().left;
+  float top = textObject->getLocalBounds().top;
+  setCenter(width / 2.0f + left, height / 2.0f + top);
 }

@@ -12,7 +12,7 @@ class DrawTrax : public DrawObject {
  public:
   DrawTrax(int type, bool transparent = false);
 
-  ~DrawTrax();
+  virtual ~DrawTrax();
 
   // virtual void rotate(float angle);
   // virtual void draw(sf::RenderTarget& win) const;

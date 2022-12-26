@@ -33,15 +33,15 @@ void DrawObject::updateTransform() {
 //   // do only if useful
 // }
 
-// vec2f DrawObject::getAbsolutePos() const {
-//   vec2f offset{0, 0};
-//   DrawObject* p = parent;
-//   while (p != NULL) {
-//     offset += p->trans.position;
-//     p = p->parent;
-//   }
-//   return offset + pos;
-// }
+vec2f DrawObject::getAbsolutePosition() const {
+  vec2f offset{0, 0};
+  DrawObject* p = parent;
+  while (p != NULL) {
+    offset += p->getPosition();
+    p = p->parent;
+  }
+  return offset + position;
+}
 
 Transform DrawObject::getAbsoluteTransform() const {
   Transform t2(trans);
@@ -132,6 +132,7 @@ const Vector2f& DrawObject::getPosition() const {
 }
 
 void DrawObject::setCenter(float x, float y) {
+  // tr_ptr->setOrigin(x, y);
   center.x = x;
   center.y = y;
 

@@ -1,22 +1,64 @@
 #include "view/gameview/GameMenu.hpp"
 #include <cmath>
+#include <iostream>
 
 #define ABS(x) (x >= 0 ? x : -x)
 
 using namespace sf;
+using namespace std;
 
 GameMenu::GameMenu(Win* _win) :
     DrawableState(_win),
-    menuText{"1. domino\n\n2. trax\n\n3. carcassone", Color::White, 42} {
-  menuText.setParent(&rootObj);
-  menuText.move(-menuText.getWidth() / 2, -menuText.getHeight() / 2);
+    menuTextBoxes{{"Domino", Color::White, 42},
+                  {"Trax", Color::White, 42},
+                  {"Carcassone", Color::White, 42}},
+    selectedAction{-1} {
+  for (int i = 0; i < 3; i++) {
+    menuTextBoxes[i].setParent(&rootObj);
+    menuTextBoxes[i].resize(400, 60);
+    menuTextBoxes[i].move(0, 140 * (i - 1));
+    menuTextBoxes[i].setBackgroundColor(50, 40, 100);
+  }
 }
 
 GameMenu::~GameMenu() {}
 
+void GameMenu::switchSelectedAction(int action) {
+  if (selectedAction == action)
+    return;
+  if (selectedAction != -1) {
+    menuTextBoxes[selectedAction].setBackgroundColor(50, 40, 100);
+    menuTextBoxes[selectedAction].getTextObject()->setColor(sf::Color::White);
+  }
+  selectedAction = action;
+  if (selectedAction != -1) {
+    menuTextBoxes[selectedAction].setBackgroundColor(200, 100, 50);
+  }
+}
+
 int GameMenu::handleEvents(sf::Event& event) {
   while (win->pollEvent(event)) {
     switch (event.type) {
+      case Event::MouseButtonPressed: {
+        if (event.mouseButton.button == Mouse::Button::Left) {
+          switch (selectedAction) {
+            case 0:
+              return EVENT_SELECT_DOMINO;
+              break;
+            case 1:
+              return EVENT_SELECT_TRAX;
+              break;
+            case 2:
+              return EVENT_SELECT_CARCASSONE;
+              break;
+
+            default:
+              return 0;
+              break;
+          }
+        }
+        break;
+      }
       case Event::KeyPressed: {
         switch (event.key.code) {
           case Keyboard::Num1: {
@@ -61,14 +103,38 @@ int GameMenu::handleEvents(sf::Event& event) {
   }
   return 0;
 }
+
 void GameMenu::changeState() {
-  static float i = 1;
-  i += 0.03f;
-  menuText.setColor(Color(
-      ABS(sin(i)) * 255,
-      ABS(sin(i * 1.3)) * 200 + 55,
-      ABS(sin(i * 2.7)) * 255));
+  vec2i mousePos = Mouse::getPosition(*win);
+
+  for (int i = 0; i < 3; i++) {
+    vec2f pos =
+        menuTextBoxes[i].getAbsolutePosition() - menuTextBoxes[i].getCenter();
+    vec2f pos2 = pos;
+    pos2.x += menuTextBoxes[i].getWidth();
+    pos2.y += menuTextBoxes[i].getHeight();
+    if (mousePos.x >= pos.x && mousePos.y >= pos.y && mousePos.x <= pos2.x &&
+        mousePos.y <= pos2.y) {
+      switchSelectedAction(i);
+      break;
+    } else {
+      switchSelectedAction(-1);
+    }
+  }
+
+  static float x = 1;
+  x += 0.03f;
+  if (selectedAction != -1) {
+    for (int i = 0; i < 3; i++) {
+      menuTextBoxes[selectedAction].getTextObject()->setColor(Color(
+          ABS(sin(i + x)) * 255,
+          ABS(sin(i + x * 1.3)) * 200 + 55,
+          ABS(sin(i + x * 2.7)) * 255));
+    }
+  }
 }
 void GameMenu::draw() {
-  menuText.draw(win);
+  for (int i = 0; i < 3; i++) {
+    menuTextBoxes[i].draw(win);
+  }
 }

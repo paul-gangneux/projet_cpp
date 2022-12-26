@@ -18,6 +18,7 @@ class GameView : public DrawableState {
   DrawObject* tilePlacementVisual;
   DrawObject* curTile;
   DrawText* topLeftText;
+  DrawText* controlsText;
 
   std::list<DrawObject*> objects;
   std::list<DrawText*> textList;
@@ -36,6 +37,7 @@ class GameView : public DrawableState {
   bool rightRotPress;
 
   bool firstPlay;
+  bool controlsAreShown;
 
   // used for tile rotation
 
@@ -44,10 +46,13 @@ class GameView : public DrawableState {
 
   int modelRot;
 
+  const char* ctrlText;
+
   vec2i coordToGridPos(vec2i coords);
   DrawObject* initTilePlacementVisual();
 
-  GameView(Win* win, Game* game, DrawObject* firstTile);
+  GameView(
+      Win* win, Game* game, DrawObject* firstTile, const char* controlText);
 
  public:
   virtual ~GameView();

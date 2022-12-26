@@ -21,7 +21,7 @@ class DrawDomino : public DrawObject {
 
  public:
   DrawDomino(TileDomino* domino);
-  ~DrawDomino();
+  virtual ~DrawDomino();
 
   virtual void rotate(float angle);
   virtual void setRotation(float angle);

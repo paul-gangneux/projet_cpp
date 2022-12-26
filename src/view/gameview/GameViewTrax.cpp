@@ -7,8 +7,18 @@
 using namespace std;
 using namespace sf;
 
+static const char* textControls =
+    "Controls:\n"
+    "Left click: place tile\n"
+    "Right click: move camera\n"
+    "Scroll: zoom\n"
+    "A and Z: rotate\n"
+    "Space: change tile\n"
+    "ESC: back to menu\n"
+    "C: hide controls";
+
 GameViewTrax::GameViewTrax(Win* _win) :
-    GameView(_win, new GameTrax(), new DrawTrax(0)),
+    GameView(_win, new GameTrax(), new DrawTrax(0), textControls),
     tileType{0} {}
 
 GameViewTrax::~GameViewTrax() {}
