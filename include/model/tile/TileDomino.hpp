@@ -21,8 +21,18 @@ class TileDomino : public Tile {
   int* numbers;
 
  public:
+  // ---------------------------------------------------------------------------
+
+  /// normal constructor. generates random tiles.
   TileDomino();
+
+  /// special constructor. generates a tile that has at least 1 side matching
+  /// with the tile given in parameters. used to prevent a slow start to a game.
+  TileDomino(TileDomino const* const);
+
   virtual ~TileDomino();
+
+  // ---------------------------------------------------------------------------
 
   int const* getNumbers() const;
 

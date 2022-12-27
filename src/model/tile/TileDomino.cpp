@@ -1,10 +1,23 @@
 #include "model/tile/TileDomino.hpp"
+
 #include <iostream>
 
 TileDomino::TileDomino() : numbers{new int[12]} {
   for (int i = 0; i < 12; i++) {
     numbers[i] = rand() % 5;
   }
+}
+
+TileDomino::TileDomino(TileDomino const* const _tile) : TileDomino() {
+  // we pick one of the 4 sides at random.
+  int randside = (rand() % 4) * 3;
+
+  // the randomly chosen side will have numbers corresponding with the top side
+  // of the _tile given in parameter, so they will be able to match.
+  const int* _numbers = _tile->getNumbers();
+  numbers[randside] = _numbers[2];
+  numbers[randside + 1] = _numbers[1];
+  numbers[randside + 2] = _numbers[0];
 }
 
 TileDomino::~TileDomino() {
