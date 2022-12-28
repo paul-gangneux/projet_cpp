@@ -30,6 +30,8 @@ class TileDomino : public Tile {
   /// with the tile given in parameters. used to prevent a slow start to a game.
   TileDomino(TileDomino const* const);
 
+  void MatchRandomSide(const TileDomino* _tile);
+
   virtual ~TileDomino();
 
   // ---------------------------------------------------------------------------

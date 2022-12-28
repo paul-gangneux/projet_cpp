@@ -1,18 +1,31 @@
 #include "model/game/GameDomino.hpp"
 
+#include <algorithm>
 #include <iostream>
 
 GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
-  // we generate (8 * number of players) tiles randomly
-  for (size_t i = 0; i < 8 * (getPlayers()).size(); i++) {
-    bag.push_back(new TileDomino());
+  bag.push_back(new TileDomino());
+  for (size_t i = 0; i < 7 * (getPlayers()).size(); i++) {
+    TileDomino* td = new TileDomino();
+    int rd = (rand() % 100);
+    if (rd < 25) {
+      int r = rand() % bag.size();
+      td->MatchRandomSide(bag.at(r));
+    }
+    if (rd < 50) {
+      int r = rand() % bag.size();
+      td->MatchRandomSide(bag.at(r));
+    }
+    if (rd < 75) {
+      int r = rand() % bag.size();
+      td->MatchRandomSide(bag.at(r));
+    }
+    int r = rand() % bag.size();
+    td->MatchRandomSide(bag.at(r));
+    bag.push_back(td);
   }
-  // we generate (2 * number of players) tiles that will match with the
-  // following one. this way we're sure that each player can place 2 tiles at
-  // the beginning of the game, speeding it up
-  for (size_t i = 0; i < 2 * (getPlayers()).size(); i++) {
-    bag.push_back(new TileDomino(bag.back()));
-  }
+
+  reverse(bag.begin(), bag.end());
 }
 
 GameDomino::~GameDomino() {

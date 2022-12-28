@@ -20,6 +20,19 @@ TileDomino::TileDomino(TileDomino const* const _tile) : TileDomino() {
   numbers[randside + 2] = _numbers[0];
 }
 
+void TileDomino::MatchRandomSide(const TileDomino* _tile) {
+  // we pick one of the 4 sides at random.
+  int randside = (rand() % 4) * 3;
+  int randside2 = (rand() % 4) * 3;
+
+  // the randomly chosen side will have numbers corresponding with the top side
+  // of the _tile given in parameter, so they will be able to match.
+  const int* _numbers = _tile->getNumbers();
+  numbers[randside] = _numbers[randside2 + 2];
+  numbers[randside + 1] = _numbers[randside2 + 1];
+  numbers[randside + 2] = _numbers[randside2];
+}
+
 TileDomino::~TileDomino() {
   delete[] numbers;
 }
