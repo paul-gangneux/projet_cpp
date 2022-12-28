@@ -296,13 +296,10 @@ void GameView::changeState() {
     topLeftText->setText("Turn: " + game->getCurrentPlayer()->getName());
     topLeftText->setPosition(
         topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
-  } else {
+  } else if (!gameIsOver) {
     topLeftText->setText("Game Ended, press ENTER to go back");
     topLeftText->setPosition(
         topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
-  }
-
-  if (game->isOver() && !gameIsOver) {
     onGameEnd();
     gameIsOver = true;
   }

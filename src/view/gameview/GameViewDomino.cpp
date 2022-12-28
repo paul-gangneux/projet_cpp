@@ -101,7 +101,4 @@ void GameViewDomino::changeState() {
   }
 
   GameView::changeState();
-
-  if (game->isOver()) {
-  }
 }
