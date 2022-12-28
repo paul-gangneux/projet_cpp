@@ -1,8 +1,10 @@
 #include "view/gameview/GameView.hpp"
 
+#include <algorithm>
 #include "model/game/GameTrax.hpp"
 #include "model/tile/TileTrax.hpp"
 #include "view/drawobject/DrawTrax.hpp"
+#include "view/drawobject/TextBox.hpp"
 
 using namespace std;
 using namespace sf;
@@ -13,18 +15,19 @@ using namespace sf;
 #define TILE_SIZE 200
 #define BORDER_WIDTH 8
 
-static const char* showControlsText = "Press C to show controls";
+static const char* showControlsText = "Press C to\nshow controls";
 
 GameView::GameView(
     Win* _win, Game* _game, DrawObject* firstTile, const char* _ctrlText) :
     DrawableState(_win),
     game{_game},
+    cameraObject{DrawObject()},
     tilePlacementVisual{initTilePlacementVisual()},
     curTile{firstTile},
     topLeftText{new DrawText("", Color::White)},
     controlsText{new DrawText(showControlsText, Color::White, 24)},
     objects{list<DrawObject*>()},
-    textList{list<DrawText*>()},
+    textList{list<DrawObject*>()},
     oldMousePos{Mouse::getPosition(*win)},
     mousePos{oldMousePos},
     deltaMouse{vec2i{0, 0}},
@@ -37,13 +40,19 @@ GameView::GameView(
     curRot{0},
     destRot{0},
     modelRot{0},
-    ctrlText{_ctrlText} {
+    ctrlText{_ctrlText},
+    ctrlTextPosition{15, 100},
+    gameIsOver{false} {
+  cameraObject.setParent(&rootObj);
+  // cameraObject.setPosition(rootObj.getPosition());
+
   if (curTile != nullptr)
-    curTile->setParent(&rootObj);
+    curTile->setParent(&cameraObject);
   textList.push_back(topLeftText);
   textList.push_back(controlsText);
   controlsText->setPosition(
-      controlsText->getWidth() / 2 + 15, controlsText->getHeight() / 2 + 100);
+      controlsText->getWidth() / 2 + ctrlTextPosition.x,
+      controlsText->getHeight() / 2 + ctrlTextPosition.y);
 }
 
 GameView::~GameView() {
@@ -62,19 +71,19 @@ DrawObject* GameView::initTilePlacementVisual() {
   rect->setOutlineColor(Color(250, 150, 100));
 
   DrawObject* d = new DrawObject(rect);
-  d->setParent(&rootObj);
+  d->setParent(&cameraObject);
   d->setCenter(rec_width / 2, rec_width / 2);
   d->setPosition(0, 0);
   return d;
 }
 
 void GameView::addObject(DrawObject* o) {
-  o->setParent(&rootObj);
+  o->setParent(&cameraObject);
   objects.push_back(o);
 }
 
 void GameView::addTile(DrawObject* o, int x, int y) {
-  o->setParent(&rootObj);
+  o->setParent(&cameraObject);
   o->setPosition(x * TILE_SIZE, y * TILE_SIZE);
   objects.push_back(o);
 }
@@ -88,11 +97,11 @@ void GameView::addTile(DrawObject* o, int x, int y, float rotation) {
 // the tile would have on the grid in the model
 vec2i GameView::coordToGridPos(vec2i coords) {
   vec2f pos = vec2f(coords.x, coords.y);
-  pos -= rootObj.getPosition();
-  pos.x += (TILE_SIZE / 2.0f) * rootObj.getSize().x;
-  pos.y += (TILE_SIZE / 2.0f) * rootObj.getSize().y;
+  pos -= cameraObject.getAbsolutePosition();
+  pos.x += (TILE_SIZE / 2.0f) * cameraObject.getSize().x;
+  pos.y += (TILE_SIZE / 2.0f) * cameraObject.getSize().y;
   pos /= (float) TILE_SIZE;
-  pos /= rootObj.getSize().x;
+  pos /= cameraObject.getSize().x;
 
   if (pos.x < 0.0f)
     pos.x -= 1;
@@ -114,7 +123,7 @@ void GameView::clearObjects() {
 
 void GameView::clearText() {
   while (!textList.empty()) {
-    DrawText* o = textList.front();
+    DrawObject* o = textList.front();
     textList.pop_front();
     delete o;
   }
@@ -176,8 +185,8 @@ int GameView::handleEvents(sf::Event& event) {
 
             controlsAreShown = !controlsAreShown;
             controlsText->setPosition(
-                controlsText->getWidth() / 2 + 15,
-                controlsText->getHeight() / 2 + 100);
+                controlsText->getWidth() / 2 + ctrlTextPosition.x,
+                controlsText->getHeight() / 2 + ctrlTextPosition.y);
 
             break;
           }
@@ -203,8 +212,7 @@ int GameView::handleEvents(sf::Event& event) {
 
       case Event::MouseWheelScrolled: {
         float f = event.mouseWheelScroll.delta / 10.0f;
-        rootObj.scale(
-            1 + f, 1 + f, win->getWidth() / 2.0f, win->getHeight() / 2.0f);
+        cameraObject.scale(1 + f, 1 + f);
         break;
       }
 
@@ -225,7 +233,7 @@ void GameView::changeState() {
   // handling camera movement
 
   if (validM2Press) {
-    rootObj.move(deltaMouse.x, deltaMouse.y);
+    cameraObject.move(deltaMouse.x, deltaMouse.y);
   }
 
   // handling selected tile rotation
@@ -271,8 +279,8 @@ void GameView::changeState() {
     }
 
     // positions the held tile where the mouse is
-    vec2f size = rootObj.getSize();
-    vec2f pos = rootObj.getPosition();
+    vec2f size = cameraObject.getSize();
+    vec2f pos = cameraObject.getAbsolutePosition();
     curTile->setPosition(
         (mousePos.x - pos.x) / size.x, (mousePos.y - pos.y) / size.y);
   }
@@ -293,6 +301,11 @@ void GameView::changeState() {
     topLeftText->setPosition(
         topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
   }
+
+  if (game->isOver() && !gameIsOver) {
+    onGameEnd();
+    gameIsOver = true;
+  }
 }
 
 void GameView::draw() {
@@ -305,7 +318,58 @@ void GameView::draw() {
   if (!game->isOver() && curTile != nullptr) {
     curTile->draw(win);
   }
-  for (DrawText* t : textList) {
+  for (DrawObject* t : textList) {
     t->draw(win);
   }
 }
+
+string GameView::getScores() const {
+  string s = "Scores:\n";
+  std::vector<Player*> ps = game->getPlayers();
+  for (uint i = 0; i < ps.size() - 1; i++) {
+    s += ps.at(i)->getName() + ": " + to_string(ps.at(i)->getScore()) + "\n";
+  }
+  if (ps.size() > 0) {
+    s += ps.back()->getName() + ": " + to_string(ps.back()->getScore());
+  }
+  return s;
+}
+
+vector<string> GameView::getWinners() const {
+  std::vector<Player*> ps = game->getPlayers();
+  sort(ps.begin(), ps.end(), [](Player* p1, Player* p2) {
+    return p1->getScore() > p2->getScore();
+  });
+  vector<string> vec = vector<string>();
+  int score = (ps.front())->getScore();
+  if (score == 0)
+    return vec;  // nobody wins, empty vector
+  for (Player* p : ps) {
+    if (score == p->getScore())
+      vec.push_back(p->getName());
+    else
+      break;
+  }
+  return vec;
+}
+
+void GameView::onGameEnd() {
+  vector<string> strs = getWinners();
+  string s;
+  if (strs.size() == 1) {
+    s = "Winner: " + strs[0] + "!";
+  } else if (strs.size() == 0) {
+    s = "Nobody wins...";
+  } else {
+    s = "Winners: ";
+    for (size_t i = 0; i < strs.size() - 1; i++) {
+      s += strs.at(i) + ", ";
+    }
+    s += strs.at(strs.size() - 1) + "!";
+  }
+  TextBox* box = new TextBox(s, Color::White, 42);
+  box->setFillColor(Color(10, 20, 80, 160));
+  box->setOutlineColor(Color(20, 40, 100, 255));
+  box->setParent(&rootObj);
+  textList.push_back(box);
+};

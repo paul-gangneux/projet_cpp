@@ -31,7 +31,7 @@ int GameViewTrax::onKeyPress(Event& event) {
         delete curTile;
       }
       curTile = new DrawTrax(tileType);
-      curTile->setParent(&rootObj);
+      curTile->setParent(&cameraObject);
       curTile->rotate(modelRot * 90);
       curRot = 0;
       destRot = 0;
@@ -81,9 +81,5 @@ void GameViewTrax::changeState() {
         tileInfos[1],
         tileInfos[2],
         tileInfos[3] * 90);
-  }
-  // we wait until all the tiles are placed before showing the end game
-  else if (game->isOver()) {
-    // TODO
   }
 }

@@ -19,7 +19,7 @@ class Game {
   Game(const char* p1name, const char* p2name);
   virtual ~Game();
 
-  std::vector<Player*> const getPlayers() const;
+  const std::vector<Player*>& getPlayers() const;
 
   Player const* getCurrentPlayer() const;
 

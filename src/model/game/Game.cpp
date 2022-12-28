@@ -20,7 +20,7 @@ Game::~Game() {
   }
 }
 
-std::vector<Player*> const Game::getPlayers() const {
+const std::vector<Player*>& Game::getPlayers() const {
   return players;
 }
 

@@ -16,6 +16,7 @@ class Player {
   void addScore(int);
 
   const std::string getName() const;
+  int getScore() const;
 };
 
 #endif

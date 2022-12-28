@@ -15,13 +15,14 @@
 class GameView : public DrawableState {
  protected:
   Game* game;
+  DrawObject cameraObject;
   DrawObject* tilePlacementVisual;
   DrawObject* curTile;
   DrawText* topLeftText;
   DrawText* controlsText;
 
   std::list<DrawObject*> objects;
-  std::list<DrawText*> textList;
+  std::list<DrawObject*> textList;
 
   // mouse data
 
@@ -47,6 +48,9 @@ class GameView : public DrawableState {
   int modelRot;
 
   const char* ctrlText;
+  vec2f ctrlTextPosition;
+
+  bool gameIsOver;
 
   vec2i coordToGridPos(vec2i coords);
   DrawObject* initTilePlacementVisual();
@@ -70,6 +74,12 @@ class GameView : public DrawableState {
 
   // deals with all key press events that arent default
   virtual int onKeyPress(sf::Event& event) = 0;
+
+  std::string getScores() const;
+  std::vector<std::string> getWinners() const;
+
+  // called only once once the game ends
+  virtual void onGameEnd();
 };
 
 #endif

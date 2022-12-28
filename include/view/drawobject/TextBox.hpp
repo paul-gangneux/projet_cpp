@@ -17,9 +17,11 @@ class TextBox : public DrawObject {
 
  public:
   TextBox(
-      const char* text,
+      std::string text,
       sf::Color fontColor = sf::Color::White,
       int fontSize = 30);
+
+  TextBox(const char* text);
 
   virtual ~TextBox();
 
@@ -32,6 +34,8 @@ class TextBox : public DrawObject {
   void setOutlineSize(float size);
   void setPadding(float padding);
   void setBackgroundColor(sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
+  void setFillColor(sf::Color color);
+  void setOutlineColor(sf::Color color);
 };
 
 #endif

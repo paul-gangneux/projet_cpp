@@ -18,9 +18,15 @@ static const char* textControls =
 GameViewDomino::GameViewDomino(Win* _win) :
     GameView(_win, new GameDomino(), nullptr, textControls),
     curModelTile{(TileDomino*) ((GameDomino*) game)->grabTile()},
-    discardTile{false} {
+    discardTile{false},
+    scoreText{new DrawText(getScores(), Color::White)} {
   curTile = new DrawDomino(curModelTile);
-  curTile->setParent(&rootObj);
+  curTile->setParent(&cameraObject);
+  textList.push_back(scoreText);
+  scoreText->setPosition(
+      scoreText->getWidth() / 2 + 15, scoreText->getHeight() / 2 + 80);
+  controlsText->move(0, scoreText->getHeight() + 30);
+  ctrlTextPosition.y += scoreText->getHeight() + 30;
 }
 
 GameViewDomino::~GameViewDomino() {}
@@ -67,10 +73,11 @@ void GameViewDomino::changeState() {
         if (!game->isOver()) {
           curModelTile = (TileDomino*) ((GameDomino*) game)->grabTile();
           curTile = new DrawDomino(curModelTile);
-          curTile->setParent(&rootObj);
+          curTile->setParent(&cameraObject);
         } else {
           curTile = nullptr;
         }
+        scoreText->setText(getScores());
       }
     }
     validM1Press = false;
@@ -86,7 +93,7 @@ void GameViewDomino::changeState() {
     if (!game->isOver()) {
       curModelTile = (TileDomino*) ((GameDomino*) game)->grabTile();
       curTile = new DrawDomino(curModelTile);
-      curTile->setParent(&rootObj);
+      curTile->setParent(&cameraObject);
     } else {
       curTile = nullptr;
     }
@@ -96,6 +103,5 @@ void GameViewDomino::changeState() {
   GameView::changeState();
 
   if (game->isOver()) {
-    // todo
   }
 }

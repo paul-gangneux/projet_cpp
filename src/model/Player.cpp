@@ -17,3 +17,7 @@ void Player::addScore(int s) {
 const string Player::getName() const {
   return name;
 }
+
+int Player::getScore() const {
+  return score;
+}

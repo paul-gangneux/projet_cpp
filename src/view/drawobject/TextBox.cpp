@@ -7,7 +7,7 @@
 using namespace sf;
 using namespace std;
 
-TextBox::TextBox(const char* _text, sf::Color fontColor, int fontSize) :
+TextBox::TextBox(std::string _text, sf::Color fontColor, int fontSize) :
     DrawObject(initRect()),
     text{new DrawText(_text, fontColor, fontSize)},
     width{1},
@@ -17,6 +17,8 @@ TextBox::TextBox(const char* _text, sf::Color fontColor, int fontSize) :
   resize(0, 0);
   text->setParent(this);
 }
+
+TextBox::TextBox(const char* _text) : TextBox(string(_text)) {}
 
 TextBox::~TextBox() {
   delete text;
@@ -73,4 +75,11 @@ void TextBox::setPadding(float x) {
 void TextBox::setBackgroundColor(sf::Uint8 r, sf::Uint8 g, sf::Uint8 b) {
   rect->setFillColor(Color(r, g, b, 100));
   rect->setOutlineColor(Color(r, g, b, 255));
+}
+
+void TextBox::setFillColor(sf::Color color) {
+  rect->setFillColor(color);
+}
+void TextBox::setOutlineColor(sf::Color color) {
+  rect->setOutlineColor(color);
 }

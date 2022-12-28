@@ -176,9 +176,15 @@ void GameTrax::checkForEndGame(int x, int y) {
   bool win_b = loop_b || (ampl_x >= 7 && xtrm_b[0] && xtrm_b[1]) ||
                (ampl_y >= 7 && xtrm_b[2] && xtrm_b[3]);
 
-  // TODO: state who won in a variable
-  if (win_w || win_b)
+  if (win_w || win_b) {
+    if (win_w && getPlayers().at(0)->getScore() == 0) {
+      getPlayers().at(0)->addScore(1);
+    }
+    if (win_b && getPlayers().at(1)->getScore() == 0) {
+      getPlayers().at(1)->addScore(1);
+    }
     gameIsOver = true;
+  }
 }
 
 bool GameTrax::placeTileAux(Tile* const tile, int x, int y) {
@@ -207,7 +213,15 @@ bool GameTrax::placeTileAux(Tile* const tile, int x, int y) {
 bool GameTrax::placeTile(Tile* const tile, int x, int y) {
   bool res = placeTileAux(tile, x, y);
   if (res) {
-    nextTurn();
+    if (gameIsOver) {
+      Player* w = getPlayers().at(0);
+      Player* b = getPlayers().at(1);
+      if (w->getScore() == 1 && b->getScore() == 1) {
+        getPlayers().at(currentPlayer)->addScore(1);
+      }
+    } else {
+      nextTurn();
+    }
   }
   return res;
 };
