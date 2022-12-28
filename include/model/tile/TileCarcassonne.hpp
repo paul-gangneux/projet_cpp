@@ -12,18 +12,6 @@ class TileCarcassonne : public Tile {
   /// carcassonne rules pdf.
   uint8_t type;
 
-  /// represents what is on the borders of the tile.
-  /// 3 chars for each side. Stars at the top middle and goes clockwise.
-  /// 't':town, 'r':road, 'g':grasslands, 'T':town with shield symbol
-  char dir[12];
-  /*
-  ++ 11  0  1  ++
-  10            2
-  9             3
-  8             4    You may think of it as a clock :
-  ++  7  6  5  ++    0 is upwards, 3 is right, 6 is downwards...
-  */
-
   /// a pair of numbers : "low" and "high"
   /// we always have low <= high.
   struct edge {
@@ -57,6 +45,15 @@ class TileCarcassonne : public Tile {
       }
     }
   };
+  /*
+  The numbers on the edges need to be more precise than the ones for dir.
+  Here is their representation :
+  ++ 11  0  1  ++
+  10            2
+  9             3
+  8             4    You may think of it as a clock :
+  ++  7  6  5  ++    0 is upwards, 3 is right, 6 is downwards...
+  */
 
   std::vector<edge> edges;
 
@@ -75,8 +72,13 @@ class TileCarcassonne : public Tile {
   /// if the meeple is in a monastery, its value is 13.
   int8_t meepleLocation;
 
+  /// represents what is on the borders of the tile.
+  /// 0:up, 1:right, 2:down, 3:left
+  /// 't':town, 'r':road, 'g':grasslands, 'T':town with shield symbol
+  char dir[4];
+
  public:
-  TileCarcassonne();
+  TileCarcassonne(uint8_t);
   virtual ~TileCarcassonne();
 
   char getDir(int) const;

@@ -1,19 +1,59 @@
 #include "model/tile/TileCarcassonne.hpp"
 
 #include <iostream>
+#include <string>
 
-TileCarcassonne::TileCarcassonne() {}
+#define DIR(a)       \
+  {                  \
+    dir[0] = (a)[0]; \
+    dir[1] = (a)[1]; \
+    dir[2] = (a)[2]; \
+    dir[3] = (a)[3]; \
+  }
 
-TileCarcassonne::~TileCarcassonne() {}
+#define EDGE(a, b) edges.push_back(edge(a, b));
+
+TileCarcassonne::TileCarcassonne(uint8_t _type) :
+    type{_type},
+    edges{std::vector<edge>()},
+    monastery{false},
+    meeplePlayer{-1},
+    meepleLocation{-1} {
+  switch (type) {
+    case 1:
+      DIR("ggrr")
+      EDGE(6, 9)
+      EDGE(10, 0)
+      EDGE(0, 3)
+      EDGE(3, 5)
+      EDGE(7, 8)
+      break;
+    case 2:
+      DIR("trrg")
+      EDGE(3, 6)
+      EDGE(4, 5)
+      EDGE(7, 9)
+      EDGE(9, 2)
+      break;
+    case 3:
+      DIR("Trrt")
+      EDGE(0, 9)
+      EDGE(3, 6)
+      EDGE(2, 7)
+      EDGE(4, 5)
+  }
+}
+
+TileCarcassonne::~TileCarcassonne() {
+  // nothing to do
+}
 
 void TileCarcassonne::rotateClockwise() {
-  int temp[3] = {dir[9], dir[10], dir[11]};
-  for (int i = 11; i > 2; i--) {
-    dir[i] = dir[(i + 9) % 12];
-  }
-  for (int i = 0; i < 3; i++) {
-    dir[i] = temp[i];
-  }
+  int temp = dir[3];
+  dir[3] = dir[2];
+  dir[2] = dir[1];
+  dir[1] = dir[0];
+  dir[0] = temp;
 
   for (edge e : edges) {
     e.rotateClockwise();
@@ -23,13 +63,11 @@ void TileCarcassonne::rotateClockwise() {
 }
 
 void TileCarcassonne::rotateCounterClockwise() {
-  int temp[3] = {dir[0], dir[1], dir[2]};
-  for (int i = 0; i < 9; i++) {
-    dir[i] = dir[i + 3];
-  }
-  for (int i = 9; i < 12; i++) {
-    dir[i] = temp[i - 9];
-  }
+  int temp = dir[0];
+  dir[0] = dir[1];
+  dir[1] = dir[2];
+  dir[2] = dir[3];
+  dir[3] = temp;
 
   for (edge e : edges) {
     e.rotateCounterClockwise();
@@ -41,9 +79,9 @@ void TileCarcassonne::rotateCounterClockwise() {
 char TileCarcassonne::getDir(int a) const {
   if (a < 0)
     return dir[0];
-  if (a > 11)
-    return dir[11];
-  return dir[a];
+  // technically we should only call this function with a value between 0 and 3,
+  // but just in case:
+  return dir[a % 4];
 }
 
 bool TileCarcassonne::matchX(const Tile* right) const {
@@ -51,7 +89,7 @@ bool TileCarcassonne::matchX(const Tile* right) const {
   if (local == nullptr)
     return false;
 
-  return (tolower(dir[3]) == tolower(local->getDir(9)));
+  return (tolower(dir[1]) == tolower(local->getDir(3)));
 }
 
 bool TileCarcassonne::matchY(const Tile* down) const {
@@ -59,5 +97,5 @@ bool TileCarcassonne::matchY(const Tile* down) const {
   if (local == nullptr)
     return false;
 
-  return (tolower(dir[6]) == tolower(local->getDir(0)));
+  return (tolower(dir[2]) == tolower(local->getDir(0)));
 }
