@@ -22,7 +22,7 @@ GameViewCarcassonne::GameViewCarcassonne(Win* _win) :
     skipTurn{false},
     scoreText{new DrawText(getScores(), Color::White)} {
   // the first tile is defined and placed in model and view
-  game->placeTile(curModelTile, 0, 0);
+  ((GameCarcassonne*) game)->placeFirstTile(curModelTile);
   addTile(new DrawCarcassonne(curModelTile->getType()), 0, 0, 0);
 
   // we grab the new tile
@@ -49,7 +49,7 @@ int GameViewCarcassonne::onKeyPress(Event& event) {
   switch (event.key.code) {
     case Keyboard::Space: {
       if (!game->isOver()) {
-        // todo: next turn without placing meeple
+        ((GameCarcassonne*) game)->placeMeeple(-1);
         break;
       }
     }
@@ -86,6 +86,7 @@ void GameViewCarcassonne::changeState() {
           curTile->setParent(&cameraObject);
         } else {
           curTile = nullptr;
+          curModelTile = nullptr;
         }
         scoreText->setText(getScores());
       }

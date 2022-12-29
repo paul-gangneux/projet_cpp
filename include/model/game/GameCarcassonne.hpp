@@ -9,6 +9,7 @@ class GameCarcassonne : public Game {
   /// contains all the tiles that will be played
   /// during the game. once it is empty, the game is over.
   std::vector<TileCarcassonne*> bag;
+  bool currentPlayerHasPlacedTile;
 
  public:
   GameCarcassonne();
@@ -26,6 +27,15 @@ class GameCarcassonne : public Game {
   /// if the tile was placed correctly : returns true,
   /// checks if the bag is empty - if it is, changes gameIsOver to true
   virtual bool placeTile(Tile* const, int x, int y);
+
+  bool placeFirstTile(Tile* const _tile);
+
+  virtual void nextTurn();
+
+  // places meeple on last placed tile
+  // return true and calls nextTurn if successful
+  // if dir == -1, does nothing, calls nextTurn and returns true
+  bool placeMeeple(int _dir);
 };
 
 #endif

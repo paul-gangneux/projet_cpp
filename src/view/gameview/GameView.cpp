@@ -1,6 +1,7 @@
 #include "view/gameview/GameView.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include "model/game/GameTrax.hpp"
 #include "model/tile/TileTrax.hpp"
 #include "view/drawobject/DrawTrax.hpp"
@@ -14,6 +15,8 @@ using namespace sf;
 
 #define TILE_SIZE 200
 #define BORDER_WIDTH 8
+
+// #define log(x) std::cout << x << std::endl
 
 static const char* showControlsText = "Press C to\nshow controls";
 

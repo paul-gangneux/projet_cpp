@@ -1,9 +1,12 @@
 #include "view/gameview/GameViewDomino.hpp"
+#include <iostream>
 #include "model/game/GameDomino.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 
 using namespace std;
 using namespace sf;
+
+// #define log(x) std::cout << x << std::endl
 
 static const char* textControls =
     "Controls:\n"
@@ -79,6 +82,7 @@ void GameViewDomino::changeState() {
           curTile->setParent(&cameraObject);
         } else {
           curTile = nullptr;
+          curModelTile = nullptr;
         }
         scoreText->setText(getScores());
       }
@@ -99,6 +103,7 @@ void GameViewDomino::changeState() {
       curTile->setParent(&cameraObject);
     } else {
       curTile = nullptr;
+      curModelTile = nullptr;
     }
     discardTile = false;
   }

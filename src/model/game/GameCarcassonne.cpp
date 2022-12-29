@@ -11,7 +11,8 @@
 
 GameCarcassonne::GameCarcassonne() :
     Game(),
-    bag{std::vector<TileCarcassonne*>()} {
+    bag{std::vector<TileCarcassonne*>()},
+    currentPlayerHasPlacedTile{false} {
   putInBag(1, 9);
   putInBag(2, 3);
   putInBag(3, 2);
@@ -69,10 +70,29 @@ Tile* GameCarcassonne::grabTile() {
   return res;
 }
 
-// TODO
+bool GameCarcassonne::placeFirstTile(Tile* const _tile) {
+  return Game::placeTile(_tile, 0, 0);
+}
+
 bool GameCarcassonne::placeTile(Tile* const _tile, int x, int y) {
+  if (currentPlayerHasPlacedTile)
+    return false;
   if (Game::placeTile(_tile, x, y)) {
+    currentPlayerHasPlacedTile = true;
     return true;
   }
   return false;
+}
+
+bool GameCarcassonne::placeMeeple(int _dir) {
+  if (!currentPlayerHasPlacedTile)
+    return false;
+  // TODO
+  nextTurn();
+  return true;
+}
+
+void GameCarcassonne::nextTurn() {
+  Game::nextTurn();
+  currentPlayerHasPlacedTile = false;
 }

@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <iostream>
 
+// #define log(x) std::cout << x << std::endl
+
 GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
   bag.push_back(new TileDomino());
   for (size_t i = 0; i < 7 * (getPlayers()).size(); i++) {
