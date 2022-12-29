@@ -20,6 +20,8 @@ TileCarcassonne::TileCarcassonne(uint8_t _type) :
     meeplePlayer{-1},
     meepleLocation{-1} {
   switch (type) {
+      // TODO : check if all the cases are correctly written. they should be
+      // fine, though
     case 1:
       DIR("ggrr")
       EDGE(6, 9)
@@ -46,13 +48,15 @@ TileCarcassonne::TileCarcassonne(uint8_t _type) :
       DIR("ttrt")
       EDGE(0, 3)
       EDGE(0, 9)
-      // EDGE(3, 9)  // redundant ?
+      // EDGE(3, 9)  // redundant
+      // indeed there are redundant edges, all we need is a connex graph for
+      // related borders, it doesn't need to be a complete graph
       break;
     case 5:
       DIR("Ttgt")
       EDGE(0, 3)
       EDGE(0, 9)
-      // EDGE(3, 9)  // redundant ?
+      // EDGE (3, 9) // redundant
       break;
     case 6:
       DIR("trrt")
@@ -63,88 +67,128 @@ TileCarcassonne::TileCarcassonne(uint8_t _type) :
       break;
     case 7:
       DIR("trrr")
-      // I'm not sure if the roads
-      // are connected here
+      EDGE(10, 2)
+      EDGE(4, 5)
+      EDGE(7, 8)
+      // the roads are not connected since there is a crossroads.
       break;
     case 8:
       DIR("rgrg")
       EDGE(0, 6);
       EDGE(1, 3);
       EDGE(3, 5);
-      // EDGE(1, 5);  // redundant ?
-      EDGE(11, 9);
-      EDGE(9, 7);
-      // EDGE(11, 7);  // redundant ?
+      // EDGE(1, 5);  // redundant
+      EDGE(7, 9);
+      EDGE(9, 11);
+      // EDGE(11, 7);  // redundant
       break;
     case 9:
-      DIR("grrr")  // >:3
-      // I'm not sure if the roads
-      // are connected here
+      DIR("grrr")  // angry tile haha
       EDGE(0, 2);
       EDGE(0, 10);
-      // EDGE(10, 2);  // redundant ?
+      // EDGE(10, 2);  // redundant
+      EDGE(4, 5)
+      EDGE(7, 8)
       break;
     case 10:
       DIR("tggg")
-      // TODO: edges
+      EDGE(3, 6)
+      EDGE(6, 9)
+      // EDGE(9,3) // redundant
       break;
     case 11:
       DIR("ttgg")
-      // TODO: edges
+      EDGE(6, 9)
       break;
     case 12:
       DIR("ttgt")
-      // TODO: edges
+      EDGE(0, 3)
+      EDGE(0, 9)
+      // EDGE(3,9) //redundant
       break;
     case 13:
       DIR("gggg")
       monastery = true;
-      // TODO: edges
+      EDGE(0, 3)
+      EDGE(3, 6)
+      EDGE(6, 9)
+      EDGE(9, 0)
+      // EDGE(0, 6)  // redundant
+      // EDGE(3, 9)  // redundant
       break;
     case 14:
       DIR("ggrg")
       monastery = true;
-      // TODO: edges
+      EDGE(0, 3)
+      EDGE(3, 5)
+      EDGE(7, 9)
+      EDGE(9, 0)
+      // EDGE(0,5) // all redundant
+      // EDGE(0,7)
+      // EDGE(5,7)
+      // EDGE(5,9)
+      // EDGE(7,3)
+      // EDGE(3,9)
       break;
     case 15:
       DIR("tggt")
-      // TODO: edges
+      EDGE(0, 9)
+      EDGE(3, 6)
       break;
     case 16:
       DIR("gTgt")
-      // TODO: edges
+      EDGE(3, 9)
       break;
     case 17:
       DIR("trgr")
-      // TODO: edges
+      EDGE(3, 9)
+      EDGE(2, 10)
+      EDGE(4, 6)
+      EDGE(6, 8)
+      // EDGE(4,8) // redundant
       break;
     case 18:
       DIR("tgrr")
-      // TODO: edges
+      EDGE(6, 9)
+      EDGE(3, 5)
+      EDGE(10, 3)
+      EDGE(4, 5)
+      // EDGE(5,10) // redundant
       break;
     case 19:
       DIR("gtgt")
-      // TODO: edges
+      EDGE(3, 9)
       break;
     case 20:
       DIR("Ttrt")
-      // TODO: edges
+      EDGE(0, 3)
+      EDGE(9, 0)
+      // EDGE(3,9) // redundant
       break;
     case 21:
       DIR("Tttt")
-      // TODO: edges
+      EDGE(0, 3)
+      EDGE(3, 6)
+      EDGE(6, 9)
+      EDGE(9, 0)
+      // EDGE(0, 6) // redundant
+      // EDGE(3, 9) // redundant
       break;
     case 22:
       DIR("rrrr")
-      // TODO: edges
+      EDGE(1, 2)
+      EDGE(4, 5)
+      EDGE(7, 8)
+      EDGE(10, 11)
       break;
     case 23:
       DIR("Tggt")
-      // TODO: edges
+      EDGE(3, 6)
+      EDGE(9, 0)
       break;
     case 24:
       DIR("gtgt")
-      // TODO: edges
+      EDGE(0, 6)
       break;
   }
 }
