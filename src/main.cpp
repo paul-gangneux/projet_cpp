@@ -5,6 +5,7 @@
 #include "view/Win.hpp"
 #include "view/drawobject/DrawCarcassonne.hpp"
 #include "view/drawobject/DrawDomino.hpp"
+#include "view/drawobject/DrawMeeple.hpp"
 #include "view/drawobject/DrawText.hpp"
 #include "view/drawobject/DrawTrax.hpp"
 #include "view/gameview/GameMenu.hpp"
@@ -50,6 +51,7 @@ int main() {
   view = new GameMenu(win);
 
   DrawCarcassonne::initTextures();
+  DrawMeeple::initTextures();
 
   // initialising mouse position data
   vec2i oldMousePos = Mouse::getPosition(*win);

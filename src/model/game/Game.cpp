@@ -28,6 +28,10 @@ Player const* Game::getCurrentPlayer() const {
   return players.at(currentPlayer);
 }
 
+int Game::getCurrentPlayerIndex() const {
+  return currentPlayer;
+}
+
 bool Game::isOver() {
   return gameIsOver;
 }

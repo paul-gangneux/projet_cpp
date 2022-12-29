@@ -92,6 +92,10 @@ bool GameCarcassonne::placeMeeple(int _dir) {
   return true;
 }
 
+bool GameCarcassonne::canPlaceMeeple() {
+  return currentPlayerHasPlacedTile;
+}
+
 void GameCarcassonne::nextTurn() {
   Game::nextTurn();
   currentPlayerHasPlacedTile = false;

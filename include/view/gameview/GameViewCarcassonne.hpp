@@ -10,6 +10,8 @@ class GameViewCarcassonne : public GameView {
   bool skipTurn;
   DrawText* scoreText;
 
+  void tryToPlaceMeeple(int dir);
+
  public:
   GameViewCarcassonne(Win* win);
   virtual ~GameViewCarcassonne();

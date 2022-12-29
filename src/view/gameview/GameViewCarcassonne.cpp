@@ -1,6 +1,7 @@
 #include "view/gameview/GameViewCarcassonne.hpp"
 #include "model/game/GameCarcassonne.hpp"
 #include "view/drawobject/DrawCarcassonne.hpp"
+#include "view/drawobject/DrawMeeple.hpp"
 
 using namespace std;
 using namespace sf;
@@ -49,7 +50,7 @@ int GameViewCarcassonne::onKeyPress(Event& event) {
   switch (event.key.code) {
     case Keyboard::Space: {
       if (!game->isOver()) {
-        ((GameCarcassonne*) game)->placeMeeple(-1);
+        tryToPlaceMeeple(-1);
         break;
       }
     }
@@ -58,37 +59,89 @@ int GameViewCarcassonne::onKeyPress(Event& event) {
   return 0;
 }
 
+void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
+  // TODO:
+  bool b = ((GameCarcassonne*) game)->placeMeeple(dir);
+  // if successful, add meeple to view
+  if (b) {
+    destRot = 0;
+    curRot = 0;
+    modelRot = 0;
+    // todo: add meeple to view
+    if (dir == -1) {
+      delete curTile;
+    }
+    if (!game->isOver()) {
+      // draw newt tile
+      curModelTile = (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
+      curTile = new DrawCarcassonne(curModelTile->getType());
+      curTile->setParent(&cameraObject);
+    } else {
+      curTile = nullptr;
+      curModelTile = nullptr;
+    }
+    scoreText->setText(getScores());
+  }
+}
+
 void GameViewCarcassonne::changeState() {
   if (leftRotPress) {
-    curModelTile->rotateCounterClockwise();
+    if (!((GameCarcassonne*) game)->canPlaceMeeple()) {
+      curModelTile->rotateCounterClockwise();
+    } else {
+      destRot = -360;
+      leftRotPress = false;
+    }
   }
 
   if (rightRotPress) {
-    curModelTile->rotateClockwise();
+    if (!((GameCarcassonne*) game)->canPlaceMeeple()) {
+      curModelTile->rotateClockwise();
+    } else {
+      destRot = 360;
+      rightRotPress = false;
+    }
   }
 
   if (validM1Press) {
     if (!game->isOver()) {
-      // try to put tile in model
-      vec2i aPos = coordToGridPos(mousePos);
-      bool b = game->placeTile(curModelTile, aPos.x, aPos.y);
+      // case 1: placing a meeple
+      if (((GameCarcassonne*) game)->canPlaceMeeple()) {
+        // TODO
+        tryToPlaceMeeple(-1);
+      }
+      // case 2: placing a tile
+      else {
+        // try to put tile in model
+        vec2i aPos = coordToGridPos(mousePos);
+        bool b = game->placeTile(curModelTile, aPos.x, aPos.y);
 
-      // if successful, add tile to view
-      if (b) {
-        destRot = 0;
-        curRot = 0;
-        addTile(curTile, aPos.x, aPos.y, modelRot * 90);
-        modelRot = 0;
-        if (!game->isOver()) {
-          curModelTile =
-              (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
-          curTile = new DrawCarcassonne(curModelTile->getType());
-          curTile->setParent(&cameraObject);
-        } else {
-          curTile = nullptr;
-          curModelTile = nullptr;
+        // if successful, add tile to view
+        if (b) {
+          destRot = 0;
+          curRot = 0;
+          addTile(curTile, aPos.x, aPos.y, modelRot * 90);
+          modelRot = 0;
+          if (!game->isOver()) {
+            // drawing a meeple
+            if (((GameCarcassonne*) game)->canPlaceMeeple()) {
+              curModelTile = nullptr;
+              curTile = new DrawMeeple(game->getCurrentPlayerIndex());
+              curTile->setParent(&cameraObject);
+            }
+            // drawing a tile
+            else {
+              curModelTile =
+                  (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
+              curTile = new DrawCarcassonne(curModelTile->getType());
+              curTile->setParent(&cameraObject);
+            }
+          } else {
+            curTile = nullptr;
+            curModelTile = nullptr;
+          }
+          scoreText->setText(getScores());
         }
-        scoreText->setText(getScores());
       }
     }
     validM1Press = false;

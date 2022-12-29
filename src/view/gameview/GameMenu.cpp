@@ -7,6 +7,8 @@
 using namespace sf;
 using namespace std;
 
+static float funnyColor;
+
 GameMenu::GameMenu(Win* _win) :
     DrawableState(_win),
     menuTextBoxes{{"Domino", Color::White, 42},
@@ -18,6 +20,7 @@ GameMenu::GameMenu(Win* _win) :
     menuTextBoxes[i].resize(400, 60);
     menuTextBoxes[i].move(0, 140 * (i - 1));
     menuTextBoxes[i].setBackgroundColor(50, 40, 100);
+    funnyColor = 1;
   }
 }
 
@@ -122,14 +125,13 @@ void GameMenu::changeState() {
     }
   }
 
-  static float x = 1;
-  x += 0.03f;
+  funnyColor += 0.03f;
   if (selectedAction != -1) {
     for (int i = 0; i < 3; i++) {
       menuTextBoxes[selectedAction].getTextObject()->setColor(Color(
-          ABS(sin(i + x)) * 255,
-          ABS(sin(i + x * 1.3)) * 200 + 55,
-          ABS(sin(i + x * 2.7)) * 255));
+          ABS(sin(i + funnyColor)) * 255,
+          ABS(sin(i + funnyColor * 1.3)) * 200 + 55,
+          ABS(sin(i + funnyColor * 2.7)) * 255));
     }
   }
 }

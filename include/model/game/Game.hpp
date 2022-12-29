@@ -23,6 +23,8 @@ class Game {
 
   Player const* getCurrentPlayer() const;
 
+  int getCurrentPlayerIndex() const;
+
   /// returns true if the game has ended.
   virtual bool isOver();
 

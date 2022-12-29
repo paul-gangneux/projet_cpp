@@ -36,6 +36,8 @@ class GameCarcassonne : public Game {
   // return true and calls nextTurn if successful
   // if dir == -1, does nothing, calls nextTurn and returns true
   bool placeMeeple(int _dir);
+
+  bool canPlaceMeeple();
 };
 
 #endif
