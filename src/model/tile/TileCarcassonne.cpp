@@ -252,3 +252,8 @@ bool TileCarcassonne::matchY(const Tile* down) const {
 int TileCarcassonne::getType() const {
   return type;
 }
+
+bool TileCarcassonne::addMeeple(int _dir) {
+  // TODO
+  return true;
+}

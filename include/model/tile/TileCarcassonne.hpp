@@ -90,6 +90,8 @@ class TileCarcassonne : public Tile {
   bool matchY(const Tile* down) const;
 
   int getType() const;
+
+  bool addMeeple(int _dir);
 };
 
 #endif
