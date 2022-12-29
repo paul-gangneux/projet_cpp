@@ -11,7 +11,7 @@ GameMenu::GameMenu(Win* _win) :
     DrawableState(_win),
     menuTextBoxes{{"Domino", Color::White, 42},
                   {"Trax", Color::White, 42},
-                  {"Carcassone", Color::White, 42}},
+                  {"Carcassonne", Color::White, 42}},
     selectedAction{-1} {
   for (int i = 0; i < 3; i++) {
     menuTextBoxes[i].setParent(&rootObj);

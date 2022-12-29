@@ -1,19 +1,17 @@
 #ifndef VIEW_DRAWCARCASSONE_HPP
 #define VIEW_DRAWCARCASSONE_HPP
 
-//#include "model/tile/TileCarcassone.hpp"
 #include "view/drawobject/DrawObject.hpp"
-//#include "view/drawobject/DrawText.hpp"
 
-class DrawCarcassone : public DrawObject {
+class DrawCarcassonne : public DrawObject {
  public:
   static sf::Texture textures[24];
-  static sf::Sprite* createCarcassoneSprite(int type);
+  static sf::Sprite* createCarcassonneSprite(int type);
   // todo: meeples
 
  public:
-  DrawCarcassone(int type);
-  virtual ~DrawCarcassone();
+  DrawCarcassonne(int type);
+  virtual ~DrawCarcassonne();
 
   static void initTextures();
 

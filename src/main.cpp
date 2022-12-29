@@ -3,12 +3,12 @@
 
 #include "geometry/vectors.hpp"
 #include "view/Win.hpp"
-#include "view/drawobject/DrawCarcassone.hpp"
+#include "view/drawobject/DrawCarcassonne.hpp"
 #include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawText.hpp"
 #include "view/drawobject/DrawTrax.hpp"
 #include "view/gameview/GameMenu.hpp"
-#include "view/gameview/GameViewCarcassone.hpp"
+#include "view/gameview/GameViewCarcassonne.hpp"
 #include "view/gameview/GameViewDomino.hpp"
 #include "view/gameview/GameViewTrax.hpp"
 
@@ -33,7 +33,7 @@ void switchView(int newView) {
       view = new GameViewTrax(win);
       break;
     case EVENT_SELECT_CARCASSONE:
-      view = new GameViewCarcassone(win);
+      view = new GameViewCarcassonne(win);
       break;
 
     default:
@@ -46,7 +46,7 @@ int main() {
   win = new Win(1000, 800, "game");
   view = new GameMenu(win);
 
-  DrawCarcassone::initTextures();
+  DrawCarcassonne::initTextures();
 
   // initialising mouse position data
   vec2i oldMousePos = Mouse::getPosition(*win);

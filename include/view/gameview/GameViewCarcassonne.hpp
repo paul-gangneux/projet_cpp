@@ -1,18 +1,18 @@
 #ifndef VIEW_GAMEVIEWCARCASSONE_HPP
 #define VIEW_GAMEVIEWCARCASSONE_HPP
 
-// #include "model/tile/TileCarcassone.hpp"
+#include "model/tile/TileCarcassonne.hpp"
 #include "view/gameview/GameView.hpp"
 
-class GameViewCarcassone : public GameView {
+class GameViewCarcassonne : public GameView {
  private:
-  // TileCarcassone* curModelTile;
+  TileCarcassonne* curModelTile;
   bool skipTurn;
   DrawText* scoreText;
 
  public:
-  GameViewCarcassone(Win* win);
-  virtual ~GameViewCarcassone();
+  GameViewCarcassonne(Win* win);
+  virtual ~GameViewCarcassonne();
 
   virtual void changeState();
   virtual int onKeyPress(sf::Event& event);

@@ -88,6 +88,8 @@ class TileCarcassonne : public Tile {
 
   bool matchX(const Tile* right) const;
   bool matchY(const Tile* down) const;
+
+  int getType() const;
 };
 
 #endif

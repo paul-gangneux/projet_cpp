@@ -41,6 +41,111 @@ TileCarcassonne::TileCarcassonne(uint8_t _type) :
       EDGE(3, 6)
       EDGE(2, 7)
       EDGE(4, 5)
+      break;
+    case 4:
+      DIR("ttrt")
+      EDGE(0, 3)
+      EDGE(0, 9)
+      // EDGE(3, 9)  // redundant ?
+      break;
+    case 5:
+      DIR("Ttgt")
+      EDGE(0, 3)
+      EDGE(0, 9)
+      // EDGE(3, 9)  // redundant ?
+      break;
+    case 6:
+      DIR("trrt")
+      EDGE(0, 9)
+      EDGE(3, 6)
+      EDGE(2, 7)
+      EDGE(4, 5)
+      break;
+    case 7:
+      DIR("trrr")
+      // I'm not sure if the roads
+      // are connected here
+      break;
+    case 8:
+      DIR("rgrg")
+      EDGE(0, 6);
+      EDGE(1, 3);
+      EDGE(3, 5);
+      // EDGE(1, 5);  // redundant ?
+      EDGE(11, 9);
+      EDGE(9, 7);
+      // EDGE(11, 7);  // redundant ?
+      break;
+    case 9:
+      DIR("grrr")  // >:3
+      // I'm not sure if the roads
+      // are connected here
+      EDGE(0, 2);
+      EDGE(0, 10);
+      // EDGE(10, 2);  // redundant ?
+      break;
+    case 10:
+      DIR("tggg")
+      // TODO: edges
+      break;
+    case 11:
+      DIR("ttgg")
+      // TODO: edges
+      break;
+    case 12:
+      DIR("ttgt")
+      // TODO: edges
+      break;
+    case 13:
+      DIR("gggg")
+      monastery = true;
+      // TODO: edges
+      break;
+    case 14:
+      DIR("ggrg")
+      monastery = true;
+      // TODO: edges
+      break;
+    case 15:
+      DIR("tggt")
+      // TODO: edges
+      break;
+    case 16:
+      DIR("gTgt")
+      // TODO: edges
+      break;
+    case 17:
+      DIR("trgr")
+      // TODO: edges
+      break;
+    case 18:
+      DIR("tgrr")
+      // TODO: edges
+      break;
+    case 19:
+      DIR("gtgt")
+      // TODO: edges
+      break;
+    case 20:
+      DIR("Ttrt")
+      // TODO: edges
+      break;
+    case 21:
+      DIR("Tttt")
+      // TODO: edges
+      break;
+    case 22:
+      DIR("rrrr")
+      // TODO: edges
+      break;
+    case 23:
+      DIR("Tggt")
+      // TODO: edges
+      break;
+    case 24:
+      DIR("gtgt")
+      // TODO: edges
+      break;
   }
 }
 
@@ -98,4 +203,8 @@ bool TileCarcassonne::matchY(const Tile* down) const {
     return false;
 
   return (tolower(dir[2]) == tolower(local->getDir(0)));
+}
+
+int TileCarcassonne::getType() const {
+  return type;
 }
