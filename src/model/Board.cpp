@@ -1,13 +1,14 @@
 #include "model/Board.hpp"
-// #include <iostream>
+#include <iostream>
 
 Board::Board() : tileArray{RelativeVector<RelativeVector<Tile*>>()} {}
 
 Board::~Board() {
   tileArray.forEach([](RelativeVector<Tile*> arr) {
     arr.forEach([](Tile* tile) {
-      if (tile != nullptr)
+      if (tile != nullptr) {
         delete tile;
+      }
     });
   });
 }

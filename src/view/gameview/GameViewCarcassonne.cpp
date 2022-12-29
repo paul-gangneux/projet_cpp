@@ -36,9 +36,14 @@ GameViewCarcassonne::GameViewCarcassonne(Win* _win) :
       scoreText->getWidth() / 2 + 15, scoreText->getHeight() / 2 + 80);
   controlsText->move(0, scoreText->getHeight() + 30);
   ctrlTextPosition.y += scoreText->getHeight() + 30;
+
+  firstPlay = false;  // only useful for the other games
 }
 
-GameViewCarcassonne::~GameViewCarcassonne() {}
+GameViewCarcassonne::~GameViewCarcassonne() {
+  if (curModelTile != nullptr)
+    delete curModelTile;
+}
 
 int GameViewCarcassonne::onKeyPress(Event& event) {
   switch (event.key.code) {

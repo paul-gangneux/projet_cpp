@@ -33,6 +33,7 @@ void switchView(int newView) {
       view = new GameViewTrax(win);
       break;
     case EVENT_SELECT_CARCASSONE:
+      delete view;
       view = new GameViewCarcassonne(win);
       break;
 

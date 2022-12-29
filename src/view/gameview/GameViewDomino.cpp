@@ -29,7 +29,10 @@ GameViewDomino::GameViewDomino(Win* _win) :
   ctrlTextPosition.y += scoreText->getHeight() + 30;
 }
 
-GameViewDomino::~GameViewDomino() {}
+GameViewDomino::~GameViewDomino() {
+  if (curModelTile != nullptr)
+    delete curModelTile;
+}
 
 int GameViewDomino::onKeyPress(Event& event) {
   switch (event.key.code) {

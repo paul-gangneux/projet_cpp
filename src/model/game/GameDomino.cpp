@@ -7,6 +7,7 @@ GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
   bag.push_back(new TileDomino());
   for (size_t i = 0; i < 7 * (getPlayers()).size(); i++) {
     TileDomino* td = new TileDomino();
+
     int rd = (rand() % 100);
     if (rd < 25) {
       int r = rand() % bag.size();
@@ -22,6 +23,7 @@ GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
     }
     int r = rand() % bag.size();
     td->MatchRandomSide(bag.at(r));
+
     bag.push_back(td);
   }
 

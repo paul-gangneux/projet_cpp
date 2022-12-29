@@ -60,6 +60,7 @@ GameView::~GameView() {
   clearText();
   delete curTile;
   delete game;
+  delete tilePlacementVisual;
 }
 
 DrawObject* GameView::initTilePlacementVisual() {
