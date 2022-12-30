@@ -71,6 +71,7 @@ class GameView : public DrawableState {
   virtual int handleEvents(sf::Event& event);
   virtual void changeState();
   virtual void draw();
+  virtual void drawTiles();
 
   // deals with all key press events that arent default
   virtual int onKeyPress(sf::Event& event) = 0;

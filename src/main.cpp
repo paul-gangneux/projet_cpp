@@ -16,7 +16,7 @@
 using namespace sf;
 using namespace std;
 
-// #define log(x) std::cout << x << std::endl
+#define LOG(x) std::cout << x << std::endl
 
 Win* win;
 DrawableState* view;

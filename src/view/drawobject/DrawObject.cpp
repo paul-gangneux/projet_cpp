@@ -43,6 +43,10 @@ vec2f DrawObject::getAbsolutePosition() const {
   return offset + position;
 }
 
+vec2f DrawObject::getPositionOnScreen() const {
+  return getAbsoluteTransform() * center;
+}
+
 Transform DrawObject::getAbsoluteTransform() const {
   Transform t2(trans);
   DrawObject* p = parent;

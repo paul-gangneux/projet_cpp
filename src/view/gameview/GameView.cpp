@@ -16,7 +16,7 @@ using namespace sf;
 #define TILE_SIZE 200
 #define BORDER_WIDTH 8
 
-// #define log(x) std::cout << x << std::endl
+#define LOG(x) std::cout << x << std::endl
 
 static const char* showControlsText = "Press C to\nshow controls";
 
@@ -309,13 +309,17 @@ void GameView::changeState() {
   }
 }
 
+void GameView::drawTiles() {
+  for (DrawObject* o : objects) {
+    o->draw(win);
+  }
+}
+
 void GameView::draw() {
   if (!game->isOver()) {
     tilePlacementVisual->draw(win);
   }
-  for (DrawObject* o : objects) {
-    o->draw(win);
-  }
+  drawTiles();
   if (!game->isOver() && curTile != nullptr) {
     curTile->draw(win);
   }

@@ -5,6 +5,7 @@
 
 class DrawMeeple : public DrawObject {
  public:
+  static sf::Texture potentialMeepTex;
   static sf::Texture textures[4];
   static sf::Sprite* createMeepleSprite(int player);
   int dir;

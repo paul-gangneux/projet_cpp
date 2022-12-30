@@ -6,6 +6,12 @@
 using namespace std;
 using namespace sf;
 
+#define OFFSET_LONG 70
+#define OFFSET_SHORT 40
+#define MAX_MEEPLE_DIST 50
+
+#define LOG(x) std::cout << x << std::endl
+
 static const char* textControls =
     "Controls:\n"
     "Left click: place tile or meeple\n"
@@ -16,12 +22,32 @@ static const char* textControls =
     "ESC: back to menu\n"
     "C: hide controls";
 
+static const vec2f meepleOffset[14] = {
+
+    {0, -OFFSET_LONG},
+    {OFFSET_SHORT, -OFFSET_LONG},
+    {OFFSET_LONG, -OFFSET_SHORT},
+    {OFFSET_LONG, 0},
+    {OFFSET_LONG, OFFSET_SHORT},
+    {OFFSET_SHORT, OFFSET_LONG},
+    {0, OFFSET_LONG},
+    {-OFFSET_SHORT, OFFSET_LONG},
+    {-OFFSET_LONG, OFFSET_SHORT},
+    {-OFFSET_LONG, 0},
+    {-OFFSET_LONG, -OFFSET_SHORT},
+    {-OFFSET_SHORT, -OFFSET_LONG},
+    {0, 0},
+    {0, 0}};
+
 GameViewCarcassonne::GameViewCarcassonne(Win* _win) :
     GameView(_win, new GameCarcassonne(), nullptr, textControls),
     // we grab the last tile, which is predefined
     curModelTile{(TileCarcassonne*) ((GameCarcassonne*) game)->grabTile()},
     skipTurn{false},
-    scoreText{new DrawText(getScores(), Color::White)} {
+    scoreText{new DrawText(getScores(), Color::White)},
+    meepleList{list<DrawMeeple*>()},
+    lastPlacedTile{nullptr},
+    potentialMeeple{new DrawMeeple(-1)} {
   // the first tile is defined and placed in model and view
   ((GameCarcassonne*) game)->placeFirstTile(curModelTile);
   addTile(new DrawCarcassonne(curModelTile->getType()), 0, 0, 0);
@@ -39,11 +65,19 @@ GameViewCarcassonne::GameViewCarcassonne(Win* _win) :
   ctrlTextPosition.y += scoreText->getHeight() + 30;
 
   firstPlay = false;  // only useful for the other games
+
+  potentialMeeple->setParent(&cameraObject);
+  potentialMeeple->setPosition(-1000000, -1000000);
 }
 
 GameViewCarcassonne::~GameViewCarcassonne() {
-  if (curModelTile != nullptr)
+  if (curModelTile != nullptr) {
     delete curModelTile;
+  }
+  for (DrawMeeple* meep : meepleList) {
+    delete meep;
+  }
+  delete potentialMeeple;
 }
 
 int GameViewCarcassonne::onKeyPress(Event& event) {
@@ -60,16 +94,27 @@ int GameViewCarcassonne::onKeyPress(Event& event) {
 }
 
 void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
-  // TODO:
+  if (dir == 12) {
+    dir = 13;
+  }
   bool b = ((GameCarcassonne*) game)->placeMeeple(dir);
-  // if successful, add meeple to view
+  // if successful, adds meeple to view
   if (b) {
     destRot = 0;
     curRot = 0;
     modelRot = 0;
-    // todo: add meeple to view
+    // removing potentialMeeple
+    potentialMeeple->setPosition(-1000000000.0f, -1000000000.0f);
     if (dir == -1) {
       delete curTile;
+    } else {
+      // adding meeple to view
+      DrawMeeple* meep = (DrawMeeple*) curTile;
+      meep->setParent(&cameraObject);
+      meep->setPosition(lastPlacedTile->getPosition() + meepleOffset[dir]);
+      meep->setRotation(0);
+      meepleList.push_back(meep);
+      // todo, store data about meeple somewhere
     }
     if (!game->isOver()) {
       // draw newt tile
@@ -82,6 +127,29 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
     }
     scoreText->setText(getScores());
   }
+}
+
+int GameViewCarcassonne::calculateMeepleDirection() {
+  float scale = cameraObject.getSize().x;
+  vec2f pos = lastPlacedTile->getPositionOnScreen();
+  int dir = 0;
+  float min_dist = 999999999999.0f;
+
+  for (int i = 0; i < 13; i++) {
+    float x = mousePos.x - (pos.x + (meepleOffset[i].x) * scale);
+    float y = mousePos.y - (pos.y + (meepleOffset[i].y) * scale);
+    float dist = x * x + y * y;
+    // no need to calculate sqrt because we only compare the distances
+    if (dist < min_dist) {
+      min_dist = dist;
+      dir = i;
+    }
+  }
+  float max_dist = MAX_MEEPLE_DIST * scale;
+  if (min_dist > max_dist * max_dist) {
+    dir = -1;
+  }
+  return dir;
 }
 
 void GameViewCarcassonne::changeState() {
@@ -103,12 +171,24 @@ void GameViewCarcassonne::changeState() {
     }
   }
 
+  int dir = -1;
+  if (((GameCarcassonne*) game)->canPlaceMeeple()) {
+    dir = calculateMeepleDirection();
+    if (dir == -1) {
+      potentialMeeple->setPosition(-1000000000.0f, -1000000000.0f);
+    } else {
+      potentialMeeple->setPosition(
+          lastPlacedTile->getPosition() + meepleOffset[dir]);
+    }
+  }
+
   if (validM1Press) {
     if (!game->isOver()) {
       // case 1: placing a meeple
       if (((GameCarcassonne*) game)->canPlaceMeeple()) {
-        // TODO
-        tryToPlaceMeeple(-1);
+        dir = calculateMeepleDirection();
+        if (dir != -1)
+          tryToPlaceMeeple(dir);
       }
       // case 2: placing a tile
       else {
@@ -121,6 +201,7 @@ void GameViewCarcassonne::changeState() {
           destRot = 0;
           curRot = 0;
           addTile(curTile, aPos.x, aPos.y, modelRot * 90);
+          lastPlacedTile = curTile;
           modelRot = 0;
           if (!game->isOver()) {
             // drawing a meeple
@@ -128,6 +209,7 @@ void GameViewCarcassonne::changeState() {
               curModelTile = nullptr;
               curTile = new DrawMeeple(game->getCurrentPlayerIndex());
               curTile->setParent(&cameraObject);
+              potentialMeeple->setPosition(-1000000000.0f, -1000000000.0f);
             }
             // drawing a tile
             else {
@@ -163,4 +245,12 @@ void GameViewCarcassonne::changeState() {
   }
 
   GameView::changeState();
+}
+
+void GameViewCarcassonne::drawTiles() {
+  GameView::drawTiles();
+  potentialMeeple->draw(win);
+  for (DrawMeeple* meep : meepleList) {
+    meep->draw(win);
+  }
 }

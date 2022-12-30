@@ -72,6 +72,8 @@ class DrawObject : public sf::Transformable {
 
   void setCenter(float x, float y);
   const vec2f& getCenter() const;
+
+  vec2f getPositionOnScreen() const;
 };
 
 #endif
