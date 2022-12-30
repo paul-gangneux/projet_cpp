@@ -208,7 +208,8 @@ void TileCarcassonne::rotateClockwise() {
     e.rotateClockwise();
   }
 
-  meepleLocation = (meepleLocation + 3) % 12;
+  if (meepleLocation != -1)
+    meepleLocation = (meepleLocation + 3) % 12;
 }
 
 void TileCarcassonne::rotateCounterClockwise() {
@@ -222,7 +223,12 @@ void TileCarcassonne::rotateCounterClockwise() {
     e.rotateCounterClockwise();
   }
 
-  meepleLocation = (meepleLocation + 9) % 12;
+  if (meepleLocation != -1)
+    meepleLocation = (meepleLocation + 9) % 12;
+}
+
+std::vector<TileCarcassonne::edge> TileCarcassonne::getEdges() const {
+  return edges;
 }
 
 char TileCarcassonne::getDir(int a) const {
@@ -231,6 +237,14 @@ char TileCarcassonne::getDir(int a) const {
   // technically we should only call this function with a value between 0 and 3,
   // but just in case:
   return dir[a % 4];
+}
+
+int8_t TileCarcassonne::getMeeplePlayer() const {
+  return meeplePlayer;
+}
+
+int8_t TileCarcassonne::getMeepleLocation() const {
+  return meepleLocation;
 }
 
 bool TileCarcassonne::matchX(const Tile* right) const {
@@ -254,6 +268,13 @@ int TileCarcassonne::getType() const {
 }
 
 bool TileCarcassonne::addMeeple(int _dir) {
-  // TODO
+  if (meeplePlayer != -1)
+    return false;
+
+  meepleLocation = _dir;
+
+  // TODO : meeplePlayer = ?
+  // not sure how to access player number without adding parameter
+
   return true;
 }

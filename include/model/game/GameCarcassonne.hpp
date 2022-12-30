@@ -10,6 +10,27 @@ class GameCarcassonne : public Game {
   /// during the game. once it is empty, the game is over.
   std::vector<TileCarcassonne*> bag;
   bool currentPlayerHasPlacedTile;
+  int lastX;
+  int lastY;
+
+  /// saves the coordinates of a tile, and one direction {0,...,11}.
+  /// will be used in our algorithms.
+  struct tileAndDir {
+    int x;
+    int y;
+    uint8_t d;
+
+    tileAndDir(int _x, int _y, uint8_t _d) : x{_x}, y{_y}, d{_d} {}
+
+    bool operator==(tileAndDir b) const {
+      if (b.x == x && b.y == y && b.d == d)
+        return true;
+      else
+        return false;
+    }
+  };
+
+  bool searchMeeple(tileAndDir, std::vector<tileAndDir>*);
 
  public:
   GameCarcassonne();
@@ -38,6 +59,11 @@ class GameCarcassonne : public Game {
   bool placeMeeple(int _dir);
 
   bool canPlaceMeeple();
+
+  /// returns the adjacent dir number of the adjacent tile.
+  /// for example, if _dir=2, then the function returns 10, as the adjacent dir
+  /// would be 10 on the tile on the right.
+  uint8_t adjacentDir(uint8_t _dir);
 };
 
 #endif
