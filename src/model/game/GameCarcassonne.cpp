@@ -191,7 +191,11 @@ bool GameCarcassonne::canPlaceMeeple() {
 }
 
 void GameCarcassonne::nextTurn() {
-  Game::nextTurn();
+  if (bag.empty()) {
+    gameIsOver = true;
+  } else {
+    Game::nextTurn();
+  }
   currentPlayerHasPlacedTile = false;
 }
 

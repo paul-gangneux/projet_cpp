@@ -18,7 +18,7 @@ static const char* textControls =
     "Right click: move camera\n"
     "Scroll: zoom\n"
     "A and Z: rotate\n"
-    "Space: next turn (don't place a meeple)\n"
+    "Space: skip turn\n"
     "ESC: back to menu\n"
     "C: hide controls";
 
@@ -83,10 +83,8 @@ GameViewCarcassonne::~GameViewCarcassonne() {
 int GameViewCarcassonne::onKeyPress(Event& event) {
   switch (event.key.code) {
     case Keyboard::Space: {
-      if (!game->isOver()) {
-        tryToPlaceMeeple(-1);
-        break;
-      }
+      skipTurn = true;
+      break;
     }
     default: { break; }
   }
@@ -230,16 +228,26 @@ void GameViewCarcassonne::changeState() {
   }
 
   if (skipTurn) {
-    destRot = 0;
-    curRot = 0;
-    modelRot = 0;
-    ((GameCarcassonne*) game)->nextTurn();
     if (!game->isOver()) {
-      curModelTile = (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
-      curTile = new DrawCarcassonne(curModelTile->getType());
-      curTile->setParent(&cameraObject);
-    } else {
-      curTile = nullptr;
+      if (((GameCarcassonne*) game)->canPlaceMeeple()) {
+        tryToPlaceMeeple(-1);
+      } else {
+        destRot = 0;
+        curRot = 0;
+        modelRot = 0;
+        ((GameCarcassonne*) game)->nextTurn();
+        delete curTile;
+        delete curModelTile;
+        if (!game->isOver()) {
+          curModelTile =
+              (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
+          curTile = new DrawCarcassonne(curModelTile->getType());
+          curTile->setParent(&cameraObject);
+        } else {
+          curTile = nullptr;
+          curModelTile = nullptr;
+        }
+      }
     }
     skipTurn = false;
   }
