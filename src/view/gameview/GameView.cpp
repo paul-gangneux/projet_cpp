@@ -61,7 +61,9 @@ GameView::GameView(
 GameView::~GameView() {
   clearObjects();
   clearText();
-  delete curTile;
+  if (curTile != nullptr) {
+    delete curTile;
+  }
   delete game;
   delete tilePlacementVisual;
 }
