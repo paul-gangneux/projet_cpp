@@ -1,6 +1,7 @@
 #ifndef MODEL_GAME_CARCASSONE_HPP
 #define MODEL_GAME_CARCASSONE_HPP
 
+#include <queue>
 #include "model/game/Game.hpp"
 #include "model/tile/TileCarcassonne.hpp"
 
@@ -12,6 +13,10 @@ class GameCarcassonne : public Game {
   bool currentPlayerHasPlacedTile;
   int lastX;
   int lastY;
+
+  // contains info of meeples to be removed from view
+  // infos are: tile position x, tile position y, direction
+  std::queue<int*> removedMeepleQueue;
 
   /// saves the coordinates of a tile, and one direction {0,...,11}.
   /// will be used in our algorithms.
@@ -30,7 +35,7 @@ class GameCarcassonne : public Game {
     }
   };
 
-  bool searchMeeple(tileAndDir, std::vector<tileAndDir>*);
+  bool searchMeeple(tileAndDir, std::vector<tileAndDir>&);
 
  public:
   GameCarcassonne();
@@ -64,6 +69,8 @@ class GameCarcassonne : public Game {
   /// for example, if _dir=2, then the function returns 10, as the adjacent dir
   /// would be 10 on the tile on the right.
   uint8_t adjacentDir(uint8_t _dir);
+
+  bool getLastRemovedMeepleInfo(int infos[3]);
 };
 
 #endif

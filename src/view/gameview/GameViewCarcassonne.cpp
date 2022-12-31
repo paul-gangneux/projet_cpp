@@ -45,7 +45,7 @@ GameViewCarcassonne::GameViewCarcassonne(Win* _win) :
     curModelTile{(TileCarcassonne*) ((GameCarcassonne*) game)->grabTile()},
     skipTurn{false},
     scoreText{new DrawText(getScores(), Color::White)},
-    meepleList{list<DrawMeeple*>()},
+    meepleList{list<MeepleData>()},
     lastPlacedTile{nullptr},
     potentialMeeple{new DrawMeeple(-1)} {
   // the first tile is defined and placed in model and view
@@ -74,8 +74,8 @@ GameViewCarcassonne::~GameViewCarcassonne() {
   if (curModelTile != nullptr) {
     delete curModelTile;
   }
-  for (DrawMeeple* meep : meepleList) {
-    delete meep;
+  for (MeepleData meep : meepleList) {
+    delete meep.meeple;
   }
   delete potentialMeeple;
 }
@@ -101,7 +101,7 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
     destRot = 0;
     curRot = 0;
     modelRot = 0;
-    // removing potentialMeeple
+    // yeeting potentialMeeple out of view
     potentialMeeple->setPosition(-1000000000.0f, -1000000000.0f);
     if (dir == -1) {
       delete curTile;
@@ -111,7 +111,8 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
       meep->setParent(&cameraObject);
       meep->setPosition(lastPlacedTile->getPosition() + meepleOffset[dir]);
       meep->setRotation(0);
-      meepleList.push_back(meep);
+      meepleList.push_back(
+          {meep, {lastPlacedTilePos.x, lastPlacedTilePos.y, dir}});
       // todo, store data about meeple somewhere
     }
     if (!game->isOver()) {
@@ -131,7 +132,7 @@ int GameViewCarcassonne::calculateMeepleDirection() {
   float scale = cameraObject.getSize().x;
   vec2f pos = lastPlacedTile->getPositionOnScreen();
   int dir = 0;
-  float min_dist = 999999999999.0f;
+  float min_dist = 1.0e+30f;  // big number
 
   for (int i = 0; i < 13; i++) {
     float x = mousePos.x - (pos.x + (meepleOffset[i].x) * scale);
@@ -207,13 +208,15 @@ void GameViewCarcassonne::changeState() {
     }
   }
 
+  // ---- placing tile or meeple ---- //
   if (validM1Press) {
     if (!game->isOver()) {
       // case 1: placing a meeple
       if (((GameCarcassonne*) game)->canPlaceMeeple()) {
         dir = calculateMeepleDirection();
-        if (dir != -1)
+        if (dir != -1) {
           tryToPlaceMeeple(dir);
+        }
       }
       // case 2: placing a tile
       else {
@@ -227,16 +230,17 @@ void GameViewCarcassonne::changeState() {
           curRot = 0;
           addTile(curTile, aPos.x, aPos.y, modelRot * 90);
           lastPlacedTile = curTile;
+          lastPlacedTilePos = aPos;
           modelRot = 0;
           if (!game->isOver()) {
-            // drawing a meeple
+            // grabbing a meeple
             if (((GameCarcassonne*) game)->canPlaceMeeple()) {
               curModelTile = nullptr;
               curTile = new DrawMeeple(game->getCurrentPlayerIndex());
               curTile->setParent(&cameraObject);
               potentialMeeple->setPosition(-1000000000.0f, -1000000000.0f);
             }
-            // drawing a tile
+            // grabbing a tile from bag
             else {
               curModelTile =
                   (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
@@ -253,12 +257,27 @@ void GameViewCarcassonne::changeState() {
     }
     validM1Press = false;
   }
+
+  // removes the meeples that had been removed in model (once per frame)
+  int meepleInfos[3];
+  if (((GameCarcassonne*) game)->getLastRemovedMeepleInfo(meepleInfos)) {
+    for (list<GameViewCarcassonne::MeepleData>::iterator it = begin(meepleList);
+         it != end(meepleList);
+         it++) {
+      if (it->info[0] == meepleInfos[0] && it->info[1] == meepleInfos[1] &&
+          it->info[2] == meepleInfos[2]) {
+        delete it->meeple;
+        meepleList.erase(it);
+        break;
+      }
+    }
+  }
 }
 
 void GameViewCarcassonne::drawTiles() {
   GameView::drawTiles();
   potentialMeeple->draw(win);
-  for (DrawMeeple* meep : meepleList) {
-    meep->draw(win);
+  for (MeepleData meep : meepleList) {
+    meep.meeple->draw(win);
   }
 }

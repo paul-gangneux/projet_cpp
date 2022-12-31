@@ -271,6 +271,10 @@ bool TileCarcassonne::addMeeple(int _dir) {
   if (meeplePlayer != -1)
     return false;
 
+  if (_dir == 13 && !monastery) {
+    return false;
+  }
+
   meepleLocation = _dir;
 
   // TODO : meeplePlayer = ?

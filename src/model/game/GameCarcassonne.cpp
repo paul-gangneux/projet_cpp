@@ -1,9 +1,9 @@
 #include "model/game/GameCarcassonne.hpp"
-
 #include <algorithm>
 #include <iostream>
-
 #include "model/tile/TileCarcassonne.hpp"
+
+#define LOG(x) std::cout << x << std::endl
 
 #define putInBag(type, num)                   \
   for (size_t i = 0; i < num; i++) {          \
@@ -51,6 +51,11 @@ GameCarcassonne::~GameCarcassonne() {
   for (TileCarcassonne* t : bag) {
     delete t;
   }
+  while (!removedMeepleQueue.empty()) {
+    int* i = removedMeepleQueue.front();
+    removedMeepleQueue.pop();
+    delete[] i;
+  }
 }
 
 bool GameCarcassonne::canAddNewPlayer() {
@@ -90,25 +95,35 @@ bool GameCarcassonne::placeTile(Tile* const _tile, int x, int y) {
 }
 
 bool GameCarcassonne::searchMeeple(
-    tileAndDir current, std::vector<tileAndDir>* visited) {
+    tileAndDir current, std::vector<tileAndDir>& visited) {
   // first we check if the tileAndDir has already been visited.
 
-  if (std::find((*visited).begin(), (*visited).end(), current) !=
-      (*visited).end())
+  LOG("--------------------------");
+
+  LOG("tile: " << current.x << ", " << current.y);
+  LOG("dir: " << (int) current.d);
+
+  if (std::find(visited.begin(), visited.end(), current) != visited.end()) {
+    LOG("found");
     return false;
+  }
+  LOG("not found");
 
   // if not, we add the current tile to the visited list.
 
-  visited->push_back(current);
+  visited.push_back(current);
 
   // then, we check if it contains a meeple. if it does, the search is over.
 
   TileCarcassonne* local =
       dynamic_cast<TileCarcassonne*>(board.get(current.x, current.y));
-  if (local == nullptr)
+  if (local == nullptr) {
     return false;
-  if (local->getMeepleLocation() == current.d)
+  }
+  if (local->getMeepleLocation() == current.d) {
+    LOG(" -- Meeple found -- ");
     return true;
+  }
 
   // if we haven't found a meeple, the search continues.
   // first we need to search in the adjacent tile (relative to the dir), in the
@@ -138,8 +153,9 @@ bool GameCarcassonne::searchMeeple(
   }
   if ((board.get(xToVisit, yToVisit) != nullptr) &&
       searchMeeple(
-          tileAndDir(xToVisit, yToVisit, adjacentDir(current.d)), visited))
+          tileAndDir(xToVisit, yToVisit, adjacentDir(current.d)), visited)) {
     return true;
+  }
 
   // then we need to search in the other dirs that are linked to the current
   // one, through the edges.
@@ -149,36 +165,66 @@ bool GameCarcassonne::searchMeeple(
     // we look at all the edges of the tile, and keep the dir (vertices)
     // connected to the current dir.
     uint8_t d = e.otherSide(current.d);
-    if (d != 13)
+    if (d != 13) {
       toVisit.push_back(d);
+      LOG("  other dir: " << (int) d);
+    }
   }
 
   for (uint8_t visit : toVisit) {
-    if (searchMeeple(tileAndDir(current.x, current.y, visit), visited))
+    if (searchMeeple(tileAndDir(current.x, current.y, visit), visited)) {
       return true;
+    }
   }
 
   return false;
 }
 
+int roundDir(int d) {
+  if (d == 11 || d <= 1) {
+    return 0;
+  }
+  if (d <= 4) {
+    return 3;
+  }
+  if (d <= 7) {
+    return 6;
+  }
+  return 9;
+}
+
 bool GameCarcassonne::placeMeeple(int _dir) {
+  LOG("==========================");
+  LOG(_dir);
   if (!currentPlayerHasPlacedTile)
     return false;
 
-  if (_dir == 13) {
-    TileCarcassonne* local =
-        dynamic_cast<TileCarcassonne*>(board.get(lastX, lastY));
-    if (local == nullptr)
-      return false;
-
-    local->addMeeple(_dir);  // TODO : add currentplayer parameter
+  TileCarcassonne* local =
+      dynamic_cast<TileCarcassonne*>(board.get(lastX, lastY));
+  if (local == nullptr) {
+    return false;
   }
 
-  if (_dir != -1) {
+  if (_dir == 13) {
+    if (!local->addMeeple(_dir)) {  // TODO : add currentplayer parameter
+      return false;
+    }
+  }
+
+  else if (_dir != -1) {
+    int rd = roundDir(_dir);
+    if (local->getDir(rd) != 'r') {
+      _dir = rd;
+    }
+
+    LOG("new dir: " << _dir);
     std::vector<tileAndDir> visited;
 
-    if (searchMeeple(tileAndDir(lastX, lastY, _dir), &visited)) {
-      // TODO : unfinished
+    if (searchMeeple(tileAndDir(lastX, lastY, _dir), visited)) {
+      return false;
+    }
+    if (!local->addMeeple(_dir)) {  // TODO : add currentplayer parameter
+      return false;
     }
   }
 
@@ -222,4 +268,17 @@ uint8_t GameCarcassonne::adjacentDir(uint8_t _dir) {
   }
   // this should be an unreachable statement.
   return 13;
+}
+
+bool GameCarcassonne::getLastRemovedMeepleInfo(int infos[3]) {
+  if (removedMeepleQueue.empty()) {
+    return false;
+  }
+  int* meep = removedMeepleQueue.front();
+  infos[0] = meep[0];
+  infos[1] = meep[1];
+  infos[2] = meep[2];
+  removedMeepleQueue.pop();
+  delete[] meep;
+  return true;
 }

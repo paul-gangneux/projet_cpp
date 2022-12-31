@@ -2,14 +2,12 @@
 #define MODEL_GAME_TREX_HPP
 
 #include <queue>
-
 #include "Game.hpp"
 #include "geometry/vectors.hpp"
 #include "model/tile/TileTrax.hpp"
 
 class GameTrax : public Game {
  private:
-  // std::vector<GameTrax*> bag;
   std::queue<int*> placedTilesQueue;
   int nbOfTiles;
   int minX, maxX, minY, maxY;

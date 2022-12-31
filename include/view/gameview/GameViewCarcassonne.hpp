@@ -8,12 +8,18 @@
 
 class GameViewCarcassonne : public GameView {
  private:
+  typedef struct {
+    DrawMeeple* meeple;
+    int info[3];
+  } MeepleData;
+
   TileCarcassonne* curModelTile;
   bool skipTurn;
   DrawText* scoreText;
-  std::list<DrawMeeple*> meepleList;
+  std::list<MeepleData> meepleList;
   DrawObject* lastPlacedTile;
   DrawMeeple* potentialMeeple;
+  vec2i lastPlacedTilePos;
 
   void tryToPlaceMeeple(int dir);
   int calculateMeepleDirection();
