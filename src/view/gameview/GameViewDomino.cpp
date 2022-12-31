@@ -56,6 +56,26 @@ void GameViewDomino::changeState() {
   if (rightRotPress)
     curModelTile->rotateClockwise();
 
+  if (discardTile) {
+    destRot = 0;
+    curRot = 0;
+    modelRot = 0;
+    ((GameDomino*) game)->discardTile(curModelTile);
+    delete curTile;
+    curTile = nullptr;
+    if (!game->isOver()) {
+      curModelTile = (TileDomino*) ((GameDomino*) game)->grabTile();
+      curTile = new DrawDomino(curModelTile);
+      curTile->setParent(&cameraObject);
+    } else {
+      curTile = nullptr;
+      curModelTile = nullptr;
+    }
+    discardTile = false;
+  }
+
+  GameView::changeState();
+
   if (validM1Press) {
     if (!game->isOver()) {
       // sets position to 0,0 if it's the first play
@@ -89,24 +109,4 @@ void GameViewDomino::changeState() {
     }
     validM1Press = false;
   }
-
-  if (discardTile) {
-    destRot = 0;
-    curRot = 0;
-    modelRot = 0;
-    ((GameDomino*) game)->discardTile(curModelTile);
-    delete curTile;
-    curTile = nullptr;
-    if (!game->isOver()) {
-      curModelTile = (TileDomino*) ((GameDomino*) game)->grabTile();
-      curTile = new DrawDomino(curModelTile);
-      curTile->setParent(&cameraObject);
-    } else {
-      curTile = nullptr;
-      curModelTile = nullptr;
-    }
-    discardTile = false;
-  }
-
-  GameView::changeState();
 }

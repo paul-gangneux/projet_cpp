@@ -169,6 +169,33 @@ void GameViewCarcassonne::changeState() {
     }
   }
 
+  if (skipTurn) {
+    if (!game->isOver()) {
+      if (((GameCarcassonne*) game)->canPlaceMeeple()) {
+        tryToPlaceMeeple(-1);
+      } else {
+        destRot = 0;
+        curRot = 0;
+        modelRot = 0;
+        ((GameCarcassonne*) game)->nextTurn();
+        delete curTile;
+        delete curModelTile;
+        if (!game->isOver()) {
+          curModelTile =
+              (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
+          curTile = new DrawCarcassonne(curModelTile->getType());
+          curTile->setParent(&cameraObject);
+        } else {
+          curTile = nullptr;
+          curModelTile = nullptr;
+        }
+      }
+    }
+    skipTurn = false;
+  }
+
+  GameView::changeState();
+
   int dir = -1;
   if (((GameCarcassonne*) game)->canPlaceMeeple()) {
     dir = calculateMeepleDirection();
@@ -226,33 +253,6 @@ void GameViewCarcassonne::changeState() {
     }
     validM1Press = false;
   }
-
-  if (skipTurn) {
-    if (!game->isOver()) {
-      if (((GameCarcassonne*) game)->canPlaceMeeple()) {
-        tryToPlaceMeeple(-1);
-      } else {
-        destRot = 0;
-        curRot = 0;
-        modelRot = 0;
-        ((GameCarcassonne*) game)->nextTurn();
-        delete curTile;
-        delete curModelTile;
-        if (!game->isOver()) {
-          curModelTile =
-              (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
-          curTile = new DrawCarcassonne(curModelTile->getType());
-          curTile->setParent(&cameraObject);
-        } else {
-          curTile = nullptr;
-          curModelTile = nullptr;
-        }
-      }
-    }
-    skipTurn = false;
-  }
-
-  GameView::changeState();
 }
 
 void GameViewCarcassonne::drawTiles() {
