@@ -113,7 +113,6 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
       meep->setRotation(0);
       meepleList.push_back(
           {meep, {lastPlacedTilePos.x, lastPlacedTilePos.y, res}});
-      // todo, store data about meeple somewhere
     }
     if (!game->isOver()) {
       // draw newt tile

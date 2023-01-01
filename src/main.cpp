@@ -21,6 +21,7 @@ using namespace std;
 Win* win;
 DrawableState* view;
 
+// TODO: add player number selection
 void switchView(int newView) {
   switch (newView) {
     case EVENT_SELECT_MENU:

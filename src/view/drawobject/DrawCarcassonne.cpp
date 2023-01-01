@@ -28,24 +28,18 @@ DrawCarcassonne::DrawCarcassonne(int type) :
     DrawObject(DrawCarcassonne::createCarcassonneSprite(type)) {
   center = vec2f{100, 100};
   updateTransform();
-  // todo: meeples
 }
 
-DrawCarcassonne::~DrawCarcassonne() {
-  // todo: meeples
-}
+DrawCarcassonne::~DrawCarcassonne() {}
 
 void DrawCarcassonne::draw(sf::RenderTarget* win) const {
   DrawObject::draw(win);
-  // todo: meeples
 }
 
 void DrawCarcassonne::rotate(float _angle) {
   DrawObject::rotate(_angle);
-  // todo: meeples
 }
 
 void DrawCarcassonne::setRotation(float _angle) {
   DrawObject::setRotation(_angle);
-  // todo: meeples
 }

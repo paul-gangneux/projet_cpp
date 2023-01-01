@@ -7,7 +7,6 @@ class DrawCarcassonne : public DrawObject {
  public:
   static sf::Texture textures[24];
   static sf::Sprite* createCarcassonneSprite(int type);
-  // todo: meeples
 
  public:
   DrawCarcassonne(int type);
