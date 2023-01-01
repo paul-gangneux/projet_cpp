@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#define LOG(x) cout << x << endl
+#define LOG(x) cout << x << endl;
 
 #define STOPCOND_NONE 0
 #define STOPCOND_MEEPLEFOUND 1
@@ -104,10 +104,12 @@ bool GameCarcassonne::placeTile(Tile* const _tile, int x, int y) {
 bool GameCarcassonne::searchGraph(
     tileAndDir current,
     int* nbVisited,
+    int* nbOfShields,
     std::queue<meepleInfo>* meepInfos,
     int stopCond) {
   vector<tileAndDir> visited;  // init empty vector
-  return searchGraph(current, visited, nbVisited, meepInfos, stopCond);
+  return searchGraph(
+      current, visited, nbVisited, nbOfShields, meepInfos, stopCond);
 }
 
 // does a complete search of the graph.
@@ -122,6 +124,7 @@ bool GameCarcassonne::searchGraph(
     tileAndDir current,
     vector<tileAndDir>& visited,
     int* nbVisited,
+    int* nbOfShields,
     queue<meepleInfo>* meepInfos,
     int stopCond) {
   // first we check if the tileAndDir has already been visited.
@@ -129,7 +132,22 @@ bool GameCarcassonne::searchGraph(
     return false;
   }
 
-  // if not, we add the current tile to the visited list.
+  // if not, we check id the tile itself has been visited before,
+  // and increment nbVisited accordingly
+  if (nbVisited != nullptr) {
+    bool shouldincrement = true;
+    for (tileAndDir data : visited) {
+      if (data.x == current.x && data.y == current.y) {
+        shouldincrement = false;
+        break;
+      }
+    }
+    if (shouldincrement) {
+      (*nbVisited)++;
+    }
+  }
+
+  // then, we add the current tile to the visited list.
   visited.push_back(current);
 
   // we check if the tile exists
@@ -144,12 +162,24 @@ bool GameCarcassonne::searchGraph(
     }
   }
 
-  // if it does, increments nbVisited
-  if (nbVisited != nullptr) {
-    (*nbVisited)++;
+  // checks is currrent dir is a city with a shield
+  if (nbOfShields != nullptr) {
+    int newDir = -1;
+    if (current.d == 0) {
+      newDir = 0;
+    } else if (current.d == 3) {
+      newDir = 1;
+    } else if (current.d == 6) {
+      newDir = 2;
+    } else if (current.d == 9) {
+      newDir = 3;
+    }
+    if (newDir != -1 && local->getDir(newDir) == 'T') {
+      (*nbOfShields)++;
+    }
   }
 
-  // then, we check if it contains a meeple.
+  // checks if currrent dir contains a meeple.
   if (local->getMeepleLocation() == current.d) {
     if (stopCond == STOPCOND_MEEPLEFOUND) {
       // a meeple has been found, the search is over.
@@ -188,14 +218,20 @@ bool GameCarcassonne::searchGraph(
       xToVisit--;
       break;
   }
-  if ((board.get(xToVisit, yToVisit) != nullptr) &&
-      searchGraph(
-          tileAndDir(xToVisit, yToVisit, adjacentDir(current.d)),
-          visited,
-          nbVisited,
-          meepInfos,
-          stopCond)) {
-    return true;
+  if ((board.get(xToVisit, yToVisit) != nullptr)) {
+    if (searchGraph(
+            tileAndDir(xToVisit, yToVisit, adjacentDir(current.d)),
+            visited,
+            nbVisited,
+            nbOfShields,
+            meepInfos,
+            stopCond)) {
+      return true;
+    }
+  } else {
+    if (stopCond == STOPCOND_NOTCOMPLETE) {
+      return true;
+    }
   }
 
   // then we need to search in the other dirs that are linked to the current
@@ -216,6 +252,7 @@ bool GameCarcassonne::searchGraph(
             tileAndDir(current.x, current.y, visit),
             visited,
             nbVisited,
+            nbOfShields,
             meepInfos,
             stopCond)) {
       return true;
@@ -253,8 +290,8 @@ int GameCarcassonne::countNeighbors(int x, int y) {
 }
 
 void GameCarcassonne::calculateNewScores() {
-  TileCarcassonne* lastTile = (TileCarcassonne*) board.get(lastX, lastY);
   TileCarcassonne* tile;
+
   // checking for finished monastery
   for (int i = -1; i <= 1; i++) {
     for (int j = -1; j <= 1; j++) {
@@ -272,49 +309,122 @@ void GameCarcassonne::calculateNewScores() {
       }
     }
   }
+
+  TileCarcassonne* lastTile = (TileCarcassonne*) board.get(lastX, lastY);
+
+  // checking for complete road or city
+  for (int i = 0; i <= 3; i++) {
+    uint8_t d = i * 3;
+    char terrainType = lastTile->getDir(i);
+    int nbVisited = 0;
+    int nbShields = 0;
+    int* nbShields_p;
+    int mult;
+    queue<meepleInfo> meepInfos;
+    if (terrainType == 'r' || terrainType == 't' || terrainType == 'T') {
+      if (terrainType == 'r') {
+        nbShields_p = nullptr;
+        mult = 1;
+      } else {
+        nbShields_p = &nbShields;
+        mult = 2;
+      }
+
+      // we only calculate the score if the road or town is complete
+      if (!searchGraph(
+              tileAndDir{lastX, lastY, d},
+              &nbVisited,
+              nbShields_p,
+              &meepInfos,
+              STOPCOND_NOTCOMPLETE) &&
+          nbVisited > 0) {
+        // the rules stipulate that cities of size two are worth only 2 points
+        if (terrainType != 'r' && nbVisited == 2) {
+          nbVisited = 1;
+        }
+
+        // we calculate all the players who deserve to get points
+        // at the same time, we remove the meeples from model and view
+        int nbOfPlayers = players.size();
+        int* plys = new int[nbOfPlayers];
+        for (int j = 0; j < nbOfPlayers; j++) {
+          plys[j] = 0;
+        }
+        while (!meepInfos.empty()) {
+          meepleInfo mi = meepInfos.front();
+          plys[mi.player]++;
+
+          // removing meeple from model and view
+          removedMeepleQueue.push(new int[3]{mi.x, mi.y, mi.dir});
+          ((TileCarcassonne*) board.get(mi.x, mi.y))->addMeeple(-1, -1);
+          meepInfos.pop();
+        }
+        int max = 0;
+        for (int j = 0; j < nbOfPlayers; j++) {
+          if (max < plys[j]) {
+            max = plys[j];
+          }
+        }
+        if (max > 0) {
+          for (int j = 0; j < nbOfPlayers; j++) {
+            if (plys[j] == max) {
+              players.at(j)->addScore(nbVisited * mult + 2 * nbShields);
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
-bool GameCarcassonne::placeMeeple(int _dir) {
+// returns the dir where the meeple has actually been placed
+// returns 14 if the meeple has been successfully yeeted
+// returns -1 on failure
+int GameCarcassonne::placeMeeple(int dir) {
   if (!currentPlayerHasPlacedTile)
-    return false;
+    return -1;
 
   TileCarcassonne* local =
       dynamic_cast<TileCarcassonne*>(board.get(lastX, lastY));
   if (local == nullptr) {
-    return false;
+    return -1;
   }
 
-  if (_dir == 13) {
-    if (!local->addMeeple(_dir, currentPlayer)) {
-      return false;
+  if (dir == 13) {
+    if (!local->addMeeple(dir, currentPlayer)) {
+      return -1;
     }
   }
 
-  else if (_dir != -1) {
-    int tmp = _dir + 1;
+  else if (dir != -1) {
+    int tmp = dir + 1;
     if (tmp == 12) {
       tmp = 0;
     }
     tmp /= 3;
     if (local->getDir(tmp) != 'r') {
-      _dir = roundDir(_dir);
+      dir = roundDir(dir);
     }
 
     if (searchGraph(
-            tileAndDir(lastX, lastY, _dir),
+            tileAndDir(lastX, lastY, dir),
+            nullptr,
             nullptr,
             nullptr,
             STOPCOND_MEEPLEFOUND)) {
-      return false;
+      return -1;
     }
-    if (!local->addMeeple(_dir, currentPlayer)) {
-      return false;
+    if (!local->addMeeple(dir, currentPlayer)) {
+      return -1;
     }
   }
 
   calculateNewScores();
   nextTurn();
-  return true;
+  if (dir == -1) {
+    dir = 14;
+  }
+  return dir;
 }
 
 bool GameCarcassonne::canPlaceMeeple() {

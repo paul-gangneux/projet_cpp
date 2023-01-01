@@ -95,9 +95,9 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
   if (dir == 12) {
     dir = 13;
   }
-  bool b = ((GameCarcassonne*) game)->placeMeeple(dir);
+  int res = ((GameCarcassonne*) game)->placeMeeple(dir);
   // if successful, adds meeple to view
-  if (b) {
+  if (res != -1) {
     destRot = 0;
     curRot = 0;
     modelRot = 0;
@@ -109,10 +109,10 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
       // adding meeple to view
       DrawMeeple* meep = (DrawMeeple*) curTile;
       meep->setParent(&cameraObject);
-      meep->setPosition(lastPlacedTile->getPosition() + meepleOffset[dir]);
+      meep->setPosition(lastPlacedTile->getPosition() + meepleOffset[res]);
       meep->setRotation(0);
       meepleList.push_back(
-          {meep, {lastPlacedTilePos.x, lastPlacedTilePos.y, dir}});
+          {meep, {lastPlacedTilePos.x, lastPlacedTilePos.y, res}});
       // todo, store data about meeple somewhere
     }
     if (!game->isOver()) {

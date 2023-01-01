@@ -52,6 +52,7 @@ class GameCarcassonne : public Game {
       tileAndDir current,
       std::vector<tileAndDir>& visited,
       int* nbVisited = nullptr,
+      int* nbOfShields = nullptr,
       std::queue<meepleInfo>* meepInfos = nullptr,
       int stopCondition = 0);
 
@@ -60,6 +61,7 @@ class GameCarcassonne : public Game {
   bool searchGraph(
       tileAndDir current,
       int* nbVisited = nullptr,
+      int* nbOfShields = nullptr,
       std::queue<meepleInfo>* meepInfos = nullptr,
       int stopCondition = 0);
 
@@ -94,9 +96,11 @@ class GameCarcassonne : public Game {
   virtual void nextTurn();
 
   // places meeple on last placed tile
-  // return true and calls nextTurn if successful
-  // if dir == -1, does nothing, calls nextTurn and returns true
-  bool placeMeeple(int _dir);
+  // returns the dir where the meeple has actually been placed and calls
+  // nextTurn if successful
+  // if dir == -1, does nothing, calls nextTurn and returns 14
+  // returns -1 on failure
+  int placeMeeple(int _dir);
 
   bool canPlaceMeeple();
 
