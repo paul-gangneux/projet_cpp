@@ -152,7 +152,7 @@ TileCarcassonne::TileCarcassonne(uint8_t _type) :
       EDGE(6, 9)
       EDGE(3, 5)
       EDGE(10, 3)
-      EDGE(4, 5)
+      EDGE(7, 8)
       // EDGE(5,10) // redundant
       break;
     case 19:
@@ -279,11 +279,18 @@ bool TileCarcassonne::addMeeple(int _dir, int player) {
   return true;
 }
 
+void TileCarcassonne::removeMeeple() {
+  meepleLocation = -1;
+  meeplePlayer = -1;
+}
+
 bool TileCarcassonne::hasMonastery() const {
   return monastery;
 }
 
+// =============================================== //
 // --- definition of functions for struct edge --- //
+// =============================================== //
 
 TileCarcassonne::edge::edge(uint8_t a, uint8_t b) : low{a}, high{b} {
   if (b < a) {

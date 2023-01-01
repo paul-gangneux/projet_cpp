@@ -20,9 +20,11 @@ class GameViewCarcassonne : public GameView {
   DrawObject* lastPlacedTile;
   DrawMeeple* potentialMeeple;
   vec2i lastPlacedTilePos;
+  bool lastTileHasMonastery;
 
   void tryToPlaceMeeple(int dir);
   int calculateMeepleDirection();
+  void grabNextTile();
 
  public:
   GameViewCarcassonne(Win* win);

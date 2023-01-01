@@ -305,7 +305,7 @@ void GameCarcassonne::calculateNewScores() {
         players.at(tile->getMeeplePlayer())->addScore(9);
         // we remove the meeple from model and view
         removedMeepleQueue.push(new int[3]{lastX + i, lastY + j, 13});
-        tile->addMeeple(-1, -1);
+        tile->removeMeeple();
       }
     }
   }
@@ -356,7 +356,7 @@ void GameCarcassonne::calculateNewScores() {
 
           // removing meeple from model and view
           removedMeepleQueue.push(new int[3]{mi.x, mi.y, mi.dir});
-          ((TileCarcassonne*) board.get(mi.x, mi.y))->addMeeple(-1, -1);
+          ((TileCarcassonne*) board.get(mi.x, mi.y))->removeMeeple();
           meepInfos.pop();
         }
         int max = 0;
@@ -477,4 +477,20 @@ bool GameCarcassonne::getLastRemovedMeepleInfo(int infos[3]) {
   removedMeepleQueue.pop();
   delete[] meep;
   return true;
+}
+
+// ===================================================== //
+// --- definition of functions for struct tileAndDir --- //
+// ===================================================== //
+
+GameCarcassonne::tileAndDir::tileAndDir(int _x, int _y, uint8_t _d) :
+    x{_x},
+    y{_y},
+    d{_d} {}
+
+bool GameCarcassonne::tileAndDir::operator==(tileAndDir b) const {
+  if (b.x == x && b.y == y && b.d == d)
+    return true;
+  else
+    return false;
 }

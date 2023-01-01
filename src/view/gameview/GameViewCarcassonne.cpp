@@ -47,15 +47,14 @@ GameViewCarcassonne::GameViewCarcassonne(Win* _win) :
     scoreText{new DrawText(getScores(), Color::White)},
     meepleList{list<MeepleData>()},
     lastPlacedTile{nullptr},
-    potentialMeeple{new DrawMeeple(-1)} {
+    potentialMeeple{new DrawMeeple(-1)},
+    lastTileHasMonastery{false} {
   // the first tile is defined and placed in model and view
   ((GameCarcassonne*) game)->placeFirstTile(curModelTile);
   addTile(new DrawCarcassonne(curModelTile->getType()), 0, 0, 0);
 
   // we grab the new tile
-  curModelTile = (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
-  curTile = new DrawCarcassonne(curModelTile->getType());
-  curTile->setParent(&cameraObject);
+  grabNextTile();
 
   // initializing text
   textList.push_back(scoreText);
@@ -80,6 +79,13 @@ GameViewCarcassonne::~GameViewCarcassonne() {
   delete potentialMeeple;
 }
 
+void GameViewCarcassonne::grabNextTile() {
+  curModelTile = (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
+  curTile = new DrawCarcassonne(curModelTile->getType());
+  curTile->setParent(&cameraObject);
+  lastTileHasMonastery = curModelTile->hasMonastery();
+}
+
 int GameViewCarcassonne::onKeyPress(Event& event) {
   switch (event.key.code) {
     case Keyboard::Space: {
@@ -101,6 +107,8 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
     destRot = 0;
     curRot = 0;
     modelRot = 0;
+    leftRotPress = false;
+    rightRotPress = false;
     // yeeting potentialMeeple out of view
     potentialMeeple->setPosition(-1000000000.0f, -1000000000.0f);
     if (dir == -1) {
@@ -117,9 +125,7 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
     }
     if (!game->isOver()) {
       // draw newt tile
-      curModelTile = (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
-      curTile = new DrawCarcassonne(curModelTile->getType());
-      curTile->setParent(&cameraObject);
+      grabNextTile();
     } else {
       curTile = nullptr;
       curModelTile = nullptr;
@@ -133,8 +139,9 @@ int GameViewCarcassonne::calculateMeepleDirection() {
   vec2f pos = lastPlacedTile->getPositionOnScreen();
   int dir = 0;
   float min_dist = 1.0e+30f;  // big number
+  int maxVal = lastTileHasMonastery ? 13 : 12;
 
-  for (int i = 0; i < 13; i++) {
+  for (int i = 0; i < maxVal; i++) {
     float x = mousePos.x - (pos.x + (meepleOffset[i].x) * scale);
     float y = mousePos.y - (pos.y + (meepleOffset[i].y) * scale);
     float dist = x * x + y * y;
@@ -178,14 +185,13 @@ void GameViewCarcassonne::changeState() {
         destRot = 0;
         curRot = 0;
         modelRot = 0;
+        leftRotPress = false;
+        rightRotPress = false;
         ((GameCarcassonne*) game)->nextTurn();
         delete curTile;
         delete curModelTile;
         if (!game->isOver()) {
-          curModelTile =
-              (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
-          curTile = new DrawCarcassonne(curModelTile->getType());
-          curTile->setParent(&cameraObject);
+          grabNextTile();
         } else {
           curTile = nullptr;
           curModelTile = nullptr;
@@ -194,8 +200,6 @@ void GameViewCarcassonne::changeState() {
     }
     skipTurn = false;
   }
-
-  GameView::changeState();
 
   int dir = -1;
   if (((GameCarcassonne*) game)->canPlaceMeeple()) {
@@ -228,6 +232,8 @@ void GameViewCarcassonne::changeState() {
         if (b) {
           destRot = 0;
           curRot = 0;
+          leftRotPress = false;
+          rightRotPress = false;
           addTile(curTile, aPos.x, aPos.y, modelRot * 90);
           lastPlacedTile = curTile;
           lastPlacedTilePos = aPos;
@@ -242,10 +248,7 @@ void GameViewCarcassonne::changeState() {
             }
             // grabbing a tile from bag
             else {
-              curModelTile =
-                  (TileCarcassonne*) ((GameCarcassonne*) game)->grabTile();
-              curTile = new DrawCarcassonne(curModelTile->getType());
-              curTile->setParent(&cameraObject);
+              grabNextTile();
             }
           } else {
             curTile = nullptr;
@@ -272,6 +275,8 @@ void GameViewCarcassonne::changeState() {
       }
     }
   }
+
+  GameView::changeState();
 }
 
 void GameViewCarcassonne::drawTiles() {

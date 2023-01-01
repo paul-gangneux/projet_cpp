@@ -25,14 +25,9 @@ class GameCarcassonne : public Game {
     int y;
     uint8_t d;
 
-    tileAndDir(int _x, int _y, uint8_t _d) : x{_x}, y{_y}, d{_d} {}
+    tileAndDir(int _x, int _y, uint8_t _d);
 
-    bool operator==(tileAndDir b) const {
-      if (b.x == x && b.y == y && b.d == d)
-        return true;
-      else
-        return false;
-    }
+    bool operator==(tileAndDir b) const;
   };
 
   struct meepleInfo {
