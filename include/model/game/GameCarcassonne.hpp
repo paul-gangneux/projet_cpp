@@ -35,7 +35,42 @@ class GameCarcassonne : public Game {
     }
   };
 
-  bool searchMeeple(tileAndDir, std::vector<tileAndDir>&);
+  struct meepleInfo {
+    int x, y, dir, player;
+  };
+
+  /// does a complete search of the graph.
+  /// stops the search at any point if the stop condition is met,
+  /// returns true if the stop condition has been met, false otherwise
+  ///
+  /// if nbVisited != nullptr, it will store the number of existing tiles
+  /// visited
+  ///
+  /// if meepInfos != nullptr, it will store the data about all the meeples
+  /// found during the search as a queue of [pos x, pos y, direction, player]
+  bool searchGraph(
+      tileAndDir current,
+      std::vector<tileAndDir>& visited,
+      int* nbVisited = nullptr,
+      std::queue<meepleInfo>* meepInfos = nullptr,
+      int stopCondition = 0);
+
+  /// initializes the vector of marked vertices
+  /// shouldn't be called recursively
+  bool searchGraph(
+      tileAndDir current,
+      int* nbVisited = nullptr,
+      std::queue<meepleInfo>* meepInfos = nullptr,
+      int stopCondition = 0);
+
+  int countNeighbors(int x, int y);
+
+  void calculateNewScores();
+
+  /// returns the adjacent dir number of the adjacent tile.
+  /// for example, if _dir=2, then the function returns 10, as the adjacent dir
+  /// would be 10 on the tile on the right.
+  uint8_t adjacentDir(uint8_t _dir);
 
  public:
   GameCarcassonne();
@@ -45,7 +80,7 @@ class GameCarcassonne : public Game {
 
   /// returns a Tile* from the bag.
   /// however, it points to a TileCarcassonne, so we will use casting later.
-  Tile* grabTile();
+  virtual Tile* grabTile();
 
   /// tries to place a tile at coordinates x y,
   /// returns false if the placement was invalid (= tile wasn't placed).
@@ -64,11 +99,6 @@ class GameCarcassonne : public Game {
   bool placeMeeple(int _dir);
 
   bool canPlaceMeeple();
-
-  /// returns the adjacent dir number of the adjacent tile.
-  /// for example, if _dir=2, then the function returns 10, as the adjacent dir
-  /// would be 10 on the tile on the right.
-  uint8_t adjacentDir(uint8_t _dir);
 
   bool getLastRemovedMeepleInfo(int infos[3]);
 };

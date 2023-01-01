@@ -55,49 +55,24 @@ class TileCarcassonne : public Tile {
 
   bool addMeeple(int _dir, int player);
 
+  bool hasMonastery() const;
+
   /// a pair of numbers : "low" and "high"
   /// we always have low <= high.
   struct edge {
     uint8_t low;
     uint8_t high;
 
-    edge(uint8_t a, uint8_t b) : low{a}, high{b} {
-      if (b < a) {
-        low = b;
-        high = a;
-      }
-    }
+    edge(uint8_t a, uint8_t b);
 
-    void rotateClockwise() {
-      low = (low + 3) % 12;
-      high = (high + 3) % 12;
-      if (high < low) {
-        uint8_t temp = low;
-        low = high;
-        high = temp;
-      }
-    }
+    void rotateClockwise();
+    void rotateCounterClockwise();
 
-    void rotateCounterClockwise() {
-      low = (low + 9) % 12;
-      high = (high + 9) % 12;
-      if (high < low) {
-        uint8_t temp = low;
-        low = high;
-        high = temp;
-      }
-    }
+    // function name is a bit confusing, but i couldn't find a better one.
 
     /// If the edge has the value "a", returns the other value.
     /// otherwise, returns 13.
-    // function name is a bit confusing, but i couldn't find a better one.
-    uint8_t otherSide(uint8_t a) {
-      if (low == a)
-        return high;
-      if (high == a)
-        return low;
-      return 13;
-    }
+    uint8_t otherSide(uint8_t a);
   };
   /*
   The numbers on the edges need to be more precise than the ones for dir.

@@ -1,9 +1,16 @@
 #include "model/game/GameCarcassonne.hpp"
 #include <algorithm>
 #include <iostream>
+#include <list>
 #include "model/tile/TileCarcassonne.hpp"
 
-#define LOG(x) std::cout << x << std::endl
+using namespace std;
+
+#define LOG(x) cout << x << endl
+
+#define STOPCOND_NONE 0
+#define STOPCOND_MEEPLEFOUND 1
+#define STOPCOND_NOTCOMPLETE 0b10
 
 #define putInBag(type, num)                   \
   for (size_t i = 0; i < num; i++) {          \
@@ -12,7 +19,7 @@
 
 GameCarcassonne::GameCarcassonne() :
     Game(),
-    bag{std::vector<TileCarcassonne*>()},
+    bag{vector<TileCarcassonne*>()},
     currentPlayerHasPlacedTile{false},
     lastX{0},
     lastY{0} {
@@ -44,6 +51,7 @@ GameCarcassonne::GameCarcassonne() :
   // the last tile in bag will the the first placed in game
   putInBag(17, 1);
 
+  // we shuffle every tile except the last one
   random_shuffle(bag.begin(), bag.end() - 1);
 }
 
@@ -59,7 +67,7 @@ GameCarcassonne::~GameCarcassonne() {
 }
 
 bool GameCarcassonne::canAddNewPlayer() {
-  return true;
+  return players.size() < 4;
 }
 
 Tile* GameCarcassonne::grabTile() {
@@ -67,7 +75,7 @@ Tile* GameCarcassonne::grabTile() {
     // --- DEBUG
     LOG("OOPSIE: GameCarcassonne::grabTile() was called, but the bag is "
         "empty. Check value of isGameOver");
-    std::exit(1);
+    exit(1);
     // --- end debug
   }
   Tile* res = bag.back();
@@ -91,32 +99,72 @@ bool GameCarcassonne::placeTile(Tile* const _tile, int x, int y) {
   return false;
 }
 
-bool GameCarcassonne::searchMeeple(
-    tileAndDir current, std::vector<tileAndDir>& visited) {
-  // first we check if the tileAndDir has already been visited.
+// initializes the vector of marked vertices
+// shouldn't be called recursively
+bool GameCarcassonne::searchGraph(
+    tileAndDir current,
+    int* nbVisited,
+    std::queue<meepleInfo>* meepInfos,
+    int stopCond) {
+  vector<tileAndDir> visited;  // init empty vector
+  return searchGraph(current, visited, nbVisited, meepInfos, stopCond);
+}
 
-  if (std::find(visited.begin(), visited.end(), current) != visited.end()) {
+// does a complete search of the graph.
+// stops the search at any point if the stop condition is met,
+// returns true if the stop condition has been met, false otherwise
+//
+// if nbVisited != nullptr, it will store the number of existing tiles visited
+//
+// if meepInfos != nullptr, it will store the data about all the meeples
+// found during the search as a queue of [pos x, pos y, direction, player]
+bool GameCarcassonne::searchGraph(
+    tileAndDir current,
+    vector<tileAndDir>& visited,
+    int* nbVisited,
+    queue<meepleInfo>* meepInfos,
+    int stopCond) {
+  // first we check if the tileAndDir has already been visited.
+  if (find(visited.begin(), visited.end(), current) != visited.end()) {
     return false;
   }
 
   // if not, we add the current tile to the visited list.
-
   visited.push_back(current);
 
-  // then, we check if it contains a meeple. if it does, the search is over.
-
+  // we check if the tile exists
   TileCarcassonne* local =
       dynamic_cast<TileCarcassonne*>(board.get(current.x, current.y));
   if (local == nullptr) {
-    return false;
-  }
-  if (local->getMeepleLocation() == current.d) {
-    return true;
+    // the area is not complete, the search is over.
+    if (stopCond == STOPCOND_NOTCOMPLETE) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  // if we haven't found a meeple, the search continues.
-  // first we need to search in the adjacent tile (relative to the dir), in the
-  // appropriate dir.
+  // if it does, increments nbVisited
+  if (nbVisited != nullptr) {
+    (*nbVisited)++;
+  }
+
+  // then, we check if it contains a meeple.
+  if (local->getMeepleLocation() == current.d) {
+    if (stopCond == STOPCOND_MEEPLEFOUND) {
+      // a meeple has been found, the search is over.
+      return true;
+    }
+    if (meepInfos != nullptr) {
+      // adding infos about the found meeple to the queue
+      meepInfos->push(
+          {current.x, current.y, current.d, local->getMeeplePlayer()});
+    }
+  }
+
+  // if not fail condition has been met, the search continues
+  // first we need to search in the adjacent tile (relative to the dir), in
+  // the appropriate dir.
 
   int xToVisit = current.x;
   int yToVisit = current.y;
@@ -141,15 +189,19 @@ bool GameCarcassonne::searchMeeple(
       break;
   }
   if ((board.get(xToVisit, yToVisit) != nullptr) &&
-      searchMeeple(
-          tileAndDir(xToVisit, yToVisit, adjacentDir(current.d)), visited)) {
+      searchGraph(
+          tileAndDir(xToVisit, yToVisit, adjacentDir(current.d)),
+          visited,
+          nbVisited,
+          meepInfos,
+          stopCond)) {
     return true;
   }
 
   // then we need to search in the other dirs that are linked to the current
   // one, through the edges.
 
-  std::vector<uint8_t> toVisit;
+  vector<uint8_t> toVisit;
   for (TileCarcassonne::edge e : local->getEdges()) {
     // we look at all the edges of the tile, and keep the dir (vertices)
     // connected to the current dir.
@@ -160,7 +212,12 @@ bool GameCarcassonne::searchMeeple(
   }
 
   for (uint8_t visit : toVisit) {
-    if (searchMeeple(tileAndDir(current.x, current.y, visit), visited)) {
+    if (searchGraph(
+            tileAndDir(current.x, current.y, visit),
+            visited,
+            nbVisited,
+            meepInfos,
+            stopCond)) {
       return true;
     }
   }
@@ -178,6 +235,43 @@ int roundDir(int d) {
     return 6;
   }
   return 9;
+}
+
+int GameCarcassonne::countNeighbors(int x, int y) {
+  Tile* tile;
+  int n = 0;
+  for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+      if (i != 0 || j != 0) {
+        tile = board.get(x + i, y + j);
+        if (tile != nullptr)
+          n++;
+      }
+    }
+  }
+  return n;
+}
+
+void GameCarcassonne::calculateNewScores() {
+  TileCarcassonne* lastTile = (TileCarcassonne*) board.get(lastX, lastY);
+  TileCarcassonne* tile;
+  // checking for finished monastery
+  for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+      tile = (TileCarcassonne*) board.get(lastX + i, lastY + j);
+      // now we check is the tile exists, has a monastery,
+      // has a meeple on it, and is complete
+      if (tile != nullptr && tile->hasMonastery() &&
+          tile->getMeepleLocation() == 13 &&
+          countNeighbors(lastX + i, lastY + j) == 8) {
+        // player gets points
+        players.at(tile->getMeeplePlayer())->addScore(9);
+        // we remove the meeple from model and view
+        removedMeepleQueue.push(new int[3]{lastX + i, lastY + j, 13});
+        tile->addMeeple(-1, -1);
+      }
+    }
+  }
 }
 
 bool GameCarcassonne::placeMeeple(int _dir) {
@@ -205,9 +299,12 @@ bool GameCarcassonne::placeMeeple(int _dir) {
     if (local->getDir(tmp) != 'r') {
       _dir = roundDir(_dir);
     }
-    std::vector<tileAndDir> visited;
 
-    if (searchMeeple(tileAndDir(lastX, lastY, _dir), visited)) {
+    if (searchGraph(
+            tileAndDir(lastX, lastY, _dir),
+            nullptr,
+            nullptr,
+            STOPCOND_MEEPLEFOUND)) {
       return false;
     }
     if (!local->addMeeple(_dir, currentPlayer)) {
@@ -215,6 +312,7 @@ bool GameCarcassonne::placeMeeple(int _dir) {
     }
   }
 
+  calculateNewScores();
   nextTurn();
   return true;
 }
@@ -226,6 +324,7 @@ bool GameCarcassonne::canPlaceMeeple() {
 void GameCarcassonne::nextTurn() {
   if (bag.empty()) {
     gameIsOver = true;
+    // TODO: calculate end game scores
   } else {
     Game::nextTurn();
   }

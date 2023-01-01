@@ -278,3 +278,48 @@ bool TileCarcassonne::addMeeple(int _dir, int player) {
   meeplePlayer = player;
   return true;
 }
+
+bool TileCarcassonne::hasMonastery() const {
+  return monastery;
+}
+
+// --- definition of functions for struct edge --- //
+
+TileCarcassonne::edge::edge(uint8_t a, uint8_t b) : low{a}, high{b} {
+  if (b < a) {
+    low = b;
+    high = a;
+  }
+}
+
+void TileCarcassonne::edge::rotateClockwise() {
+  low = (low + 3) % 12;
+  high = (high + 3) % 12;
+  if (high < low) {
+    uint8_t temp = low;
+    low = high;
+    high = temp;
+  }
+}
+
+void TileCarcassonne::edge::rotateCounterClockwise() {
+  low = (low + 9) % 12;
+  high = (high + 9) % 12;
+  if (high < low) {
+    uint8_t temp = low;
+    low = high;
+    high = temp;
+  }
+}
+
+// function name is a bit confusing, but i couldn't find a better one.
+
+/// If the edge has the value "a", returns the other value.
+/// otherwise, returns 13.
+uint8_t TileCarcassonne::edge::otherSide(uint8_t a) {
+  if (low == a)
+    return high;
+  if (high == a)
+    return low;
+  return 13;
+}

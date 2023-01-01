@@ -13,7 +13,7 @@ class RelativeVector {
 
  public:
   RelativeVector() : pos{std::vector<T>()}, neg{std::vector<T>()} {}
-  ~RelativeVector() {}  // todo, maybe
+  ~RelativeVector() {}
 
   T& operator[](int x) {
     if (x >= 0)
