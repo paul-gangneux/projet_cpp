@@ -203,12 +203,11 @@ void TileCarcassonne::rotateClockwise() {
   dir[2] = dir[1];
   dir[1] = dir[0];
   dir[0] = temp;
-
-  for (edge e : edges) {
+  for (edge& e : edges) {
     e.rotateClockwise();
   }
 
-  if (meepleLocation != -1)
+  if (meepleLocation != -1 && meepleLocation != 13)
     meepleLocation = (meepleLocation + 3) % 12;
 }
 
@@ -219,11 +218,11 @@ void TileCarcassonne::rotateCounterClockwise() {
   dir[2] = dir[3];
   dir[3] = temp;
 
-  for (edge e : edges) {
+  for (edge& e : edges) {
     e.rotateCounterClockwise();
   }
 
-  if (meepleLocation != -1)
+  if (meepleLocation != -1 && meepleLocation != 13)
     meepleLocation = (meepleLocation + 9) % 12;
 }
 
@@ -267,7 +266,7 @@ int TileCarcassonne::getType() const {
   return type;
 }
 
-bool TileCarcassonne::addMeeple(int _dir) {
+bool TileCarcassonne::addMeeple(int _dir, int player) {
   if (meeplePlayer != -1)
     return false;
 
@@ -276,9 +275,6 @@ bool TileCarcassonne::addMeeple(int _dir) {
   }
 
   meepleLocation = _dir;
-
-  // TODO : meeplePlayer = ?
-  // not sure how to access player number without adding parameter
-
+  meeplePlayer = player;
   return true;
 }

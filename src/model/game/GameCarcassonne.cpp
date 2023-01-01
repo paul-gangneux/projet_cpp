@@ -65,11 +65,8 @@ bool GameCarcassonne::canAddNewPlayer() {
 Tile* GameCarcassonne::grabTile() {
   if (bag.empty()) {
     // --- DEBUG
-    std::cout
-        << std::endl
-        << "OOPSIE: GameCarcassonne::grabTile() was called, but the bag is "
-           "empty. Check value of isGameOver"
-        << std::endl;
+    LOG("OOPSIE: GameCarcassonne::grabTile() was called, but the bag is "
+        "empty. Check value of isGameOver");
     std::exit(1);
     // --- end debug
   }
@@ -98,16 +95,9 @@ bool GameCarcassonne::searchMeeple(
     tileAndDir current, std::vector<tileAndDir>& visited) {
   // first we check if the tileAndDir has already been visited.
 
-  LOG("--------------------------");
-
-  LOG("tile: " << current.x << ", " << current.y);
-  LOG("dir: " << (int) current.d);
-
   if (std::find(visited.begin(), visited.end(), current) != visited.end()) {
-    LOG("found");
     return false;
   }
-  LOG("not found");
 
   // if not, we add the current tile to the visited list.
 
@@ -121,7 +111,6 @@ bool GameCarcassonne::searchMeeple(
     return false;
   }
   if (local->getMeepleLocation() == current.d) {
-    LOG(" -- Meeple found -- ");
     return true;
   }
 
@@ -167,7 +156,6 @@ bool GameCarcassonne::searchMeeple(
     uint8_t d = e.otherSide(current.d);
     if (d != 13) {
       toVisit.push_back(d);
-      LOG("  other dir: " << (int) d);
     }
   }
 
@@ -176,7 +164,6 @@ bool GameCarcassonne::searchMeeple(
       return true;
     }
   }
-
   return false;
 }
 
@@ -194,8 +181,6 @@ int roundDir(int d) {
 }
 
 bool GameCarcassonne::placeMeeple(int _dir) {
-  LOG("==========================");
-  LOG(_dir);
   if (!currentPlayerHasPlacedTile)
     return false;
 
@@ -206,24 +191,26 @@ bool GameCarcassonne::placeMeeple(int _dir) {
   }
 
   if (_dir == 13) {
-    if (!local->addMeeple(_dir)) {  // TODO : add currentplayer parameter
+    if (!local->addMeeple(_dir, currentPlayer)) {
       return false;
     }
   }
 
   else if (_dir != -1) {
-    int rd = roundDir(_dir);
-    if (local->getDir(rd) != 'r') {
-      _dir = rd;
+    int tmp = _dir + 1;
+    if (tmp == 12) {
+      tmp = 0;
     }
-
-    LOG("new dir: " << _dir);
+    tmp /= 3;
+    if (local->getDir(tmp) != 'r') {
+      _dir = roundDir(_dir);
+    }
     std::vector<tileAndDir> visited;
 
     if (searchMeeple(tileAndDir(lastX, lastY, _dir), visited)) {
       return false;
     }
-    if (!local->addMeeple(_dir)) {  // TODO : add currentplayer parameter
+    if (!local->addMeeple(_dir, currentPlayer)) {
       return false;
     }
   }

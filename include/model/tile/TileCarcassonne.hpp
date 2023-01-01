@@ -47,13 +47,13 @@ class TileCarcassonne : public Tile {
   std::vector<edge> getEdges() const;
   int getType() const;
 
-  void rotateClockwise();
-  void rotateCounterClockwise();
+  virtual void rotateClockwise();
+  virtual void rotateCounterClockwise();
 
-  bool matchX(const Tile* right) const;
-  bool matchY(const Tile* down) const;
+  virtual bool matchX(const Tile* right) const;
+  virtual bool matchY(const Tile* down) const;
 
-  bool addMeeple(int _dir);
+  bool addMeeple(int _dir, int player);
 
   /// a pair of numbers : "low" and "high"
   /// we always have low <= high.
