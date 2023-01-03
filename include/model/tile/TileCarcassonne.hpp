@@ -54,6 +54,7 @@ class TileCarcassonne : public Tile {
   virtual bool matchY(const Tile* down) const;
 
   bool addMeeple(int _dir, int player);
+  void removeMeeple();
 
   bool hasMonastery() const;
 
