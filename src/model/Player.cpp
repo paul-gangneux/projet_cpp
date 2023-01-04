@@ -14,6 +14,10 @@ void Player::addScore(int s) {
   score += s;
 }
 
+void Player::setName(std::string _name) {
+  name = _name;
+}
+
 const string Player::getName() const {
   return name;
 }

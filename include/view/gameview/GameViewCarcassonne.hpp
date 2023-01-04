@@ -27,7 +27,7 @@ class GameViewCarcassonne : public GameView {
   void grabNextTile();
 
  public:
-  GameViewCarcassonne(Win* win);
+  GameViewCarcassonne(Win* win, int nbOfPlayers);
   virtual ~GameViewCarcassonne();
 
   virtual void changeState();

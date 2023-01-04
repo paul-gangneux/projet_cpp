@@ -46,13 +46,13 @@ int GameMenu::handleEvents(sf::Event& event) {
         if (event.mouseButton.button == Mouse::Button::Left) {
           switch (selectedAction) {
             case 0:
-              return EVENT_SELECT_DOMINO;
+              return EVENT_SELECT_DOMINO_PLAYERSELECT;
               break;
             case 1:
               return EVENT_SELECT_TRAX;
               break;
             case 2:
-              return EVENT_SELECT_CARCASSONE;
+              return EVENT_SELECT_CARCASSONNE_PLAYERSELECT;
               break;
 
             default:
@@ -65,7 +65,7 @@ int GameMenu::handleEvents(sf::Event& event) {
       case Event::KeyPressed: {
         switch (event.key.code) {
           case Keyboard::Num1: {
-            return EVENT_SELECT_DOMINO;
+            return EVENT_SELECT_DOMINO_PLAYERSELECT;
             break;
           }
 
@@ -75,7 +75,7 @@ int GameMenu::handleEvents(sf::Event& event) {
           }
 
           case Keyboard::Num3: {
-            return EVENT_SELECT_CARCASSONE;
+            return EVENT_SELECT_CARCASSONNE_PLAYERSELECT;
             break;
           }
 
@@ -84,10 +84,10 @@ int GameMenu::handleEvents(sf::Event& event) {
             break;
           }
 
-            // case Keyboard::F11: {
-            //   // fullscreen
-            //   break;
-            // }
+          case Keyboard::F11: {
+            return EVENT_FULLSCREEN;
+            break;
+          }
 
           default:
             break;
@@ -111,13 +111,7 @@ void GameMenu::changeState() {
   vec2i mousePos = Mouse::getPosition(*win);
 
   for (int i = 0; i < 3; i++) {
-    vec2f pos =
-        menuTextBoxes[i].getAbsolutePosition() - menuTextBoxes[i].getCenter();
-    vec2f pos2 = pos;
-    pos2.x += menuTextBoxes[i].getWidth();
-    pos2.y += menuTextBoxes[i].getHeight();
-    if (mousePos.x >= pos.x && mousePos.y >= pos.y && mousePos.x <= pos2.x &&
-        mousePos.y <= pos2.y) {
+    if (menuTextBoxes[i].isInBox(mousePos)) {
       switchSelectedAction(i);
       break;
     } else {

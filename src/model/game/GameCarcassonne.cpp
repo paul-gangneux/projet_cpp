@@ -17,12 +17,18 @@ using namespace std;
     bag.push_back(new TileCarcassonne(type)); \
   }
 
-GameCarcassonne::GameCarcassonne() :
-    Game(),
+static const char* defaultPlayerNames[]{"yellow", "red", "blue", "green"};
+
+GameCarcassonne::GameCarcassonne(int nb_of_players) :
+    Game(nb_of_players),
     bag{vector<TileCarcassonne*>()},
     currentPlayerHasPlacedTile{false},
     lastX{0},
     lastY{0} {
+  for (int i = 0; i < nb_of_players; i++) {
+    players[i]->setName(defaultPlayerNames[i]);
+  }
+
   putInBag(1, 9);
   putInBag(2, 3);
   putInBag(3, 2);

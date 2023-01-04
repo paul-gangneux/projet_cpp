@@ -5,6 +5,7 @@
 
 #define EVENT_QUIT 1
 #define EVENT_BACK 2
+#define EVENT_FULLSCREEN 3
 
 class DrawableState {
  protected:
@@ -14,6 +15,8 @@ class DrawableState {
 
  public:
   virtual ~DrawableState();
+
+  void setWin(Win* _win);
 
   // can return EVENT_QUIT or EVENT_BACK, to be done by the main function
   virtual int handleEvents(sf::Event& event) = 0;

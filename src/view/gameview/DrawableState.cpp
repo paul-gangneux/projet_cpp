@@ -6,3 +6,9 @@ DrawableState::DrawableState(Win* _win) : win{_win}, rootObj{DrawObject()} {
 }
 
 DrawableState::~DrawableState() {}
+
+void DrawableState::setWin(Win* _win) {
+  win = _win;
+  win->setRootObject(&rootObj);
+  rootObj.setPosition(win->getWidth() / 2, win->getHeight() / 2);
+}

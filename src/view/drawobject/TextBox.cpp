@@ -83,3 +83,18 @@ void TextBox::setFillColor(sf::Color color) {
 void TextBox::setOutlineColor(sf::Color color) {
   rect->setOutlineColor(color);
 }
+
+bool TextBox::isInBox(vec2f _pos) const {
+  // note, doesn't take scaling into account, so far it's not needed
+  vec2f pos = getAbsolutePosition() - center;
+  vec2f pos2 = pos;
+  pos2.x += getWidth();
+  pos2.y += getHeight();
+  return (
+      _pos.x >= pos.x && _pos.y >= pos.y && _pos.x <= pos2.x &&
+      _pos.y <= pos2.y);
+}
+
+bool TextBox::isInBox(vec2i _pos) const {
+  return isInBox(vec2f{(float) _pos.x, (float) _pos.y});
+}

@@ -2,16 +2,17 @@
 
 using namespace sf;
 
-Win::Win(int _width, int _height, const char* name, DrawObject* _object) :
-    RenderWindow{VideoMode(_width, _height, 32), name},
+Win::Win(int _width, int _height, const char* name, sf::Uint32 videoMode) :
+    RenderWindow{VideoMode(_width, _height, 32), name, videoMode},
     width{_width},
     height{_height},
-    rootObject{_object} {
+    rootObject{nullptr} {
   setVerticalSyncEnabled(true);
+  onResize();
 }
 
-Win::Win(int _width, int _height, const char* name) :
-    Win(_width, _height, name, nullptr) {}
+// Win::Win(int _width, int _height, const char* name) :
+//     Win(_width, _height, name, nullptr) {}
 
 Win::~Win() {
   close();

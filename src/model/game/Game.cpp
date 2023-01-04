@@ -2,17 +2,31 @@
 
 #include <iostream>
 
-Game::Game(const char* p1name, const char* p2name) :
+using namespace std;
+
+Game::Game() : Game("player 1", "player 2") {}
+
+Game::Game(const char* p1name, const char* p2name) : Game::Game(2) {
+  players.at(0)->setName(p1name);
+  players.at(0)->setName(p2name);
+}
+
+Game::Game(int nb_of_players) :
     players{std::vector<Player*>()},
     board{Board()},
     currentPlayer{0},
     firstPlay{true},
     gameIsOver{false} {
-  addPlayer(p1name);
-  addPlayer(p2name);
+  if (nb_of_players < 2) {
+    throw std::invalid_argument("player count can't be under 2");
+  }
+  for (int i = 1; i <= nb_of_players; i++) {
+    if (!canAddNewPlayer()) {
+      throw std::invalid_argument("player count too big");
+    }
+    addPlayer("player " + to_string(i));
+  }
 }
-
-Game::Game() : Game("player 1", "player 2") {}
 
 Game::~Game() {
   for (Player* p : players) {
@@ -54,6 +68,10 @@ bool Game::addPlayer() {
 }
 
 bool Game::addPlayer(const char* name) {
+  return addPlayer(name);
+}
+
+bool Game::addPlayer(const string name) {
   if (!canAddNewPlayer())
     return false;
 

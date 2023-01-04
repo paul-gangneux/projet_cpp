@@ -18,8 +18,8 @@ static const char* textControls =
     "ESC: back to menu\n"
     "C: hide controls";
 
-GameViewDomino::GameViewDomino(Win* _win) :
-    GameView(_win, new GameDomino(), nullptr, textControls),
+GameViewDomino::GameViewDomino(Win* _win, int nbOfPlayers) :
+    GameView(_win, new GameDomino(nbOfPlayers), nullptr, textControls),
     curModelTile{(TileDomino*) ((GameDomino*) game)->grabTile()},
     discardTile{false},
     scoreText{new DrawText(getScores(), Color::White)} {
@@ -60,6 +60,8 @@ void GameViewDomino::changeState() {
     destRot = 0;
     curRot = 0;
     modelRot = 0;
+    leftRotPress = false;
+    rightRotPress = false;
     ((GameDomino*) game)->discardTile(curModelTile);
     delete curTile;
     curTile = nullptr;
@@ -73,8 +75,6 @@ void GameViewDomino::changeState() {
     }
     discardTile = false;
   }
-
-  GameView::changeState();
 
   if (validM1Press) {
     if (!game->isOver()) {
@@ -94,6 +94,8 @@ void GameViewDomino::changeState() {
       if (b) {
         destRot = 0;
         curRot = 0;
+        leftRotPress = false;
+        rightRotPress = false;
         addTile(curTile, aPos.x, aPos.y, modelRot * 90);
         modelRot = 0;
         if (!game->isOver()) {
@@ -109,4 +111,6 @@ void GameViewDomino::changeState() {
     }
     validM1Press = false;
   }
+
+  GameView::changeState();
 }

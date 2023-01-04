@@ -17,6 +17,7 @@ class Game {
  public:
   Game();
   Game(const char* p1name, const char* p2name);
+  Game(int nb_of_players);
   virtual ~Game();
 
   const std::vector<Player*>& getPlayers() const;
@@ -38,6 +39,7 @@ class Game {
   virtual bool addPlayer();
 
   virtual bool addPlayer(const char* name);
+  virtual bool addPlayer(const std::string name);
 
   /// increments currentplayer, modulo number of players.
   virtual void nextTurn();

@@ -5,7 +5,9 @@
 
 // #define log(x) std::cout << x << std::endl
 
-GameDomino::GameDomino() : Game(), bag{std::vector<TileDomino*>()} {
+GameDomino::GameDomino(int nb_of_players) :
+    Game(nb_of_players),
+    bag{std::vector<TileDomino*>()} {
   bag.push_back(new TileDomino());
   for (size_t i = 0; i < 7 * (getPlayers()).size(); i++) {
     TileDomino* td = new TileDomino();

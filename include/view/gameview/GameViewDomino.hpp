@@ -11,7 +11,7 @@ class GameViewDomino : public GameView {
   DrawText* scoreText;
 
  public:
-  GameViewDomino(Win* win);
+  GameViewDomino(Win* win, int nbOfPlayers);
   virtual ~GameViewDomino();
 
   virtual void changeState();

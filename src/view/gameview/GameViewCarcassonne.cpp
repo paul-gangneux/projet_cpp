@@ -39,8 +39,8 @@ static const vec2f meepleOffset[14] = {
     {0, 0},
     {0, 0}};
 
-GameViewCarcassonne::GameViewCarcassonne(Win* _win) :
-    GameView(_win, new GameCarcassonne(), nullptr, textControls),
+GameViewCarcassonne::GameViewCarcassonne(Win* _win, int nbOfPlayers) :
+    GameView(_win, new GameCarcassonne(nbOfPlayers), nullptr, textControls),
     // we grab the last tile, which is predefined
     curModelTile{(TileCarcassonne*) ((GameCarcassonne*) game)->grabTile()},
     skipTurn{false},

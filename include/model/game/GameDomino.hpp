@@ -11,7 +11,7 @@ class GameDomino : public Game {
   std::vector<TileDomino*> bag;
 
  public:
-  GameDomino();
+  GameDomino(int nb_of_players);
   virtual ~GameDomino();
 
   /// always returns true, since we can have an

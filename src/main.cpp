@@ -12,6 +12,7 @@
 #include "view/gameview/GameViewCarcassonne.hpp"
 #include "view/gameview/GameViewDomino.hpp"
 #include "view/gameview/GameViewTrax.hpp"
+#include "view/gameview/PlayerSelectionMenu.hpp"
 
 using namespace sf;
 using namespace std;
@@ -20,25 +21,42 @@ using namespace std;
 
 Win* win;
 DrawableState* view;
+vec2i screenSize{1000, 800};
+bool fullscreen = false;
 
-// TODO: add player number selection
+int nbOfPlayers = 2;
+
 void switchView(int newView) {
   switch (newView) {
     case EVENT_SELECT_MENU:
       delete view;
       view = new GameMenu(win);
       break;
+
     case EVENT_SELECT_DOMINO:
       delete view;
-      view = new GameViewDomino(win);
+      view = new GameViewDomino(win, nbOfPlayers);
       break;
+
     case EVENT_SELECT_TRAX:
       delete view;
       view = new GameViewTrax(win);
       break;
-    case EVENT_SELECT_CARCASSONE:
+
+    case EVENT_SELECT_CARCASSONNE:
       delete view;
-      view = new GameViewCarcassonne(win);
+      view = new GameViewCarcassonne(win, nbOfPlayers);
+      break;
+
+    case EVENT_SELECT_DOMINO_PLAYERSELECT:
+      delete view;
+      view = new PlayerSelectionMenu(win, EVENT_SELECT_DOMINO, &nbOfPlayers);
+      break;
+
+    case EVENT_SELECT_CARCASSONNE_PLAYERSELECT:
+      delete view;
+      view =
+          new PlayerSelectionMenu(win, EVENT_SELECT_CARCASSONNE, &nbOfPlayers);
       break;
 
     default:
@@ -82,9 +100,26 @@ int main() {
         case EVENT_QUIT:
           loops = false;
           break;
+
         case EVENT_BACK:
           switchView(EVENT_SELECT_MENU);
           break;
+
+        case EVENT_FULLSCREEN: {
+          if (fullscreen) {
+            delete win;
+            win = new Win(screenSize.x, screenSize.y, "game");
+            view->setWin(win);
+            fullscreen = false;
+          } else {
+            screenSize = vec2i{win->getWidth(), win->getHeight()};
+            delete win;
+            win = new Win(0, 0, "game", Style::Fullscreen);
+            view->setWin(win);
+            fullscreen = true;
+          }
+          break;
+        }
         default:
           switchView(ret);
           break;

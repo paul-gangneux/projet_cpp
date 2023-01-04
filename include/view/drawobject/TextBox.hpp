@@ -36,6 +36,9 @@ class TextBox : public DrawObject {
   void setBackgroundColor(sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
   void setFillColor(sf::Color color);
   void setOutlineColor(sf::Color color);
+
+  bool isInBox(vec2f pos) const;
+  bool isInBox(vec2i pos) const;
 };
 
 #endif

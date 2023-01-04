@@ -209,6 +209,11 @@ int GameView::handleEvents(sf::Event& event) {
             break;
           }
 
+          case Keyboard::F11: {
+            return EVENT_FULLSCREEN;
+            break;
+          }
+
           default:
             return onKeyPress(event);
             break;

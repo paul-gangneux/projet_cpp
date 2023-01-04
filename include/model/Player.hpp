@@ -12,8 +12,10 @@ class Player {
   Player();
   Player(std::string _name);
   Player(int);
+
   virtual ~Player();
   void addScore(int);
+  void setName(std::string name);
 
   const std::string getName() const;
   int getScore() const;

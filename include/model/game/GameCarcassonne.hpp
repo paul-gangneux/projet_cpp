@@ -70,7 +70,7 @@ class GameCarcassonne : public Game {
   uint8_t adjacentDir(uint8_t _dir);
 
  public:
-  GameCarcassonne();
+  GameCarcassonne(int nb_of_players);
   virtual ~GameCarcassonne();
 
   virtual bool canAddNewPlayer();

@@ -10,8 +10,10 @@ class Win : public sf::RenderWindow {
   DrawObject* rootObject;
 
  public:
-  Win(int width, int height, const char* name, DrawObject* rootObject);
-  Win(int width, int height, const char* name);
+  Win(int width,
+      int height,
+      const char* name,
+      sf::Uint32 videoMode = sf::Style::Default);
   virtual ~Win();
 
   int getWidth() const;
