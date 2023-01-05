@@ -1,22 +1,25 @@
 #include "model/game/Game.hpp"
-
 #include <iostream>
 
 using namespace std;
 
-Game::Game() : Game("player 1", "player 2") {}
+// Game::Game() : Game("player 1", "player 2") {}
 
-Game::Game(const char* p1name, const char* p2name) : Game::Game(2) {
+Game::Game(const char* p1name, const char* p2name, int nb_of_tiles) :
+    Game::Game(2, nb_of_tiles) {
   players.at(0)->setName(p1name);
   players.at(1)->setName(p2name);
 }
 
-Game::Game(int nb_of_players) :
+Game::Game(int nb_of_players, int nb_of_tiles) :
     players{std::vector<Player*>()},
     board{Board()},
     currentPlayer{0},
     firstPlay{true},
-    gameIsOver{false} {
+    gameIsOver{false},
+    nbOfPlacedTiles{0},
+    nbOfDiscardedTiles{0},
+    maxNbOfTiles{nb_of_tiles} {
   if (nb_of_players < 2) {
     throw std::invalid_argument("player count can't be under 2");
   }
@@ -89,10 +92,20 @@ void Game::nextTurn() {
 }
 
 bool Game::placeTile(Tile* const tile, int x, int y) {
+  bool res;
   if (firstPlay) {
     board.placeTileForced(tile, x, y);
     firstPlay = false;
-    return true;
+    res = true;
+  } else {
+    res = board.placeTile(tile, x, y);
   }
-  return board.placeTile(tile, x, y);
+  if (res) {
+    nbOfPlacedTiles++;
+  }
+  return res;
+}
+
+int Game::nbOfTilesLeft() {
+  return maxNbOfTiles - nbOfPlacedTiles - nbOfDiscardedTiles;
 }

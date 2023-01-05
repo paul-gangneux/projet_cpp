@@ -51,6 +51,7 @@ int GameViewTrax::onKeyPress(Event& event) {
 void GameViewTrax::changeState() {
   GameView::changeState();
   if (validM1Press) {
+    updateTextOnScreen = true;
     if (!game->isOver()) {
       // sets position to 0,0 if it's the first play
       vec2i aPos;

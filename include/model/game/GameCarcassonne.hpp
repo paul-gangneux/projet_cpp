@@ -103,6 +103,8 @@ class GameCarcassonne : public Game {
   bool getLastRemovedMeepleInfo(int infos[3]);
 
   int getPlayerMeepleCount(int player);
+
+  void discardTile();
 };
 
 #endif

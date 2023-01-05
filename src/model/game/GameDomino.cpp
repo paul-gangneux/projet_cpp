@@ -6,10 +6,10 @@
 // #define log(x) std::cout << x << std::endl
 
 GameDomino::GameDomino(int nb_of_players) :
-    Game(nb_of_players),
+    Game(nb_of_players, 7 * nb_of_players),
     bag{std::vector<TileDomino*>()} {
   bag.push_back(new TileDomino());
-  for (size_t i = 0; i < 7 * (getPlayers()).size(); i++) {
+  for (int i = 0; i < (7 * nb_of_players) - 1; i++) {
     TileDomino* td = new TileDomino();
 
     int rd = (rand() % 100);
@@ -107,6 +107,8 @@ void GameDomino::discardTile(Tile* const _tile) {
   // if the tile that has just been discarded was the last one, game is over.
   if (bag.size() == 0)
     gameIsOver = true;
+
+  nbOfDiscardedTiles++;
 
   nextTurn();
 }

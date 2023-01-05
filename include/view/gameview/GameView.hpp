@@ -51,6 +51,7 @@ class GameView : public DrawableState {
   vec2f ctrlTextPosition;
 
   bool gameIsOver;
+  bool updateTextOnScreen;
 
   vec2i coordToGridPos(vec2i coords);
   DrawObject* initTilePlacementVisual();

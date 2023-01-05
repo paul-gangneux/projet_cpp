@@ -177,6 +177,7 @@ void GameViewCarcassonne::changeState() {
   }
 
   if (skipTurn) {
+    updateTextOnScreen = true;
     if (!game->isOver()) {
       if (((GameCarcassonne*) game)->canPlaceMeeple()) {
         tryToPlaceMeeple(-1);
@@ -186,7 +187,7 @@ void GameViewCarcassonne::changeState() {
         modelRot = 0;
         leftRotPress = false;
         rightRotPress = false;
-        ((GameCarcassonne*) game)->nextTurn();
+        ((GameCarcassonne*) game)->discardTile();
         delete curTile;
         delete curModelTile;
         if (!game->isOver()) {
@@ -213,6 +214,7 @@ void GameViewCarcassonne::changeState() {
 
   // ---- placing tile or meeple ---- //
   if (validM1Press) {
+    updateTextOnScreen = true;
     if (!game->isOver()) {
       // case 1: placing a meeple
       if (((GameCarcassonne*) game)->canPlaceMeeple()) {

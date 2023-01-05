@@ -20,7 +20,7 @@ using namespace std;
 static const char* defaultPlayerNames[]{"yellow", "red", "blue", "green"};
 
 GameCarcassonne::GameCarcassonne(int nb_of_players) :
-    Game(nb_of_players),
+    Game(nb_of_players, 72),
     bag{vector<TileCarcassonne*>()},
     currentPlayerHasPlacedTile{false},
     lastX{0},
@@ -496,6 +496,11 @@ bool GameCarcassonne::getLastRemovedMeepleInfo(int infos[3]) {
 
 int GameCarcassonne::getPlayerMeepleCount(int player) {
   return meepleVector[player];
+}
+
+void GameCarcassonne::discardTile() {
+  nbOfDiscardedTiles++;
+  nextTurn();
 }
 
 // ===================================================== //

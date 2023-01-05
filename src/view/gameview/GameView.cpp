@@ -45,7 +45,8 @@ GameView::GameView(
     modelRot{0},
     ctrlText{_ctrlText},
     ctrlTextPosition{15, 100},
-    gameIsOver{false} {
+    gameIsOver{false},
+    updateTextOnScreen{true} {
   cameraObject.setParent(&rootObj);
   // cameraObject.setPosition(rootObj.getPosition());
 
@@ -303,16 +304,23 @@ void GameView::changeState() {
     tilePlacementVisual->setPosition(v.x * TILE_SIZE, v.y * TILE_SIZE);
   }
 
-  if (!game->isOver()) {
-    topLeftText->setText("Turn: " + game->getCurrentPlayer()->getName());
-    topLeftText->setPosition(
-        topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
-  } else if (!gameIsOver) {
-    topLeftText->setText("Game Ended, press ENTER to go back");
-    topLeftText->setPosition(
-        topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
-    onGameEnd();
-    gameIsOver = true;
+  if (updateTextOnScreen) {
+    if (!game->isOver()) {
+      string str = "Turn: " + game->getCurrentPlayer()->getName();
+      str.resize(17, ' ');
+      str += "   Tiles left: ";
+      str += to_string(game->nbOfTilesLeft());
+      topLeftText->setText(str);
+      topLeftText->setPosition(
+          topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
+    } else if (!gameIsOver) {
+      topLeftText->setText("Game Ended, press ENTER to go back");
+      topLeftText->setPosition(
+          topLeftText->getWidth() / 2 + 15, topLeftText->getHeight() / 2 + 10);
+      onGameEnd();
+      gameIsOver = true;
+    }
+    updateTextOnScreen = false;
   }
 }
 

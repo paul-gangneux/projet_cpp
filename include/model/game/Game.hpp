@@ -13,11 +13,14 @@ class Game {
   int currentPlayer;
   bool firstPlay;
   bool gameIsOver;
+  int nbOfPlacedTiles;
+  int nbOfDiscardedTiles;
+  int maxNbOfTiles;
 
  public:
-  Game();
-  Game(const char* p1name, const char* p2name);
-  Game(int nb_of_players);
+  // Game();
+  Game(const char* p1name, const char* p2name, int nb_of_tiles);
+  Game(int nb_of_players, int nb_of_tiles);
   virtual ~Game();
 
   const std::vector<Player*>& getPlayers() const;
@@ -47,6 +50,8 @@ class Game {
   /// tries to place a tile at coordinates x y,
   /// returns false if the placement was invalid (= tile wasn't placed).
   virtual bool placeTile(Tile* const tile, int x, int y);
+
+  int nbOfTilesLeft();
 };
 
 #endif

@@ -57,6 +57,7 @@ void GameViewDomino::changeState() {
     curModelTile->rotateClockwise();
 
   if (discardTile) {
+    updateTextOnScreen = true;
     destRot = 0;
     curRot = 0;
     modelRot = 0;
@@ -77,6 +78,7 @@ void GameViewDomino::changeState() {
   }
 
   if (validM1Press) {
+    updateTextOnScreen = true;
     if (!game->isOver()) {
       // sets position to 0,0 if it's the first play
       vec2i aPos;
