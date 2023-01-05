@@ -2,6 +2,7 @@
 #define MODEL_GAME_CARCASSONE_HPP
 
 #include <queue>
+
 #include "model/game/Game.hpp"
 #include "model/tile/TileCarcassonne.hpp"
 
@@ -66,6 +67,10 @@ class GameCarcassonne : public Game {
 
   void calculateNewScores();
   void calculateEndScoresFromMeeple(meepleInfo meepInfo);
+
+  void endGameCalculations();
+
+  void calculateScoresIncomplete();
 
   /// returns the adjacent dir number of the adjacent tile.
   /// for example, if _dir=2, then the function returns 10, as the adjacent dir

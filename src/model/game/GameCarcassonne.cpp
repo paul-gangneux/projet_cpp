@@ -1,7 +1,9 @@
 #include "model/game/GameCarcassonne.hpp"
+
 #include <algorithm>
 #include <iostream>
 #include <list>
+
 #include "model/tile/TileCarcassonne.hpp"
 
 using namespace std;
@@ -15,6 +17,18 @@ using namespace std;
 #define putInBag(type, num)                   \
   for (size_t i = 0; i < num; i++) {          \
     bag.push_back(new TileCarcassonne(type)); \
+  }
+
+/// Used in endGameCalculations() for the breadth-first search.
+/// basically, checks if there is a tile on the board at (x,y),
+/// and if so, checks if it wasn't already visited (if it isn't in the vector v)
+/// if so : adds it to the bfs queue, and marks it as visited for the bfs
+#define BFS_NEIGHBOR(x, y)                                    \
+  neighbor = tileAndDir(x, y, 0);                             \
+  if ((board.get(x, y) != nullptr) &&                         \
+      (std::find(v.begin(), v.end(), neighbor) == v.end())) { \
+    q.push(neighbor);                                         \
+    v.push_back(neighbor);                                    \
   }
 
 static const char* defaultPlayerNames[]{"yellow", "red", "blue", "green"};
@@ -526,6 +540,40 @@ int GameCarcassonne::placeMeeple(int dir) {
   return dir;
 }
 
+void GameCarcassonne::endGameCalculations() {
+  // we need to collect all meeples left on the board at the end of the game.
+  // we will do a classic breadth-first search on the board, starting at (0,0)
+
+  std::queue<tileAndDir> q;   // queue for the bfs
+  std::vector<tileAndDir> v;  // vector to mark as visited for the bfs
+
+  tileAndDir start = tileAndDir(0, 0, 0);
+  q.push(start);
+  v.push_back(start);
+
+  tileAndDir curr = tileAndDir(0, 0, 0);
+  tileAndDir neighbor = tileAndDir(0, 0, 0);
+
+  while (!q.empty()) {
+    curr = q.front();
+    q.pop();  // pop() does not return anything, hence the use of front()
+
+    // left neighbor :
+    BFS_NEIGHBOR(curr.x - 1, curr.y)
+
+    // top neighbor :
+    BFS_NEIGHBOR(curr.x, curr.y - 1)
+
+    // right neighbor :
+    BFS_NEIGHBOR(curr.x + 1, curr.y)
+
+    // bottom neighbor :
+    BFS_NEIGHBOR(curr.x, curr.y + 1)
+  }
+
+  // TODO : continue this
+}
+
 bool GameCarcassonne::canPlaceMeeple() {
   return currentPlayerHasPlacedTile && meepleVector[currentPlayer] > 0;
 }
@@ -533,7 +581,7 @@ bool GameCarcassonne::canPlaceMeeple() {
 void GameCarcassonne::nextTurn() {
   if (bag.empty()) {
     gameIsOver = true;
-    // TODO: calculate end game scores
+    endGameCalculations();
   } else {
     Game::nextTurn();
   }
@@ -592,9 +640,7 @@ void GameCarcassonne::discardTile() {
 // ===================================================== //
 
 GameCarcassonne::tileAndDir::tileAndDir(int _x, int _y, uint8_t _d) :
-    x{_x},
-    y{_y},
-    d{_d} {}
+    x{_x}, y{_y}, d{_d} {}
 
 bool GameCarcassonne::tileAndDir::operator==(tileAndDir b) const {
   if (b.x == x && b.y == y && b.d == d)
