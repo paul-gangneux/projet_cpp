@@ -8,7 +8,7 @@ Game::Game() : Game("player 1", "player 2") {}
 
 Game::Game(const char* p1name, const char* p2name) : Game::Game(2) {
   players.at(0)->setName(p1name);
-  players.at(0)->setName(p2name);
+  players.at(1)->setName(p2name);
 }
 
 Game::Game(int nb_of_players) :
