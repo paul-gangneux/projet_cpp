@@ -30,7 +30,10 @@ class GameCarcassonne : public Game {
     tileAndDir(int _x, int _y, uint8_t _d);
 
     bool operator==(tileAndDir b) const;
+    // bool operator>(tileAndDir b) const;
   };
+
+  friend bool operator<(tileAndDir b1, tileAndDir b2);
 
   /// contains posX, posY, direction, and player
   struct meepleInfo {
@@ -76,6 +79,9 @@ class GameCarcassonne : public Game {
   /// for example, if _dir=2, then the function returns 10, as the adjacent dir
   /// would be 10 on the tile on the right.
   uint8_t adjacentDir(uint8_t _dir);
+
+  void addToLocalCompletedCities(
+      std::vector<tileAndDir>& localCityReps, tileAndDir v, int border);
 
  public:
   GameCarcassonne(int nb_of_players);

@@ -19,6 +19,11 @@ using namespace std;
     bag.push_back(new TileCarcassonne(type)); \
   }
 
+#define addIfNotExist(collection, item)                                       \
+  if (find(collection.begin(), collection.end(), item) == collection.end()) { \
+    collection.push_back(item);                                               \
+  }
+
 /// Used in endGameCalculations() for the breadth-first search.
 /// basically, checks if there is a tile on the board at (x,y),
 /// and if so, checks if it wasn't already visited (if it isn't in the vector v)
@@ -536,12 +541,46 @@ int GameCarcassonne::placeMeeple(int dir) {
   return dir;
 }
 
+void GameCarcassonne::addToLocalCompletedCities(
+    vector<tileAndDir>& localCityReps, tileAndDir v, int border) {
+  TileCarcassonne* t = (TileCarcassonne*) board.get(v.x, v.y);
+  int dir = border * 3;
+  if ((v.d == (dir + 2) % 12 || v.d == (dir + 3) % 12 ||
+       v.d == (dir + 9) % 12 || v.d == (dir + 10) % 12) &&
+      (t->getBorder(border) == 't' || t->getBorder(border) == 'T')) {
+    tileAndDir td{v.x, v.y, (uint8_t) dir};
+
+    vector<tileAndDir> cityVisited = vector<tileAndDir>();
+    if (!searchGraph(
+            td, cityVisited, nullptr, nullptr, nullptr, STOPCOND_NOTCOMPLETE)) {
+      // fetching the min visited tileAndDir
+      tileAndDir minCityTile = td;
+      for (tileAndDir city_td : cityVisited) {
+        if (city_td < minCityTile) {
+          minCityTile = city_td;
+        }
+      }
+      // adding the tileanddir to city representants if doesn't exist
+      addIfNotExist(localCityReps, minCityTile)
+    }
+  }
+}
+
 void GameCarcassonne::endGameCalculations() {
+  struct meepleInfoPlus {
+    meepleInfo meeple;
+    vector<tileAndDir> cities;
+  };
+
   // we need to collect all meeples left on the board at the end of the game.
   // we will do a classic breadth-first search on the board, starting at (0,0)
 
-  std::queue<tileAndDir> q;   // queue for the bfs
-  std::vector<tileAndDir> v;  // vector to mark as visited for the bfs
+  queue<tileAndDir> q;   // queue for the bfs
+  vector<tileAndDir> v;  // vector to mark as visited for the bfs
+
+  // contains the smallest tileAndDir for each relevant completed city
+  vector<tileAndDir> cityReps;
+  vector<meepleInfoPlus> fieldMeeples;
 
   tileAndDir start = tileAndDir(0, 0, 0);
   q.push(start);
@@ -570,16 +609,86 @@ void GameCarcassonne::endGameCalculations() {
     int meepdir = tile->getMeepleLocation();
     if (meepdir != -1) {
       meepleInfo meep{curr.x, curr.y, meepdir, tile->getMeeplePlayer()};
-      if ((meepdir == 0 || meepdir == 3 || meepdir == 6 || meepdir == 9) &&
-          tile->getBorder(dirToBorder(meepdir)) != 'g') {
+      // case road, city or monastery
+      if ((meepdir == 13) ||
+          ((meepdir == 0 || meepdir == 3 || meepdir == 6 || meepdir == 9) &&
+           tile->getBorder(dirToBorder(meepdir)) != 'g')) {
         calculateEndScoresFromMeeple(meep);
-      } else {
-        // else meeple is on grassland: TODO
+      }
+      // case grassland
+      else {
+        vector<tileAndDir> fieldVisited = vector<tileAndDir>();
+        queue<meepleInfo> fieldMeepInfos = queue<meepleInfo>();
+
+        searchGraph(
+            tileAndDir{curr.x, curr.y, (uint8_t) meepdir},
+            fieldVisited,
+            nullptr,
+            nullptr,
+            &fieldMeepInfos,
+            STOPCOND_NONE);
+
+        vector<tileAndDir> localCityReps;
+
+        for (tileAndDir x : fieldVisited) {
+          addToLocalCompletedCities(localCityReps, x, 0);
+          addToLocalCompletedCities(localCityReps, x, 1);
+          addToLocalCompletedCities(localCityReps, x, 2);
+          addToLocalCompletedCities(localCityReps, x, 3);
+        }
+
+        for (tileAndDir x : localCityReps) {
+          addIfNotExist(cityReps, x)
+        }
+
+        while (!fieldMeepInfos.empty()) {
+          meepleInfo meep = fieldMeepInfos.front();
+          fieldMeeples.push_back({meep, localCityReps});
+          // removing from model
+          ((TileCarcassonne*) board.get(meep.x, meep.y))->removeMeeple();
+          fieldMeepInfos.pop();
+        }
       }
     }
   }
 
-  // TODO : continue this
+  int* meeplePerPlayer = new int[players.size()];
+
+  for (tileAndDir rep : cityReps) {
+    // reinitializing meeplePerPlayer
+    for (size_t i = 0; i < players.size(); i++) {
+      meeplePerPlayer[i] = 0;
+    }
+
+    // counting meeple per player in fields surrounding city
+    for (meepleInfoPlus info : fieldMeeples) {
+      for (tileAndDir localRep : info.cities) {
+        if (rep == localRep) {
+          meeplePerPlayer[info.meeple.player]++;
+          break;
+        }
+      }
+    }
+
+    // counting max number of neighboring meeples
+    int max = 0;
+    for (uint j = 0; j < players.size(); j++) {
+      if (max < meeplePerPlayer[j]) {
+        max = meeplePerPlayer[j];
+      }
+    }
+
+    // giving points to deserving players
+    if (max > 0) {
+      for (uint j = 0; j < players.size(); j++) {
+        if (meeplePerPlayer[j] == max) {
+          players.at(j)->addScore(4);
+        }
+      }
+    }
+  }
+
+  delete[] meeplePerPlayer;
 }
 
 bool GameCarcassonne::canPlaceMeeple() {
@@ -654,4 +763,11 @@ GameCarcassonne::tileAndDir::tileAndDir(int _x, int _y, uint8_t _d) :
 
 bool GameCarcassonne::tileAndDir::operator==(tileAndDir b) const {
   return (b.x == x && b.y == y && b.d == d);
+}
+
+// arbitrary comparaison relation, useful for ordering elements
+bool operator<(GameCarcassonne::tileAndDir b1, GameCarcassonne::tileAndDir b2) {
+  return (
+      (b1.x < b2.x) || (b1.x == b2.x && b1.y < b2.y) ||
+      (b1.x == b2.x && b1.y == b2.y && b1.d < b2.d));
 }
