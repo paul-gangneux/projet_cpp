@@ -3,12 +3,12 @@
 #include <iostream>
 #include <string>
 
-#define DIR(a)       \
-  {                  \
-    dir[0] = (a)[0]; \
-    dir[1] = (a)[1]; \
-    dir[2] = (a)[2]; \
-    dir[3] = (a)[3]; \
+#define DIR(a)          \
+  {                     \
+    border[0] = (a)[0]; \
+    border[1] = (a)[1]; \
+    border[2] = (a)[2]; \
+    border[3] = (a)[3]; \
   }
 
 #define EDGE(a, b) edges.push_back(edge(a, b));
@@ -198,11 +198,11 @@ TileCarcassonne::~TileCarcassonne() {
 }
 
 void TileCarcassonne::rotateClockwise() {
-  int temp = dir[3];
-  dir[3] = dir[2];
-  dir[2] = dir[1];
-  dir[1] = dir[0];
-  dir[0] = temp;
+  int temp = border[3];
+  border[3] = border[2];
+  border[2] = border[1];
+  border[1] = border[0];
+  border[0] = temp;
   for (edge& e : edges) {
     e.rotateClockwise();
   }
@@ -212,11 +212,11 @@ void TileCarcassonne::rotateClockwise() {
 }
 
 void TileCarcassonne::rotateCounterClockwise() {
-  int temp = dir[0];
-  dir[0] = dir[1];
-  dir[1] = dir[2];
-  dir[2] = dir[3];
-  dir[3] = temp;
+  int temp = border[0];
+  border[0] = border[1];
+  border[1] = border[2];
+  border[2] = border[3];
+  border[3] = temp;
 
   for (edge& e : edges) {
     e.rotateCounterClockwise();
@@ -230,12 +230,12 @@ std::vector<TileCarcassonne::edge> TileCarcassonne::getEdges() const {
   return edges;
 }
 
-char TileCarcassonne::getDir(int a) const {
+char TileCarcassonne::getBorder(int a) const {
   if (a < 0)
-    return dir[0];
+    return border[0];
   // technically we should only call this function with a value between 0 and 3,
   // but just in case:
-  return dir[a % 4];
+  return border[a % 4];
 }
 
 int8_t TileCarcassonne::getMeeplePlayer() const {
@@ -251,7 +251,7 @@ bool TileCarcassonne::matchX(const Tile* right) const {
   if (local == nullptr)
     return false;
 
-  return (tolower(dir[1]) == tolower(local->getDir(3)));
+  return (tolower(border[1]) == tolower(local->getBorder(3)));
 }
 
 bool TileCarcassonne::matchY(const Tile* down) const {
@@ -259,7 +259,7 @@ bool TileCarcassonne::matchY(const Tile* down) const {
   if (local == nullptr)
     return false;
 
-  return (tolower(dir[2]) == tolower(local->getDir(0)));
+  return (tolower(border[2]) == tolower(local->getBorder(0)));
 }
 
 int TileCarcassonne::getType() const {

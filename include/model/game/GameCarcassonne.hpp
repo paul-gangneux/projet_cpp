@@ -31,6 +31,7 @@ class GameCarcassonne : public Game {
     bool operator==(tileAndDir b) const;
   };
 
+  /// contains posX, posY, direction, and player
   struct meepleInfo {
     int x, y, dir, player;
   };
@@ -64,6 +65,7 @@ class GameCarcassonne : public Game {
   int countNeighbors(int x, int y);
 
   void calculateNewScores();
+  void calculateEndScoresFromMeeple(meepleInfo meepInfo);
 
   /// returns the adjacent dir number of the adjacent tile.
   /// for example, if _dir=2, then the function returns 10, as the adjacent dir

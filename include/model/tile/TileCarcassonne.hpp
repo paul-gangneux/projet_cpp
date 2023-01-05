@@ -35,13 +35,13 @@ class TileCarcassonne : public Tile {
   /// represents what is on the borders of the tile.
   /// 0:up, 1:right, 2:down, 3:left
   /// 't':town, 'r':road, 'g':grasslands, 'T':town with shield symbol
-  char dir[4];
+  char border[4];
 
  public:
   TileCarcassonne(uint8_t);
   virtual ~TileCarcassonne();
 
-  char getDir(int) const;
+  char getBorder(int) const;
   int8_t getMeeplePlayer() const;
   int8_t getMeepleLocation() const;
   std::vector<edge> getEdges() const;

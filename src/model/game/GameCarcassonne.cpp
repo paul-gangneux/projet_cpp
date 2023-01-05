@@ -173,7 +173,7 @@ bool GameCarcassonne::searchGraph(
     }
   }
 
-  // checks is currrent dir is a city with a shield
+  // checks is current dir is a city with a shield
   if (nbOfShields != nullptr) {
     int newDir = -1;
     if (current.d == 0) {
@@ -185,7 +185,7 @@ bool GameCarcassonne::searchGraph(
     } else if (current.d == 9) {
       newDir = 3;
     }
-    if (newDir != -1 && local->getDir(newDir) == 'T') {
+    if (newDir != -1 && local->getBorder(newDir) == 'T') {
       (*nbOfShields)++;
     }
   }
@@ -285,6 +285,18 @@ int roundDir(int d) {
   return 9;
 }
 
+int dirToBorder(int d) {
+  d = roundDir(d);
+  if (d == 0) {
+    return 0;
+  } else if (d == 3) {
+    return 1;
+  } else if (d == 6) {
+    return 2;
+  }
+  return 3;
+}
+
 int GameCarcassonne::countNeighbors(int x, int y) {
   Tile* tile;
   int n = 0;
@@ -328,7 +340,7 @@ void GameCarcassonne::calculateNewScores() {
   // checking for complete road or city
   for (int i = 0; i <= 3; i++) {
     uint8_t d = i * 3;
-    char terrainType = lastTile->getDir(i);
+    char terrainType = lastTile->getBorder(i);
     int nbVisited = 0;
     int nbShields = 0;
     int* nbShields_p;
@@ -359,13 +371,13 @@ void GameCarcassonne::calculateNewScores() {
         // we calculate all the players who deserve to get points
         // at the same time, we remove the meeples from model and view
         int nbOfPlayers = players.size();
-        int* plys = new int[nbOfPlayers];
+        int* meeplePerPlayer = new int[nbOfPlayers];
         for (int j = 0; j < nbOfPlayers; j++) {
-          plys[j] = 0;
+          meeplePerPlayer[j] = 0;
         }
         while (!meepInfos.empty()) {
           meepleInfo mi = meepInfos.front();
-          plys[mi.player]++;
+          meeplePerPlayer[mi.player]++;
 
           // removing meeple from model and view
           meepleVector[mi.player]++;
@@ -375,18 +387,90 @@ void GameCarcassonne::calculateNewScores() {
         }
         int max = 0;
         for (int j = 0; j < nbOfPlayers; j++) {
-          if (max < plys[j]) {
-            max = plys[j];
+          if (max < meeplePerPlayer[j]) {
+            max = meeplePerPlayer[j];
           }
         }
         if (max > 0) {
           for (int j = 0; j < nbOfPlayers; j++) {
-            if (plys[j] == max) {
+            if (meeplePerPlayer[j] == max) {
               players.at(j)->addScore(nbVisited * mult + 2 * nbShields);
             }
           }
         }
+        delete[] meeplePerPlayer;
       }
+    }
+  }
+}
+
+void GameCarcassonne::calculateEndScoresFromMeeple(meepleInfo meep) {
+  TileCarcassonne* tile = (TileCarcassonne*) board.get(meep.x, meep.y);
+
+  // case monastery
+  if (meep.dir == 13) {
+    if (tile != nullptr && tile->hasMonastery()) {
+      players.at(meep.player)->addScore(countNeighbors(meep.x, meep.y) + 1);
+
+      // we remove the meeple from model only (not view)
+      tile->removeMeeple();
+    }
+  }
+
+  // case city or road
+  else {
+    char terrainType = tile->getBorder(dirToBorder(meep.dir));
+    int nbVisited = 0;
+    int nbShields = 0;
+    int* nbShields_p;
+    queue<meepleInfo> meepInfos;
+    if (terrainType == 'r' || terrainType == 't' || terrainType == 'T') {
+      if (terrainType == 'r') {
+        nbShields_p = nullptr;
+      } else {
+        nbShields_p = &nbShields;
+      }
+
+      searchGraph(
+          tileAndDir{meep.x, meep.y, meep.dir},
+          &nbVisited,
+          nbShields_p,
+          &meepInfos,
+          STOPCOND_NONE);
+      // the rules stipulate that cities of size two are worth less
+      if (terrainType != 'r' && nbVisited == 2) {
+        nbVisited = 1;
+      }
+
+      // we calculate all the players who deserve to get points
+      // at the same time, we remove the meeples from model (not view)
+      int nbOfPlayers = players.size();
+      int* meeplePerPlayer = new int[nbOfPlayers];
+      for (int j = 0; j < nbOfPlayers; j++) {
+        meeplePerPlayer[j] = 0;
+      }
+      while (!meepInfos.empty()) {
+        meepleInfo mi = meepInfos.front();
+        meeplePerPlayer[mi.player]++;
+
+        // removing meeple from model (not view)
+        ((TileCarcassonne*) board.get(mi.x, mi.y))->removeMeeple();
+        meepInfos.pop();
+      }
+      int max = 0;
+      for (int j = 0; j < nbOfPlayers; j++) {
+        if (max < meeplePerPlayer[j]) {
+          max = meeplePerPlayer[j];
+        }
+      }
+      if (max > 0) {
+        for (int j = 0; j < nbOfPlayers; j++) {
+          if (meeplePerPlayer[j] == max) {
+            players.at(j)->addScore(nbVisited + nbShields);
+          }
+        }
+      }
+      delete[] meeplePerPlayer;
     }
   }
 }
@@ -416,7 +500,7 @@ int GameCarcassonne::placeMeeple(int dir) {
       tmp = 0;
     }
     tmp /= 3;
-    if (local->getDir(tmp) != 'r') {
+    if (local->getBorder(tmp) != 'r') {
       dir = roundDir(dir);
     }
 
