@@ -446,15 +446,11 @@ void GameCarcassonne::calculateEndScoresFromMeeple(meepleInfo meep) {
       }
 
       searchGraph(
-          tileAndDir{meep.x, meep.y, meep.dir},
+          tileAndDir{meep.x, meep.y, (uint8_t) meep.dir},
           &nbVisited,
           nbShields_p,
           &meepInfos,
           STOPCOND_NONE);
-      // the rules stipulate that cities of size two are worth less
-      if (terrainType != 'r' && nbVisited == 2) {
-        nbVisited = 1;
-      }
 
       // we calculate all the players who deserve to get points
       // at the same time, we remove the meeples from model (not view)
@@ -519,7 +515,7 @@ int GameCarcassonne::placeMeeple(int dir) {
     }
 
     if (searchGraph(
-            tileAndDir(lastX, lastY, dir),
+            tileAndDir(lastX, lastY, (uint8_t) dir),
             nullptr,
             nullptr,
             nullptr,
@@ -569,6 +565,18 @@ void GameCarcassonne::endGameCalculations() {
 
     // bottom neighbor :
     BFS_NEIGHBOR(curr.x, curr.y + 1)
+
+    TileCarcassonne* tile = (TileCarcassonne*) board.get(curr.x, curr.y);
+    int meepdir = tile->getMeepleLocation();
+    if (meepdir != -1) {
+      meepleInfo meep{curr.x, curr.y, meepdir, tile->getMeeplePlayer()};
+      if ((meepdir == 0 || meepdir == 3 || meepdir == 6 || meepdir == 9) &&
+          tile->getBorder(dirToBorder(meepdir)) != 'g') {
+        calculateEndScoresFromMeeple(meep);
+      } else {
+        // else meeple is on grassland: TODO
+      }
+    }
   }
 
   // TODO : continue this
@@ -640,11 +648,10 @@ void GameCarcassonne::discardTile() {
 // ===================================================== //
 
 GameCarcassonne::tileAndDir::tileAndDir(int _x, int _y, uint8_t _d) :
-    x{_x}, y{_y}, d{_d} {}
+    x{_x},
+    y{_y},
+    d{_d} {}
 
 bool GameCarcassonne::tileAndDir::operator==(tileAndDir b) const {
-  if (b.x == x && b.y == y && b.d == d)
-    return true;
-  else
-    return false;
+  return (b.x == x && b.y == y && b.d == d);
 }

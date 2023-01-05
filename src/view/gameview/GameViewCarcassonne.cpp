@@ -195,6 +195,7 @@ void GameViewCarcassonne::changeState() {
         } else {
           curTile = nullptr;
           curModelTile = nullptr;
+          scoreText->setText(getAllPlayerInfo());
         }
       }
     }
