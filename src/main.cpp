@@ -114,7 +114,11 @@ int main() {
           } else {
             screenSize = vec2i{win->getWidth(), win->getHeight()};
             delete win;
-            win = new Win(0, 0, "game", Style::Fullscreen);
+            win = new Win(
+                sf::VideoMode::getDesktopMode().width,
+                sf::VideoMode::getDesktopMode().height,
+                "game",
+                Style::Fullscreen);
             view->setWin(win);
             fullscreen = true;
           }

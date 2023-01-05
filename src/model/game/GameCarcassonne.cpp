@@ -24,9 +24,11 @@ GameCarcassonne::GameCarcassonne(int nb_of_players) :
     bag{vector<TileCarcassonne*>()},
     currentPlayerHasPlacedTile{false},
     lastX{0},
-    lastY{0} {
+    lastY{0},
+    meepleVector{vector<int>(nb_of_players)} {
   for (int i = 0; i < nb_of_players; i++) {
     players[i]->setName(defaultPlayerNames[i]);
+    meepleVector[i] = 6;
   }
 
   putInBag(1, 9);
@@ -100,6 +102,9 @@ bool GameCarcassonne::placeTile(Tile* const _tile, int x, int y) {
     currentPlayerHasPlacedTile = true;
     lastX = x;
     lastY = y;
+    if (meepleVector[currentPlayer] <= 0) {
+      nextTurn();
+    }
     return true;
   }
   return false;
@@ -308,8 +313,10 @@ void GameCarcassonne::calculateNewScores() {
           tile->getMeepleLocation() == 13 &&
           countNeighbors(lastX + i, lastY + j) == 8) {
         // player gets points
-        players.at(tile->getMeeplePlayer())->addScore(9);
+        int playerNb = tile->getMeeplePlayer();
+        players.at(playerNb)->addScore(9);
         // we remove the meeple from model and view
+        meepleVector[playerNb]++;
         removedMeepleQueue.push(new int[3]{lastX + i, lastY + j, 13});
         tile->removeMeeple();
       }
@@ -361,6 +368,7 @@ void GameCarcassonne::calculateNewScores() {
           plys[mi.player]++;
 
           // removing meeple from model and view
+          meepleVector[mi.player]++;
           removedMeepleQueue.push(new int[3]{mi.x, mi.y, mi.dir});
           ((TileCarcassonne*) board.get(mi.x, mi.y))->removeMeeple();
           meepInfos.pop();
@@ -387,7 +395,7 @@ void GameCarcassonne::calculateNewScores() {
 // returns 14 if the meeple has been successfully yeeted
 // returns -1 on failure
 int GameCarcassonne::placeMeeple(int dir) {
-  if (!currentPlayerHasPlacedTile)
+  if (!currentPlayerHasPlacedTile || meepleVector[currentPlayer] <= 0)
     return -1;
 
   TileCarcassonne* local =
@@ -423,6 +431,7 @@ int GameCarcassonne::placeMeeple(int dir) {
     if (!local->addMeeple(dir, currentPlayer)) {
       return -1;
     }
+    meepleVector[currentPlayer]--;
   }
 
   calculateNewScores();
@@ -434,7 +443,7 @@ int GameCarcassonne::placeMeeple(int dir) {
 }
 
 bool GameCarcassonne::canPlaceMeeple() {
-  return currentPlayerHasPlacedTile;
+  return currentPlayerHasPlacedTile && meepleVector[currentPlayer] > 0;
 }
 
 void GameCarcassonne::nextTurn() {
@@ -483,6 +492,10 @@ bool GameCarcassonne::getLastRemovedMeepleInfo(int infos[3]) {
   removedMeepleQueue.pop();
   delete[] meep;
   return true;
+}
+
+int GameCarcassonne::getPlayerMeepleCount(int player) {
+  return meepleVector[player];
 }
 
 // ===================================================== //

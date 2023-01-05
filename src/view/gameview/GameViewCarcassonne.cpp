@@ -44,7 +44,7 @@ GameViewCarcassonne::GameViewCarcassonne(Win* _win, int nbOfPlayers) :
     // we grab the last tile, which is predefined
     curModelTile{(TileCarcassonne*) ((GameCarcassonne*) game)->grabTile()},
     skipTurn{false},
-    scoreText{new DrawText(getScores(), Color::White)},
+    scoreText{new DrawText(getAllPlayerInfo(), Color::White)},
     meepleList{list<MeepleData>()},
     lastPlacedTile{nullptr},
     potentialMeeple{new DrawMeeple(-1)},
@@ -129,7 +129,7 @@ void GameViewCarcassonne::tryToPlaceMeeple(int dir) {
       curTile = nullptr;
       curModelTile = nullptr;
     }
-    scoreText->setText(getScores());
+    scoreText->setText(getAllPlayerInfo());
   }
 }
 
@@ -253,7 +253,7 @@ void GameViewCarcassonne::changeState() {
             curTile = nullptr;
             curModelTile = nullptr;
           }
-          scoreText->setText(getScores());
+          scoreText->setText(getAllPlayerInfo());
         }
       }
     }
@@ -276,6 +276,29 @@ void GameViewCarcassonne::changeState() {
   }
 
   GameView::changeState();
+}
+
+string GameViewCarcassonne::getAllPlayerInfo() const {
+  string s = "player:  meeples:  score:\n";
+  std::vector<Player*> ps = game->getPlayers();
+  int len = ps.size();
+
+  for (int i = 0; i < len; i++) {
+    string name = ps.at(i)->getName();
+    string meeplecount =
+        to_string(((GameCarcassonne*) game)->getPlayerMeepleCount(i));
+    string score = to_string(ps.at(i)->getScore());
+
+    name.resize(8, ' ');
+    meeplecount.resize(9, ' ');
+    score.resize(3, ' ');
+
+    s += name + " " + meeplecount + " " + score;
+    if (i != len - 1) {
+      s += '\n';
+    }
+  }
+  return s;
 }
 
 void GameViewCarcassonne::drawTiles() {

@@ -13,6 +13,7 @@ class GameCarcassonne : public Game {
   bool currentPlayerHasPlacedTile;
   int lastX;
   int lastY;
+  std::vector<int> meepleVector;
 
   // contains info of meeples to be removed from view
   // infos are: tile position x, tile position y, direction
@@ -100,6 +101,8 @@ class GameCarcassonne : public Game {
   bool canPlaceMeeple();
 
   bool getLastRemovedMeepleInfo(int infos[3]);
+
+  int getPlayerMeepleCount(int player);
 };
 
 #endif

@@ -25,6 +25,7 @@ class GameViewCarcassonne : public GameView {
   void tryToPlaceMeeple(int dir);
   int calculateMeepleDirection();
   void grabNextTile();
+  std::string getAllPlayerInfo() const;
 
  public:
   GameViewCarcassonne(Win* win, int nbOfPlayers);
