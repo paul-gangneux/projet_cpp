@@ -4,7 +4,7 @@
 #include "view/drawobject/DrawObject.hpp"
 
 class DrawMeeple : public DrawObject {
- public:
+ private:
   static sf::Texture potentialMeepTex;
   static sf::Texture textures[4];
   static sf::Sprite* createMeepleSprite(int player);

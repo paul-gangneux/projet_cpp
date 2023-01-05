@@ -4,7 +4,7 @@
 #include "view/drawobject/DrawObject.hpp"
 
 class DrawCarcassonne : public DrawObject {
- public:
+ private:
   static sf::Texture textures[24];
   static sf::Sprite* createCarcassonneSprite(int type);
 
