@@ -73,7 +73,7 @@ class GameCarcassonne : public Game {
 
   void endGameCalculations();
 
-  void calculateScoresIncomplete();
+  // void calculateScoresIncomplete();
 
   /// returns the adjacent dir number of the adjacent tile.
   /// for example, if _dir=2, then the function returns 10, as the adjacent dir
