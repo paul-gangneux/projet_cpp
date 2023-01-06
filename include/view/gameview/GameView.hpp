@@ -3,11 +3,8 @@
 
 #include <iostream>
 #include <list>
-
 #include "geometry/vectors.hpp"
 #include "model/game/Game.hpp"
-#include "view/Win.hpp"
-#include "view/drawobject/DrawDomino.hpp"
 #include "view/drawobject/DrawObject.hpp"
 #include "view/drawobject/DrawText.hpp"
 #include "view/gameview/DrawableState.hpp"
@@ -53,14 +50,18 @@ class GameView : public DrawableState {
   bool gameIsOver;
   bool updateTextOnScreen;
 
-  vec2i coordToGridPos(vec2i coords);
-  DrawObject* initTilePlacementVisual();
-
   GameView(
       Win* win, Game* game, DrawObject* firstTile, const char* controlText);
 
- public:
   virtual ~GameView();
+
+  // takes mouse coordinates and changes it to coords
+  // the tile would have on the grid in the model
+  vec2i coordToGridPos(vec2i coords);
+
+  // initializes the little orange square that
+  // shows where a tile will be placed
+  DrawObject* initTilePlacementVisual();
 
   void addObject(DrawObject* obj);
   void addTile(DrawObject* obj, int x, int y);

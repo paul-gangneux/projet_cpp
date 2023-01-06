@@ -2,7 +2,6 @@
 #define VIEW_DRAWOBJECT_HPP
 
 #include <SFML/Graphics.hpp>
-
 #include "geometry/vectors.hpp"
 
 class DrawObject : public sf::Transformable {

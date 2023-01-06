@@ -1,10 +1,6 @@
 #include "view/gameview/GameView.hpp"
-
 #include <algorithm>
 #include <iostream>
-#include "model/game/GameTrax.hpp"
-#include "model/tile/TileTrax.hpp"
-#include "view/drawobject/DrawTrax.hpp"
 #include "view/drawobject/TextBox.hpp"
 
 using namespace std;
@@ -69,6 +65,8 @@ GameView::~GameView() {
   delete tilePlacementVisual;
 }
 
+// initializes the little orange square that
+// shows where a tile will be placed
 DrawObject* GameView::initTilePlacementVisual() {
   int rec_width = TILE_SIZE - (BORDER_WIDTH * 2);
 

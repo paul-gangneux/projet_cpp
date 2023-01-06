@@ -1,9 +1,7 @@
 #include "model/game/GameCarcassonne.hpp"
-
 #include <algorithm>
 #include <iostream>
 #include <list>
-
 #include "model/tile/TileCarcassonne.hpp"
 
 using namespace std;

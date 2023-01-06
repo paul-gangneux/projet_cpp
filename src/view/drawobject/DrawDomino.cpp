@@ -1,7 +1,5 @@
 #include "view/drawobject/DrawDomino.hpp"
-
 #include <iostream>
-
 #include "geometry/vectors.hpp"
 
 using namespace sf;
