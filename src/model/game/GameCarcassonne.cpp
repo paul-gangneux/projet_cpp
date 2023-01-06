@@ -10,7 +10,7 @@ using namespace std;
 
 #define STOPCOND_NONE 0
 #define STOPCOND_MEEPLEFOUND 1
-#define STOPCOND_NOTCOMPLETE 0b10
+#define STOPCOND_NOTCOMPLETE 2
 
 #define putInBag(type, num)                   \
   for (size_t i = 0; i < num; i++) {          \

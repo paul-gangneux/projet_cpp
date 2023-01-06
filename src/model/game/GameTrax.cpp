@@ -224,7 +224,7 @@ bool GameTrax::placeTile(Tile* const tile, int x, int y) {
     }
   }
   return res;
-};
+}
 
 bool GameTrax::getTileInfoInPlaceQueue(int infos[4]) {
   if (placedTilesQueue.empty()) {

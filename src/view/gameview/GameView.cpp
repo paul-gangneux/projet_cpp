@@ -390,4 +390,4 @@ void GameView::onGameEnd() {
   box->setOutlineColor(Color(20, 40, 100, 255));
   box->setParent(&rootObj);
   textList.push_back(box);
-};
+}
