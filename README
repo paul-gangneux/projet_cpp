@@ -1,1 +1,51 @@
-todo: présenter projet + détailler compilation, exécution et compilation
+# Projet de C++ 2022/2023
+
+par
+GANGNEUX paul
+KELLER Dylan
+
+### compilation
+
+`make`
+
+### execution
+
+`make run`
+ou
+`./gaming`
+
+### prise en main
+
+on peut séléctionner des éléments du menu en cliquant dessus.
+la séléction de partie et du nombre de joueurs peut se faire entièrement à la souris.
+
+en jeu, on utilise le clavier et la souris:
+
+`clique gauche`
+poser une tuile ou un meeple (carcassonne)
+
+`clique droit (click and drag)`
+faire défilier la vue
+
+`molette`
+zoomer / dézoomer
+
+`a` et `z`
+faire tourner la tuile
+
+`espace`
+passer son tour (domino et carcassonne),
+changer de type de tuile (trax)
+
+`entrer`
+pour revenir au menu à la fin d'une partie
+
+`c`
+pour afficher les contrôles
+
+`esc`
+revenir au menu (depuis un jeu)
+quitter le programme (depuis le menu)
+
+`F11`
+plein écran
